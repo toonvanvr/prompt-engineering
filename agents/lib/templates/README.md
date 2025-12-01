@@ -7,7 +7,7 @@ This directory contains reusable templates for various agent operations.
 ### Sub-Agent Dispatches
 Templates for spawning sub-agents for specific tasks:
 - `dispatch-analysis.md` - Analysis phase sub-agent
-- `dispatch-design.md` - Design phase sub-agent  
+- `dispatch-design.md` - Design phase sub-agent
 - `dispatch-implementation.md` - Implementation phase sub-agent
 - `dispatch-review.md` - Review phase sub-agent
 

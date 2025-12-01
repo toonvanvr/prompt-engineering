@@ -18,7 +18,7 @@ You are a SUB-AGENT. Before proceeding, acknowledge these prime directives:
 ### Objective
 Analyze {DOMAIN} to understand:
 - Current implementation patterns
-- Data models and their relationships  
+- Data models and their relationships
 - Dependencies and integrations
 - Edge cases and gotchas
 

@@ -31,7 +31,7 @@ Use this template for documenting request interpretation.
 - {Item that seems implied}
 - {Item that's reasonable}
 
-### Definitely Out of Scope  
+### Definitely Out of Scope
 - {Item explicitly excluded}
 - {Item that would be scope creep}
 
