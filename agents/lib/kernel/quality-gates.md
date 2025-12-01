@@ -2,6 +2,54 @@
 
 Quality gates are mandatory checkpoints between phases. They ensure work meets standards before progressing.
 
+> **Core Reference**: See [orchestration.md](orchestration.md) for error recovery, [skepticism.md](skepticism.md) for verification mindset.
+
+## VERIFICATION IS NON-NEGOTIABLE
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     VERIFICATION IS YOUR SUPERPOWER                         │
+│                                                                             │
+│  Verification is NOT optional. It is NOT a suggestion.                      │
+│  It is the difference between professional and amateur.                     │
+│                                                                             │
+│  EVERY sub-agent output → Verify before proceeding                          │
+│  EVERY phase completion → Gate check before transition                      │
+│  EVERY implementation    → Full verification suite                          │
+│                                                                             │
+│  "Trust but verify" is WRONG. "Verify, then trust" is RIGHT.                │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Verification Levels
+
+| Level | When | What |
+|-------|------|------|
+| Quick | After each sub-agent return | Handoff exists, format valid |
+| Full | After phase completion | All gates passed, docs complete |
+| Comprehensive | After implementation | All tests, all checks, manual review |
+
+---
+
+## RED FLAGS 🚩
+
+Stop immediately when you see these:
+
+| Red Flag | Problem | Immediate Action |
+|----------|---------|------------------|
+| Missing `_handoff.md` | Context will be lost | Create before proceeding |
+| Document > 500 lines | Too complex to process | Split by concern |
+| "I think this works" | Unverified assumption | Run verification NOW |
+| Sub-agent scope creep | Will exceed context | Terminate, spawn smaller |
+| Phase transition without gate | Risk of cascade failure | STOP, check gate |
+| Low confidence not flagged | Hidden uncertainty | Document, consider sub-agent |
+| 3+ attempts on same error | Stuck in loop | ESCALATE |
+| Parallel sub-agents without sync | Coordination failure | Add handoff points |
+| Assumptions not documented | Hidden dependencies | Write to assumptions.md |
+| Skipped interpretation | Solving wrong problem | Go back to interpret |
+
+---
+
 ## Gate Structure
 
 Each gate has:

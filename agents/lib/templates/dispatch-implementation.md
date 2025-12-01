@@ -4,6 +4,30 @@ Use this template when spawning an implementation sub-agent.
 
 ---
 
+## The 1-1-1 Rule
+
+Every task in implementation should be:
+
+- **1 file** changed (max 2)
+- **1 verification** step
+- **1 clear outcome**
+
+If a task requires more, decompose it into smaller tasks.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          THE 1-1-1 RULE                                     │
+│                                                                             │
+│  1 FILE    — Maximum 2 files changed per task                               │
+│  1 VERIFY  — Specific verification step for each task                       │
+│  1 OUTCOME — Clear, checkable completion criterion                          │
+│                                                                             │
+│  If task needs more → DECOMPOSE FURTHER                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Sub-Agent Dispatch: Implementation - {COMPONENT}
 
 ### KERNEL INHERITANCE (MANDATORY)

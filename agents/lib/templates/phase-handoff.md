@@ -14,6 +14,20 @@ Use this template for all phase handoff documents.
 
 ---
 
+## Confidence Assessment
+
+**Confidence Level:** HIGH / MEDIUM / LOW
+
+**Concerns** (if not HIGH):
+- [Specific uncertainty 1]
+- [Specific uncertainty 2]
+
+**Mitigation** (if LOW):
+- [ ] Spawn verification sub-agent before proceeding
+- [ ] Flag for human review
+
+---
+
 ## Executive Summary
 <2-3 sentences capturing the essence of what was done and discovered>
 

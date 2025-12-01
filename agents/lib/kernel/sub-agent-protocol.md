@@ -2,6 +2,54 @@
 
 This document defines the communication protocol between the orchestrator and sub-agents.
 
+> **Core Reference**: See [orchestration.md](orchestration.md) for when to spawn sub-agents, [skepticism.md](skepticism.md) for verification requirements.
+
+## The Three Laws (Inherited by All Sub-Agents)
+
+Every sub-agent MUST operate under these laws:
+
+1. **Sub-Agents for Complexity** — If your task grows too complex, spawn your own sub-agents
+2. **Document Before Terminate** — Write findings to files before ending
+3. **Quality Gates Are Immutable** — Verify your work meets requirements
+
+---
+
+## Tool Usage Decision Matrix
+
+When sub-agents need to choose tools:
+
+| Need | Tool | When to Use |
+|------|------|-------------|
+| Find files | `file_search` | Know filename pattern |
+| Find content | `grep_search` | Know exact string/regex |
+| Understand code | `semantic_search` | Need conceptual understanding |
+| Read context | `read_file` | Need file contents |
+| Edit files | `edit tools` | Making changes |
+| Run commands | `terminal` | Need system interaction |
+| Delegate work | `runSubagent` | Task too complex |
+
+### Tool Selection Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     TOOL SELECTION DECISION                                 │
+│                                                                             │
+│  What do you need?                                                          │
+│       │                                                                     │
+│   ┌───┴───┬───────┬───────┬───────┬───────┐                                │
+│   │       │       │       │       │       │                                 │
+│   ▼       ▼       ▼       ▼       ▼       ▼                                 │
+│  Find   Find    Under-  Read   Make    Complex                              │
+│  files  content stand   file  changes  task                                 │
+│   │       │       │       │      │       │                                  │
+│   ▼       ▼       ▼       ▼      ▼       ▼                                  │
+│  file_  grep_  semantic read_  edit   runSub-                               │
+│  search search search   file   tools  agent                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Spawning a Sub-Agent
 
 When invoking `runSubagent`, the orchestrator MUST include:

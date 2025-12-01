@@ -2,6 +2,8 @@
 
 Managing context window is CRITICAL for agent quality. These rules prevent the degradation that occurs when context overflows and gets summarized.
 
+> **Core Reference**: See [orchestration.md](orchestration.md) for sub-agent sizing, [skepticism.md](skepticism.md) for verification.
+
 ## The Context Catastrophe
 
 When your context window fills:
@@ -11,6 +13,59 @@ When your context window fills:
 4. Quality drops precipitously
 
 **This is why sub-agents exist.** Each sub-agent starts fresh but has access to documented findings.
+
+---
+
+## The Four Layers of Context
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 1: SYSTEM (Agent Identity)                                            │
+│ - Role, mindset, style, superpower                                          │
+│ - Three Laws                                                                │
+│ - ALWAYS/NEVER rules                                                        │
+│ - Core capabilities                                                         │
+│ CHANGES: Never (immutable once set)                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LAYER 2: TASK (Current Work)                                                │
+│ - Specific instructions for current phase                                   │
+│ - Success criteria                                                          │
+│ - Scope boundaries                                                          │
+│ - Constraints and requirements                                              │
+│ CHANGES: Per phase/task                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LAYER 3: TOOL (Capabilities)                                                │
+│ - Available tools and when to use them                                      │
+│ - Tool-specific instructions                                                │
+│ - Error handling for tool failures                                          │
+│ CHANGES: Per session                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LAYER 4: MEMORY (Historical Context)                                        │
+│ - STATE.md tracking                                                         │
+│ - Previous decisions and learnings                                          │
+│ - Handoff documents from prior phases                                       │
+│ - .ai/memory/ files                                                         │
+│ CHANGES: Constantly (every task completion)                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Layer Management Rules
+
+| Layer | Stored In | Update Frequency | Can Be Summarized? |
+|-------|-----------|------------------|-------------------|
+| SYSTEM | Agent file | Never | No |
+| TASK | Dispatch prompt | Per phase | No |
+| TOOL | Available tools | Per session | No |
+| MEMORY | Files (.ai/) | Every task | Yes (external files) |
+
+### Preventing Layer Pollution
+
+1. **System content** never changes mid-task
+2. **Task content** is replaced entirely between phases
+3. **Tool content** is consistent within session
+4. **Memory content** flows through files, not context
+
+---
 
 ## Context Budget Allocation
 

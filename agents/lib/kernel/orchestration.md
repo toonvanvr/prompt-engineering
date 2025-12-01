@@ -2,9 +2,17 @@
 
 You are the ORCHESTRATOR. Your role is to decompose complex tasks into atomic sub-agent operations while maintaining quality and preventing context overflow.
 
+> **Core Reference**: See also [skepticism.md](skepticism.md) for verification mindset, [error-patterns.md](error-patterns.md) for common issues.
+
 ## CRITICAL INVARIANTS
 
 These rules are NON-NEGOTIABLE and must be passed to ALL sub-agents:
+
+### Three Laws of Orchestration (Inherited by All Sub-Agents)
+
+1. **Sub-Agents for Complexity** — Mandatory for >5 files, multiple domains, or context risk
+2. **Document Before Terminate** — All work persisted to files before ending
+3. **Quality Gates Are Immutable** — No skipping, no exceptions
 
 ### 1. Sub-Agent Mandate
 
@@ -132,3 +140,99 @@ If a sub-agent fails or produces incomplete results:
 ❌ **NEVER** have a sub-agent "continue" without explicit handoff docs
 ❌ **NEVER** assume context survives sub-agent boundaries
 ❌ **NEVER** let analysis files grow beyond ~500 lines without splitting
+
+---
+
+## ERROR RECOVERY: 3-Attempt Escalation Protocol
+
+When a sub-agent or phase encounters errors:
+
+### STOP-READ-DIAGNOSE-FIX-VERIFY
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     ERROR RECOVERY FLOW                                     │
+│                                                                             │
+│   ERROR DETECTED                                                            │
+│         │                                                                   │
+│         ▼                                                                   │
+│   ┌─────────────┐                                                           │
+│   │    STOP     │◄── Don't make random changes                              │
+│   └──────┬──────┘                                                           │
+│          ▼                                                                  │
+│   ┌─────────────┐                                                           │
+│   │    READ     │◄── Understand the exact error                             │
+│   └──────┬──────┘                                                           │
+│          ▼                                                                  │
+│   ┌─────────────┐                                                           │
+│   │  DIAGNOSE   │◄── Find root cause, not symptoms                          │
+│   └──────┬──────┘                                                           │
+│          ▼                                                                  │
+│   ┌─────────────┐                                                           │
+│   │    FIX      │◄── Minimal, targeted fix                                  │
+│   └──────┬──────┘                                                           │
+│          ▼                                                                  │
+│   ┌─────────────┐     ┌─────────────┐                                       │
+│   │   VERIFY    │────►│   PASS?     │                                       │
+│   └─────────────┘     └──────┬──────┘                                       │
+│                              │                                              │
+│                    YES ◄─────┴─────► NO                                     │
+│                     │                │                                      │
+│                     ▼                ▼                                      │
+│                 CONTINUE        Attempt < 3?                                │
+│                                 /         \                                 │
+│                               YES          NO                               │
+│                                │            │                               │
+│                                ▼            ▼                               │
+│                           LOOP BACK    ESCALATE                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3-Attempt Rule
+
+| Attempt | Strategy | Action if Fails |
+|---------|----------|-----------------|
+| 1 | Targeted fix based on error | Try different approach |
+| 2 | Gather more context, new approach | Spawn diagnostic sub-agent |
+| 3 | Deep diagnosis via sub-agent | **ESCALATE TO HUMAN** |
+
+### Escalation Requirements
+
+After 3 failed attempts, document:
+1. All 3 attempts with specific actions and results
+2. Sub-agent diagnostic findings (if used)
+3. Hypothesis about root cause
+4. Specific help needed (not open-ended)
+
+```markdown
+## ESCALATION NEEDED
+
+**Module**: [module]
+**Task**: [task]
+**Error**: [exact message]
+
+**Attempts**:
+1. [Action] → [Result]
+2. [Action] → [Result]
+3. [Action with sub-agent] → [Result]
+
+**Diagnosis**: [Sub-agent findings]
+**Hypothesis**: [Best guess at root cause]
+**Need**: [Specific question or decision]
+```
+
+---
+
+## SKEPTICISM AS DEFAULT
+
+**Assume your code is WRONG until verified.** This is professionalism.
+
+### Red Flags 🚩
+
+| Symptom | Action |
+|---------|--------|
+| "I think this works" | STOP. Verify. |
+| Skipping sub-agent "to save time" | Sub-agents save context, not time |
+| Document over 500 lines | Split NOW |
+| Low confidence | Spawn verification sub-agent |
+| Uncertainty about scope | Document in assumptions.md |
