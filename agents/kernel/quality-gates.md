@@ -20,45 +20,45 @@ Phase N → [GATE] → Phase N+1
 
 ### Analysis Gate
 
-| Check               | Verification            |
-| ------------------- | ----------------------- |
-| Scope defined       | IN/OUT documented       |
-| Patterns identified | Pattern list exists     |
-| Dependencies mapped | Dependency graph exists |
-| Risks documented    | Risk list with severity |
+|Check|Verification|
+|-|-|
+|Scope defined|IN/OUT documented|
+|Patterns identified|Pattern list exists|
+|Dependencies mapped|Dependency graph exists|
+|Risks documented|Risk list with severity|
 
 **Pass Condition:** All checks documented with evidence.
 
 ### Design Gate
 
-| Check                   | Verification                |
-| ----------------------- | --------------------------- |
-| Covers all requirements | Traceability matrix         |
-| Addresses all patterns  | Design maps to patterns     |
-| Feasibility confirmed   | No blocking constraints     |
-| Approach approved       | User sign-off (if required) |
+|Check|Verification|
+|-|-|
+|Covers all requirements|Traceability matrix|
+|Addresses all patterns|Design maps to patterns|
+|Feasibility confirmed|No blocking constraints|
+|Approach approved|User sign-off (if required)|
 
 **Pass Condition:** Design document complete + covers scope.
 
 ### Implementation Gate
 
-| Check            | Verification           |
-| ---------------- | ---------------------- |
-| Matches design   | Code implements spec   |
-| Tests pass       | Test execution log     |
-| No regressions   | Prior tests still pass |
-| Style consistent | Linter/formatter clean |
+|Check|Verification|
+|-|-|
+|Matches design|Code implements spec|
+|Tests pass|Test execution log|
+|No regressions|Prior tests still pass|
+|Style consistent|Linter/formatter clean|
 
 **Pass Condition:** All tests pass + style clean.
 
 ### Review Gate
 
-| Check                    | Verification          |
-| ------------------------ | --------------------- |
-| Blocking issues resolved | Zero blockers         |
-| Warnings addressed       | Acknowledged or fixed |
-| Documentation updated    | Reflects changes      |
-| Handoff complete         | `_handoff.md` exists  |
+|Check|Verification|
+|-|-|
+|Blocking issues resolved|Zero blockers|
+|Warnings addressed|Acknowledged or fixed|
+|Documentation updated|Reflects changes|
+|Handoff complete|`_handoff.md` exists|
 
 **Pass Condition:** No blockers + handoff exists.
 
@@ -66,17 +66,15 @@ Phase N → [GATE] → Phase N+1
 
 ## Gate Verification Template
 
-```markdown
+```md
 ## Gate: {gate_name}
 
 ### Checks
-
 - [ ] {check_1}: {evidence}
 - [ ] {check_2}: {evidence}
 - [ ] {check_3}: {evidence}
 
 ### Result
-
 - Status: {PASS | FAIL}
 - Blockers: {list if FAIL}
 - Next: {next phase or fix action}
@@ -125,23 +123,23 @@ FAIL detected
 
 ## Gate Evidence Types
 
-| Evidence           | Use Case          | Example                   |
-| ------------------ | ----------------- | ------------------------- |
-| File exists        | Artifact created  | `design.md` exists        |
-| Content matches    | Structure correct | Required sections present |
-| Command output     | Tests/tools       | `npm test` exit 0         |
-| Explicit statement | User approval     | "Design approved" in chat |
+|Evidence|Use Case|Example|
+|-|-|-|
+|File exists|Artifact created|`design.md` exists|
+|Content matches|Structure correct|Required sections present|
+|Command output|Tests/tools|`npm test` exit 0|
+|Explicit statement|User approval|"Design approved" in chat|
 
 ---
 
 ## Phase-Gate Matrix
 
-| Phase          | Gate              | Evidence               | Next           |
-| -------------- | ----------------- | ---------------------- | -------------- |
-| Analysis       | Analysis complete | `analysis.md`          | Design         |
-| Design         | Design approved   | `design.md` + approval | Implementation |
-| Implementation | Tests pass        | Test log               | Review         |
-| Review         | No blockers       | `review.md`            | Complete       |
+|Phase|Gate|Evidence|Next|
+|-|-|-|-|
+|Analysis|Analysis complete|`analysis.md`|Design|
+|Design|Design approved|`design.md` + approval|Implementation|
+|Implementation|Tests pass|Test log|Review|
+|Review|No blockers|`review.md`|Complete|
 
 ---
 
@@ -149,11 +147,10 @@ FAIL detected
 
 Every handoff includes gate status:
 
-```markdown
+```md
 ## Verification
 
 ### Gate: {gate_name}
-
 - Status: {PASS}
 - Evidence: {file/command}
 - Timestamp: {when}

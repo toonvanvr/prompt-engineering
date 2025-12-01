@@ -6,13 +6,13 @@ Two operational modes. Different constraint levels.
 
 ## Mode Definitions
 
-| Aspect      | EXPLORE                   | EXPLOIT              |
-| ----------- | ------------------------- | -------------------- |
-| Creativity  | Enabled                   | Disabled             |
-| Constraints | Guardrails only           | Full stack           |
-| Deviation   | Within bounds             | Zero tolerance       |
-| Output      | Options + recommendations | Exact implementation |
-| Uncertainty | Expected                  | Unacceptable         |
+|Aspect|EXPLORE|EXPLOIT|
+|-|-|-|
+|Creativity|Enabled|Disabled|
+|Constraints|Guardrails only|Full stack|
+|Deviation|Within bounds|Zero tolerance|
+|Output|Options + recommendations|Exact implementation|
+|Uncertainty|Expected|Unacceptable|
 
 ---
 
@@ -22,7 +22,7 @@ Use when: Discovery, analysis, design, options needed.
 
 ### Characteristics
 
-```markdown
+```md
 Mode: EXPLORE
 
 Creativity: enabled within guardrails
@@ -59,7 +59,7 @@ Use when: Implementation, execution, following spec.
 
 ### Characteristics
 
-```markdown
+```md
 Mode: EXPLOIT
 
 Creativity: disabled
@@ -122,17 +122,17 @@ After EXPLORE resolves → return to EXPLOIT.
 
 ### Parent → Child Mode Transfer
 
-| Parent Mode | Child Default                        |
-| ----------- | ------------------------------------ |
-| EXPLORE     | EXPLORE (unless implementation task) |
-| EXPLOIT     | EXPLOIT                              |
+|Parent Mode|Child Default|
+|-|-|
+|EXPLORE|EXPLORE (unless implementation task)|
+|EXPLOIT|EXPLOIT|
 
 ### Override Allowed?
 
-| Direction         | Allowed | Condition              |
-| ----------------- | ------- | ---------------------- |
-| EXPLORE → EXPLOIT | ✅      | Implementation subtask |
-| EXPLOIT → EXPLORE | ⚠️      | Only on escalation     |
+|Direction|Allowed|Condition|
+|-|-|-|
+|EXPLORE → EXPLOIT|✅|Implementation subtask|
+|EXPLOIT → EXPLORE|⚠️|Only on escalation|
 
 ---
 
@@ -140,7 +140,7 @@ After EXPLORE resolves → return to EXPLOIT.
 
 Every dispatch includes:
 
-```markdown
+```md
 ## Mode: {EXPLORE | EXPLOIT}
 
 {mode-specific constraints}

@@ -230,6 +230,56 @@ Remove articles where grammatically safe:
 | less than            | <      | Comparison   |
 | for example          | e.g.,  | Illustration |
 
+#### Markdown Syntax Compression
+
+Use minimal syntax to save tokens:
+
+| Element                    | Verbose                           | Dense          | Savings |
+| -------------------------- | --------------------------------- | -------------- | ------- |
+| Table separators           | `\| --- \| ---- \| ----- \|`      | `\|-\|-\|-\|`  | ~80%    |
+| Fence tag: markdown        | ` ```markdown `                   | ` ```md `      | 5 chars |
+| Fence tag: yaml            | ` ```yaml `                       | ` ```yml `     | 1 char  |
+| Fence tag: javascript      | ` ```javascript `                 | ` ```js `      | 7 chars |
+| Fence tag: typescript      | ` ```typescript `                 | ` ```ts `      | 7 chars |
+| Flow diagram indent        | 4 spaces per level                | 0 spaces       | 4/line  |
+| Table column padding       | Spaces to align columns           | No padding     | Many    |
+
+**Table Example:**
+
+Before (verbose):
+```md
+| Column One | Column Two | Column Three |
+| ---------- | ---------- | ------------ |
+| Value A    | Value B    | Value C      |
+```
+
+After (dense):
+```md
+|Column One|Column Two|Column Three|
+|-|-|-|
+|Value A|Value B|Value C|
+```
+
+**Flow Diagram Example:**
+
+Before:
+```
+READ DESIGN
+    ↓ [understood?]
+PLAN CHANGES
+    ↓ [files identified?]
+IMPLEMENT
+```
+
+After:
+```
+READ DESIGN
+↓ [understood?]
+PLAN CHANGES
+↓ [files identified?]
+IMPLEMENT
+```
+
 #### Prose to Structure
 
 Convert paragraph prose to markdown structure:

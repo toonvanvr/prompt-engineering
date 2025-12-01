@@ -6,13 +6,13 @@ Template for multi-dimensional agent anchoring. Prevents persona drift.
 
 ## Layer Overview
 
-| Layer | Name            | Purpose            | Example                             |
-| ----- | --------------- | ------------------ | ----------------------------------- |
-| 1     | Identity Matrix | WHO you are        | Role + Mindset + Style + Superpower |
-| 2     | Three Laws      | IMMUTABLE rules    | Sub-agent, Document, Gates          |
-| 3     | ALWAYS/NEVER    | BINARY constraints | "Always verify", "Never skip"       |
-| 4     | Phases/Gates    | SEQUENTIAL flow    | Analysis → Design → Implement       |
-| 5     | Output Format   | EXACT structure    | Markdown template with example      |
+|Layer|Name|Purpose|Example|
+|-|-|-|-|
+|1|Identity Matrix|WHO you are|Role + Mindset + Style + Superpower|
+|2|Three Laws|IMMUTABLE rules|Sub-agent, Document, Gates|
+|3|ALWAYS/NEVER|BINARY constraints|"Always verify", "Never skip"|
+|4|Phases/Gates|SEQUENTIAL flow|Analysis → Design → Implement|
+|5|Output Format|EXACT structure|Markdown template with example|
 
 ---
 
@@ -20,7 +20,7 @@ Template for multi-dimensional agent anchoring. Prevents persona drift.
 
 4 dimensions, all required.
 
-```markdown
+```md
 ## Identity
 
 Role: {what you are}
@@ -38,7 +38,7 @@ Superpower: {unique strength}
 
 ### Example
 
-```markdown
+```md
 Role: Security-focused code reviewer
 Mindset: Assume all input is hostile
 Style: Direct, CVE-referenced findings
@@ -51,7 +51,7 @@ Superpower: Threat pattern recognition
 
 3 immutable rules. See `three-laws.md` for standard set.
 
-```markdown
+```md
 ## Three Laws
 
 1. **{Name}** — {explanation}
@@ -72,15 +72,13 @@ Superpower: Threat pattern recognition
 
 Binary constraints. No ambiguity.
 
-```markdown
+```md
 ### ALWAYS
-
 1. {action}
 2. {action}
    ...
 
 ### NEVER
-
 1. {action}
 2. {action}
    ...
@@ -95,15 +93,13 @@ Binary constraints. No ambiguity.
 
 ### Example
 
-```markdown
+```md
 ### ALWAYS
-
 1. Verify file exists before edit
 2. Document changes in handoff
 3. Run tests after modification
 
 ### NEVER
-
 1. Edit files outside scope
 2. Skip verification steps
 3. Assume success without checking
@@ -115,10 +111,10 @@ Binary constraints. No ambiguity.
 
 Sequential execution with checkpoints.
 
-```markdown
-| Phase   | Gate           | Output     |
-| ------- | -------------- | ---------- |
-| {phase} | {verification} | {artifact} |
+```md
+|Phase|Gate|Output|
+|-|-|-|
+|{phase}|{verification}|{artifact}|
 ```
 
 ### Requirements
@@ -134,7 +130,7 @@ Sequential execution with checkpoints.
 
 Exact specification. Eliminates variance.
 
-```markdown
+```md
 ## Output Format
 
 ### {artifact_name}

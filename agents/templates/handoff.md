@@ -5,7 +5,7 @@ Standard template for phase transitions.
 
 ---
 
-```markdown
+```md
 # Phase Handoff: {PHASE_NAME}
 
 **Phase:** {Interpretation|Analysis|Design|Implementation|Review}
@@ -15,100 +15,85 @@ Standard template for phase transitions.
 ---
 
 ## Confidence Assessment
-
-| Level             | Concerns      | Mitigation |
-| ----------------- | ------------- | ---------- |
-| {HIGH/MEDIUM/LOW} | {if not HIGH} | {if LOW}   |
+|Level|Concerns|Mitigation|
+|-|-|-|
+|{HIGH/MEDIUM/LOW}|{if not HIGH}|{if LOW}|
 
 **If LOW:**
-
 - [ ] Spawn verification sub-agent
 - [ ] Flag for human review
 
 ---
 
 ## Summary
-
 {2-3 sentences: what was done & key discoveries}
 
 ---
 
 ## Key Findings
-
-| Finding | Reference       | Impact   |
-| ------- | --------------- | -------- |
-| {title} | `{path}:{line}` | {effect} |
+|Finding|Reference|Impact|
+|-|-|-|
+|{title}|`{path}:{line}`|{effect}|
 
 ---
 
 ## Decisions Made
-
-| Decision | Rationale | Impact    |
-| -------- | --------- | --------- |
-| {what}   | {why}     | {affects} |
+|Decision|Rationale|Impact|
+|-|-|-|
+|{what}|{why}|{affects}|
 
 ---
 
 ## Artifacts Produced
-
-| Artifact | Path                         | Description |
-| -------- | ---------------------------- | ----------- |
-| {name}   | `.ai/scratch/{topic}/{file}` | {contents}  |
+|Artifact|Path|Description|
+|-|-|-|
+|{name}|`.ai/scratch/{topic}/{file}`|{contents}|
 
 ---
 
 ## Open Questions
 
 ### For Next Phase
-
 - [ ] {question to answer next}
 
 ### For User (if blocking)
-
 - {only if truly blocking}
 
 ---
 
 ## Recommendations
-
-| Priority   | Recommendation |
-| ---------- | -------------- |
-| Start with | {what}         |
-| Focus on   | {area}         |
-| Watch for  | {risk}         |
+|Priority|Recommendation|
+|-|-|
+|Start with|{what}|
+|Focus on|{area}|
+|Watch for|{risk}|
 
 ---
 
 ## Critical Context
 
 ### Must Remember
-
 - {critical fact}
 
 ### Gotchas
-
 - {gotcha}: {explanation}
 
 ---
 
 ## Quality Gate
-
-| Gate        | Status              |
-| ----------- | ------------------- |
-| {gate_name} | {PASS/FAIL/PENDING} |
+|Gate|Status|
+|-|-|
+|{gate_name}|{PASS/FAIL/PENDING}|
 
 ### Checks
-
-| Check   | Status | Evidence |
-| ------- | ------ | -------- |
-| {check} | ✓/✗    | {ref}    |
+|Check|Status|Evidence|
+|-|-|-|
+|{check}|✓/✗|{ref}|
 
 ---
 
 ## Acceptance Checklist
-
 Before proceeding, verify:
-
 - [ ] All artifacts accessible
 - [ ] Summary clear
 - [ ] No blocking questions
@@ -121,56 +106,48 @@ Before proceeding, verify:
 
 ### Analysis Handoff Additions
 
-```markdown
+```md
 ## Patterns Discovered
-
 - {pattern}: {usage}
 
 ## Questions for Design
-
 - {question}
 ```
 
 ### Design Handoff Additions
 
-```markdown
+```md
 ## Implementation Order
-
 1. {step}
 2. {step}
 
 ## Files to Modify
-
-| File   | Type    | Change |
-| ------ | ------- | ------ |
-| {path} | NEW/MOD | {what} |
+|File|Type|Change|
+|-|-|-|
+|{path}|NEW/MOD|{what}|
 ```
 
 ### Implementation Handoff Additions
 
-```markdown
+```md
 ## Verification Log
-
-| Step    | Result      |
-| ------- | ----------- |
-| {check} | {PASS/FAIL} |
+|Step|Result|
+|-|-|
+|{check}|{PASS/FAIL}|
 
 ## Ready for Review
-
 {focus areas}
 ```
 
 ### Review Handoff Additions
 
-```markdown
+```md
 ## Verdict: {PASS/CONDITIONAL/FAIL}
 
 ## Blocking Issues
-
 - {issue}
 
 ## Conditional Items
-
 - {issue to track}
 ```
 ````

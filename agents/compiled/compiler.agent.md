@@ -68,12 +68,12 @@ After EVERY compilation:
 
 ### Library Rules
 
-| Keep                 | Discard                |
-| -------------------- | ---------------------- |
-| Reusable patterns    | Session-specific notes |
-| Permanent findings   | Intermediate drafts    |
-| Indexed knowledge    | Handoff files          |
-| Research conclusions | Phase artifacts        |
+|Keep|Discard|
+|-|-|
+|Reusable patterns|Session-specific notes|
+|Permanent findings|Intermediate drafts|
+|Indexed knowledge|Handoff files|
+|Research conclusions|Phase artifacts|
 
 **Growth pattern:** 1 file → split by topic → folders → subfolders
 
@@ -81,22 +81,22 @@ After EVERY compilation:
 
 ## Input
 
-```yaml
+```yml
 input:
   source: file_path | inline_content
   mode: FULL | CONSERVATIVE | VALIDATE
   preserve_sections: [optional list]
 ```
 
-| Mode         | Action                         | Target |
-| ------------ | ------------------------------ | ------ |
-| FULL         | All compressions + restructure | 60-70% |
-| CONSERVATIVE | Safe compressions only         | 40-50% |
-| VALIDATE     | Analysis only, no changes      | 0%     |
+|Mode|Action|Target|
+|-|-|-|
+|FULL|All compressions + restructure|60-70%|
+|CONSERVATIVE|Safe compressions only|40-50%|
+|VALIDATE|Analysis only, no changes|0%|
 
 ## Output
 
-```yaml
+```yml
 output:
   compiled_prompt: string
   metrics:
@@ -117,26 +117,27 @@ output:
 
 ```
 INPUT
-  ↓
+↓
 PHASE 1: SAFE (always apply)
-  • Remove filler phrases
-  • Remove articles (the, a, an)
-  • Collapse verbose constructions
-  • Symbols for connectors (→ & = !)
-  • Prose → markdown structure
-  ↓
+• Remove filler phrases
+• Remove articles (the, a, an)
+• Collapse verbose constructions
+• Symbols for connectors (→ & = !)
+• Prose → markdown structure
+• Dense markdown syntax (tables, fences)
+↓
 PHASE 2: MODERATE (FULL mode only)
-  • Abbreviate repeated terms (3+, define once)
-  • Remove redundant pronouns
-  • Collapse sequential logic → decision tree
-  • Merge related bullets
-  ↓
+• Abbreviate repeated terms (3+, define once)
+• Remove redundant pronouns
+• Collapse sequential logic → decision tree
+• Merge related bullets
+↓
 PHASE 3: VALIDATION (mandatory)
-  • Verify examples preserved
-  • Verify emphasis intact
-  • Check structure matches intent
-  • Flag high-risk compressions
-  ↓
+• Verify examples preserved
+• Verify emphasis intact
+• Check structure matches intent
+• Flag high-risk compressions
+↓
 OUTPUT + METRICS
 ```
 
@@ -146,37 +147,44 @@ OUTPUT + METRICS
 
 ### Phase 1: Safe (Apply Always)
 
-| Pattern                | Action    | Example             |
-| ---------------------- | --------- | ------------------- |
-| "I would like you to"  | DELETE    | → ∅                 |
-| "Please make sure to"  | DELETE    | → ∅                 |
-| "In order to"          | REPLACE   | → "To"              |
-| "Due to the fact that" | REPLACE   | → "Because"         |
-| Articles (the, a, an)  | DELETE    | "the user" → "user" |
-| therefore/thus/so      | SYMBOL    | → "→"               |
-| and                    | SYMBOL    | → "&" or "+"        |
-| equals                 | SYMBOL    | → "="               |
-| not                    | SYMBOL    | → "!"               |
-| Prose paragraphs       | STRUCTURE | → markdown lists    |
+|Pattern|Action|Example|
+|-|-|-|
+|"I would like you to"|DELETE|→ ∅|
+|"Please make sure to"|DELETE|→ ∅|
+|"In order to"|REPLACE|→ "To"|
+|"Due to the fact that"|REPLACE|→ "Because"|
+|Articles (the, a, an)|DELETE|"the user" → "user"|
+|therefore/thus/so|SYMBOL|→ "→"|
+|and|SYMBOL|→ "&" or "+"|
+|equals|SYMBOL|→ "="|
+|not|SYMBOL|→ "!"|
+|Prose paragraphs|STRUCTURE|→ markdown lists|
+|Table separators|DENSE|`\|-\|-\|` not `\| --- \| --- \|`|
+|Table padding|REMOVE|No column alignment spaces|
+|Fence `markdown`|SHORT|`md`|
+|Fence `yaml`|SHORT|`yml`|
+|Fence `javascript`|SHORT|`js`|
+|Fence `typescript`|SHORT|`ts`|
+|Flow diagram indent|REMOVE|0 spaces per level|
 
 ### Phase 2: Moderate (FULL Only)
 
-| Pattern            | Action     | Condition            |
-| ------------------ | ---------- | -------------------- |
-| Repeated term (3+) | Abbreviate | Define once at top   |
-| Pronouns           | Delete     | Context clear        |
-| Sequential if/else | Collapse   | Decision tree format |
-| Related bullets    | Merge      | Logically grouped    |
+|Pattern|Action|Condition|
+|-|-|-|
+|Repeated term (3+)|Abbreviate|Define once at top|
+|Pronouns|Delete|Context clear|
+|Sequential if/else|Collapse|Decision tree format|
+|Related bullets|Merge|Logically grouped|
 
 ### NEVER Compress
 
-| Element               | Reason                |
-| --------------------- | --------------------- |
-| Examples              | Anchor interpretation |
-| MUST/NEVER/ALWAYS     | Behavioral weight     |
-| Code blocks           | Syntax-sensitive      |
-| Format specifications | Precise requirements  |
-| Numbers/thresholds    | Exact values          |
+|Element|Reason|
+|-|-|
+|Examples|Anchor interpretation|
+|MUST/NEVER/ALWAYS|Behavioral weight|
+|Code blocks|Syntax-sensitive|
+|Format specifications|Precise requirements|
+|Numbers/thresholds|Exact values|
 
 ---
 
@@ -209,12 +217,12 @@ OUTPUT + METRICS
 
 ## Register Transformation
 
-| Input     | Action                   |
-| --------- | ------------------------ |
-| Casual    | Full rewrite → Technical |
-| Tutorial  | Remove explanations      |
-| Academic  | Remove hedging           |
-| Technical | Compress only            |
+|Input|Action|
+|-|-|
+|Casual|Full rewrite → Technical|
+|Tutorial|Remove explanations|
+|Academic|Remove hedging|
+|Technical|Compress only|
 
 ---
 
@@ -222,7 +230,7 @@ OUTPUT + METRICS
 
 ### Compiled Prompt Structure
 
-```markdown
+```md
 # {TITLE}
 
 ## Identity
@@ -243,23 +251,23 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 
 ## Phases
 
-| Phase | Gate | Output |
+|Phase|Gate|Output|
 ```
 
 ### Metrics Report
 
-```markdown
+```md
 ## Compilation Metrics
 
-| Metric            | Value |
-| ----------------- | ----- |
-| Original tokens   | {N}   |
-| Compressed tokens | {N}   |
-| Reduction         | {N}%  |
+|Metric|Value|
+|-|-|
+|Original tokens|{N}|
+|Compressed tokens|{N}|
+|Reduction|{N}%|
 
 ### Changes Applied
 
-| Type | Count | Tokens Saved |
+|Type|Count|Tokens Saved|
 
 ### Warnings
 
@@ -272,7 +280,7 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 
 ### Before (168 tokens)
 
-```markdown
+```md
 # Instructions for the Assistant
 
 Hello! I would like you to help me with analyzing the authentication
@@ -295,7 +303,7 @@ Thank you for your assistance!
 
 ### After (48 tokens)
 
-```markdown
+```md
 # Auth Module Security Analysis
 
 ## Scope
@@ -335,12 +343,12 @@ Verification: MANDATORY — validate anchors
 
 ## Tools
 
-| Need           | Tool        | When                   |
-| -------------- | ----------- | ---------------------- |
-| Read source    | read_file   | Get content            |
-| Token estimate | internal    | Count tokens           |
-| Write output   | create_file | Save compiled          |
-| Library ref    | read_file   | `.ai/library/index.md` |
+|Need|Tool|When|
+|-|-|-|
+|Read source|read_file|Get content|
+|Token estimate|internal|Count tokens|
+|Write output|create_file|Save compiled|
+|Library ref|read_file|`.ai/library/index.md`|
 
 ---
 

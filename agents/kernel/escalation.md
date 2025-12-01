@@ -110,29 +110,27 @@ Fix: Spawn sub-agent to analyze environment, permissions, symlinks
 
 ## Escalation Types
 
-| Type        | Trigger                       | Resolution Path                   |
-| ----------- | ----------------------------- | --------------------------------- |
-| Technical   | 3 failed attempts             | User intervention or external fix |
-| Scope       | Requires out-of-scope changes | User approval to expand scope     |
-| Information | Missing critical info         | User provides missing context     |
-| Permission  | Access denied                 | User grants access                |
-| Complexity  | Beyond single-agent capacity  | Spawn specialized sub-agent       |
+|Type|Trigger|Resolution Path|
+|-|-|-|
+|Technical|3 failed attempts|User intervention or external fix|
+|Scope|Requires out-of-scope changes|User approval to expand scope|
+|Information|Missing critical info|User provides missing context|
+|Permission|Access denied|User grants access|
+|Complexity|Beyond single-agent capacity|Spawn specialized sub-agent|
 
 ---
 
 ## Escalation Template
 
-```markdown
+```md
 # ESCALATION: {brief_title}
 
 ## Status
-
 - Severity: {HIGH | MEDIUM | LOW}
 - Blocking: {YES | NO}
 - Attempts exhausted: 3
 
 ## Context
-
 Task: {what we were trying to do}
 Phase: {current phase}
 Mode: {EXPLORE | EXPLOIT}

@@ -70,11 +70,11 @@ Output: Exact spec match
 1 OUTCOME per edit
 ```
 
-| Check     | Action                 |
-| --------- | ---------------------- | ---------- |
-| Edit file | Single file only       |
-| Verify    | Immediately after edit |
-| Result    | PASS → proceed         | FAIL → fix |
+|Check|Action|
+|-|-|
+|Edit file|Single file only|
+|Verify|Immediately after edit|
+|Result|PASS → proceed \| FAIL → fix|
 
 ---
 
@@ -82,25 +82,25 @@ Output: Exact spec match
 
 ```
 READ DESIGN
-    ↓ [understood?]
+↓ [understood?]
 PLAN CHANGES
-    ↓ [files identified?]
+↓ [files identified?]
 IMPLEMENT
-    ↓ [compiles?]
+↓ [compiles?]
 VERIFY
-    ↓ [tests pass?]
+↓ [tests pass?]
 HANDOFF
-    ↓ [documented?]
+↓ [documented?]
 COMPLETE
 ```
 
-| Phase     | Gate         | Output           |
-| --------- | ------------ | ---------------- |
-| Read      | Understood   | Mental model     |
-| Plan      | Files listed | Change plan      |
-| Implement | Compiles     | Code             |
-| Verify    | Tests pass   | Verification log |
-| Handoff   | Complete     | `_handoff.md`    |
+|Phase|Gate|Output|
+|-|-|-|
+|Read|Understood|Mental model|
+|Plan|Files listed|Change plan|
+|Implement|Compiles|Code|
+|Verify|Tests pass|Verification log|
+|Handoff|Complete|`_handoff.md`|
 
 ---
 
@@ -108,61 +108,50 @@ COMPLETE
 
 ### implementation_changes.md
 
-```markdown
+```md
 # Implementation: {Component}
 
 ## Design Reference
-
 {path}
 
 ## Files Created
-
-| File | Purpose | Lines |
+|File|Purpose|Lines|
 
 ## Files Modified
-
-| File | Change | +/-Lines |
+|File|Change|+/-Lines|
 
 ## Deviations
-
-| What | Why | Impact | Approved |
+|What|Why|Impact|Approved|
 (NONE if none)
 
 ## Verification
-
-| Check | Result |
-| Tests | PASS/FAIL |
-| Lint | PASS/FAIL |
+|Check|Result|
+|Tests|PASS/FAIL|
+|Lint|PASS/FAIL|
 ```
 
 ### \_handoff.md
 
-```markdown
+```md
 # Handoff: {Component}
 
 ## Summary
-
 {1-line}
 
 ## Files Created
-
 - `{path}`: {purpose}
 
 ## Files Modified
-
 - `{path}`: {change}
 
 ## Deviations
-
 - {deviation}: {reason} (or NONE)
 
 ## Verification
-
 - Status: PASS
 - Tests: {summary}
 
 ## Confidence
-
 - Level: HIGH|MEDIUM|LOW
 - Concerns: {list}
 ```
@@ -173,24 +162,24 @@ COMPLETE
 
 ### STOP-READ-DIAGNOSE-FIX-VERIFY
 
-| Step     | Action                  |
-| -------- | ----------------------- |
-| STOP     | Halt immediately        |
-| READ     | Full error message      |
-| DIAGNOSE | Root cause, not symptom |
-| FIX      | Minimal, targeted       |
-| VERIFY   | Confirm resolution      |
+|Step|Action|
+|-|-|
+|STOP|Halt immediately|
+|READ|Full error message|
+|DIAGNOSE|Root cause, not symptom|
+|FIX|Minimal, targeted|
+|VERIFY|Confirm resolution|
 
 ### Escalation
 
-| Attempt | Approach             |
-| ------- | -------------------- |
-| 1       | Fix per error        |
-| 2       | Alternative approach |
-| 3       | Deep investigation   |
-| 4+      | ESCALATE             |
+|Attempt|Approach|
+|-|-|
+|1|Fix per error|
+|2|Alternative approach|
+|3|Deep investigation|
+|4+|ESCALATE|
 
-```markdown
+```md
 ## Blocker
 
 Error: {message}
@@ -198,7 +187,6 @@ File: {path}
 Change: {attempted}
 
 Attempts:
-
 1. {action} → {result}
 2. {action} → {result}
 
@@ -210,12 +198,12 @@ Need: {help}
 
 ## Scope Management
 
-| Category | Rule                 |
-| -------- | -------------------- |
-| IN       | Files in design      |
-| IN       | Changes in spec      |
-| OUT      | Unrelated files      |
-| OUT      | Unspecified features |
+|Category|Rule|
+|-|-|
+|IN|Files in design|
+|IN|Changes in spec|
+|OUT|Unrelated files|
+|OUT|Unspecified features|
 
 Before EVERY edit:
 
@@ -238,23 +226,19 @@ Categories:
 - `SCOPE_CREEP`
 - `VERIFICATION_SKIP`
 
-```markdown
+```md
 # Self-Analysis: {CATEGORY}
 
 ## Trigger
-
 {what}
 
 ## Analysis
-
 {why}
 
 ## Correction
-
 {fix}
 
 ## Prevention
-
 {future}
 ```
 
@@ -262,19 +246,19 @@ Categories:
 
 ## Tools
 
-| Need          | Tool            |
-| ------------- | --------------- |
-| Read design   | read_file       |
-| Find patterns | grep_search     |
-| Understand    | semantic_search |
-| Edit          | edit tools      |
-| Verify        | terminal        |
+|Need|Tool|
+|-|-|
+|Read design|read_file|
+|Find patterns|grep_search|
+|Understand|semantic_search|
+|Edit|edit tools|
+|Verify|terminal|
 
 ---
 
 ## Deviation Request
 
-```markdown
+```md
 ## Deviation Request
 
 Design: {original}

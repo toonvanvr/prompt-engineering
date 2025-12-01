@@ -36,19 +36,19 @@ Questions: encouraged before assumptions
 
 ## Scope
 
-| IN                 | OUT                    |
-| ------------------ | ---------------------- |
-| {files_to_analyze} | {excluded_files}       |
-| {concerns}         | Implementation changes |
-|                    | Design decisions       |
+|IN|OUT|
+|-|-|
+|{files_to_analyze}|{excluded_files}|
+|{concerns}|Implementation changes|
+||Design decisions|
 
 ## File Limits
 
-| Priority | Path   | Purpose  | Limit          |
-| -------- | ------ | -------- | -------------- |
-| HIGH     | {path} | {reason} | Deep read      |
-| MEDIUM   | {path} | {reason} | Skim           |
-| LOW      | {path} | {reason} | Reference only |
+|Priority|Path|Purpose|Limit|
+|-|-|-|-|
+|HIGH|{path}|{reason}|Deep read|
+|MEDIUM|{path}|{reason}|Skim|
+|LOW|{path}|{reason}|Reference only|
 
 **Constraints:**
 
@@ -59,14 +59,14 @@ Questions: encouraged before assumptions
 
 ## Analysis Questions
 
-| Category  | Question                       |
-| --------- | ------------------------------ |
-| Structure | How is {domain} organized?     |
-| Models    | What data structures exist?    |
-| Flow      | How does data move?            |
-| Patterns  | What conventions are used?     |
-| Gotchas   | What implicit behaviors exist? |
-| Tests     | What coverage exists?          |
+|Category|Question|
+|-|-|
+|Structure|How is {domain} organized?|
+|Models|What data structures exist?|
+|Flow|How does data move?|
+|Patterns|What conventions are used?|
+|Gotchas|What implicit behaviors exist?|
+|Tests|What coverage exists?|
 
 ---
 
@@ -74,85 +74,69 @@ Questions: encouraged before assumptions
 
 ### Primary: `.ai/scratch/{topic}/analysis_{domain}.md`
 
-```markdown
+```md
 # Analysis: {Domain}
 
 ## Overview
-
 {2-3 sentences}
 
 ## Structure
-
 {organization description}
 
 ## Key Components
-
-| Component | Location | Purpose | Key Methods |
-| --------- | -------- | ------- | ----------- |
-| {name}    | {path}   | {what}  | {list}      |
+|Component|Location|Purpose|Key Methods|
+|-|-|-|-|
+|{name}|{path}|{what}|{list}|
 
 ## Data Models
-
-| Model  | Attributes | Relations | Validations |
-| ------ | ---------- | --------- | ----------- |
-| {name} | {list}     | {list}    | {rules}     |
+|Model|Attributes|Relations|Validations|
+|-|-|-|-|
+|{name}|{list}|{list}|{rules}|
 
 ## Data Flow
-
 {diagram or description}
 
 ## Patterns & Conventions
-
 - {pattern}: {usage}
 
 ## Gotchas & Edge Cases
-
 - {gotcha}: {explanation}
 
 ## Dependencies
-
-| Dependency | Usage |
-| ---------- | ----- |
-| {name}     | {how} |
+|Dependency|Usage|
+|-|-|
+|{name}|{how}|
 
 ## Test Coverage
-
 {summary}
 
 ## Questions for Design
-
 - {question}
 ```
 ````
 
 ### Handoff: `.ai/scratch/{topic}/_handoff.md`
 
-```markdown
+```md
 # Analysis Handoff: {Domain}
 
 ## Summary
-
 {2-3 sentences}
 
 ## Key Findings
-
 1. {finding}
 2. {finding}
 
 ## Critical Context for Design
-
 {must-know items}
 
 ## Artifacts
-
 - `analysis_{domain}.md`
 
 ## Open Questions
-
 - {question}
 
 ## Gate: Analysis Complete
-
 - [ ] Scope defined
 - [ ] Patterns identified
 - [ ] Dependencies mapped

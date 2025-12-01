@@ -69,11 +69,11 @@ FULL CONSTRAINT STACK:
 
 ## Input Context
 
-| Source   | Path                                |
-| -------- | ----------------------------------- |
-| Design   | `.ai/scratch/{topic}/design.md`     |
-| Analysis | `.ai/scratch/{topic}/analysis_*.md` |
-| Review   | `.ai/scratch/{topic}/review_*.md`   |
+|Source|Path|
+|-|-|
+|Design|`.ai/scratch/{topic}/design.md`|
+|Analysis|`.ai/scratch/{topic}/analysis_*.md`|
+|Review|`.ai/scratch/{topic}/review_*.md`|
 
 ---
 
@@ -81,36 +81,36 @@ FULL CONSTRAINT STACK:
 
 ### Files to Create
 
-| File   | Purpose | Verification    |
-| ------ | ------- | --------------- |
-| {path} | {what}  | {how to verify} |
+|File|Purpose|Verification|
+|-|-|-|
+|{path}|{what}|{how to verify}|
 
 ### Files to Modify
 
-| File   | Changes | Verification    |
-| ------ | ------- | --------------- |
-| {path} | {what}  | {how to verify} |
+|File|Changes|Verification|
+|-|-|-|
+|{path}|{what}|{how to verify}|
 
 ---
 
 ## Implementation Guidelines
 
-| Guideline | Requirement                            |
-| --------- | -------------------------------------- |
-| Style     | Match existing patterns                |
-| Changes   | Atomic, reversible                     |
-| Docs      | Comments for non-obvious code          |
-| Errors    | Handle per design, meaningful messages |
+|Guideline|Requirement|
+|-|-|
+|Style|Match existing patterns|
+|Changes|Atomic, reversible|
+|Docs|Comments for non-obvious code|
+|Errors|Handle per design, meaningful messages|
 
 ---
 
 ## Constraints
 
-| Limit            | Value | Action if Exceeded  |
-| ---------------- | ----- | ------------------- |
-| Lines/file       | 250   | Split task          |
-| Files modified   | 8     | Spawn sub-agent     |
-| Design deviation | 0     | Document + escalate |
+|Limit|Value|Action if Exceeded|
+|-|-|-|
+|Lines/file|250|Split task|
+|Files modified|8|Spawn sub-agent|
+|Design deviation|0|Document + escalate|
 
 ---
 
@@ -132,72 +132,60 @@ Use edit tools to apply changes to files.
 
 ### Change Log: `.ai/scratch/{topic}/implementation_{component}.md`
 
-```markdown
+```md
 # Implementation: {Component}
 
 ## Summary
-
 {what was implemented}
 
 ## Files Created
-
-| File   | Purpose | Lines |
-| ------ | ------- | ----- |
-| {path} | {why}   | {n}   |
+|File|Purpose|Lines|
+|-|-|-|
+|{path}|{why}|{n}|
 
 ## Files Modified
-
-| File   | Change | Lines   | Reason |
-| ------ | ------ | ------- | ------ |
-| {path} | {what} | {range} | {why}  |
+|File|Change|Lines|Reason|
+|-|-|-|-|
+|{path}|{what}|{range}|{why}|
 
 ## Design Deviations
-
-| Deviation | Original  | Actual | Reason |
-| --------- | --------- | ------ | ------ |
-| {what}    | {planned} | {done} | {why}  |
+|Deviation|Original|Actual|Reason|
+|-|-|-|-|
+|{what}|{planned}|{done}|{why}|
 
 ## Verification Log
-
-| Step | Command/Check | Result      |
-| ---- | ------------- | ----------- |
-| 1    | {what}        | {PASS/FAIL} |
+|Step|Command/Check|Result|
+|-|-|-|
+|1|{what}|{PASS/FAIL}|
 
 ## Test Considerations
-
 - {what to test}
 
 ## Known Limitations
-
 - {limitation}: {explanation}
 ```
 ````
 
 ### Handoff: `.ai/scratch/{topic}/_handoff.md`
 
-```markdown
+```md
 # Implementation Handoff: {Component}
 
 ## Summary
-
 {what was implemented}
 
 ## Changes Made
-
-| File   | Type    | Status | Verified |
-| ------ | ------- | ------ | -------- |
-| {path} | NEW/MOD | DONE   | ✓        |
+|File|Type|Status|Verified|
+|-|-|-|-|
+|{path}|NEW/MOD|DONE|✓|
 
 ## Verification Needed
-
 - [ ] {check}
 
 ## Ready for Review
-
 {focus areas for reviewer}
 
 ## Gate: Implementation Complete
-
 - [ ] Matches design
 - [ ] Tests pass
 - [ ] No regressions

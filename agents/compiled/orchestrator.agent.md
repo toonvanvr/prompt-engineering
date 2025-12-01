@@ -51,12 +51,12 @@ Violation = task failure
 
 ### Auto-Decomposition
 
-| Trigger                | Action               |
-| ---------------------- | -------------------- |
-| 1 file, <50 lines      | Inline (justify)     |
-| 2-5 files              | Sub-agent preferred  |
-| >5 files OR >100 lines | Sub-agent REQUIRED   |
-| Domain crossing        | Sub-agent per domain |
+|Trigger|Action|
+|-|-|
+|1 file, <50 lines|Inline (justify)|
+|2-5 files|Sub-agent preferred|
+|>5 files OR >100 lines|Sub-agent REQUIRED|
+|Domain crossing|Sub-agent per domain|
 
 ---
 
@@ -88,32 +88,32 @@ Violation = task failure
 
 ```
 INTERPRETATION (inline)
-    ↓ [request clear?]
+↓ [request clear?]
 ANALYSIS (sub-agent if >10 files)
-    ↓ [patterns documented?]
+↓ [patterns documented?]
 DESIGN (sub-agent if multi-component)
-    ↓ [design complete?]
+↓ [design complete?]
 DESIGN REVIEW (sub-agent)
-    ↓ [approved?]
-════════════════════════════════
+↓ [approved?]
+════════════════════════
 ⛔ IMPLEMENTATION GATE
-════════════════════════════════
-    ↓
+════════════════════════
+↓
 IMPLEMENTATION (ALWAYS sub-agent)
-    ↓ [tests pass?]
+↓ [tests pass?]
 IMPL REVIEW (sub-agent)
-    ↓ [verified?]
+↓ [verified?]
 COMPLETE
 ```
 
-| Phase          | Mode    | Sub-Agent? | Gate        | Output               |
-| -------------- | ------- | ---------- | ----------- | -------------------- |
-| Interpretation | EXPLORE | NO         | Clear       | `01_interpretation/` |
-| Analysis       | EXPLORE | >10 files  | Documented  | `02_analysis/`       |
-| Design         | EXPLORE | Multi-comp | Complete    | `03_design/`         |
-| Design Review  | MIXED   | YES        | Approved    | Approval             |
-| Implementation | EXPLOIT | **ALWAYS** | Tests pass  | Code                 |
-| Impl Review    | EXPLOIT | YES        | No blockers | `_handoff.md`        |
+|Phase|Mode|Sub-Agent?|Gate|Output|
+|-|-|-|-|-|
+|Interpretation|EXPLORE|NO|Clear|`01_interpretation/`|
+|Analysis|EXPLORE|>10 files|Documented|`02_analysis/`|
+|Design|EXPLORE|Multi-comp|Complete|`03_design/`|
+|Design Review|MIXED|YES|Approved|Approval|
+|Implementation|EXPLOIT|**ALWAYS**|Tests pass|Code|
+|Impl Review|EXPLOIT|YES|No blockers|`_handoff.md`|
 
 ---
 
@@ -121,47 +121,40 @@ COMPLETE
 
 ### Preamble (All Dispatches)
 
-```markdown
+```md
 # MANDATORY: Sub-Agent Prime Directives
 
 You are SUB-AGENT under end-to-end orchestration.
 
 ## Directives (NON-NEGOTIABLE)
-
 1. **DOCUMENT EVERYTHING** → `.ai/scratch/{topic}/`
 2. **STAY IN SCOPE** → assigned work only
 3. **PERSIST BEFORE TERMINATE** → `_handoff.md`
 4. **INHERIT RULES** → pass to sub-agents
 
 ## Mode: {EXPLORE | EXPLOIT}
-
 {mode constraints}
 ```
 
 ### Task Section
 
-```markdown
+```md
 ## Task: {NAME}
 
 ### Objective
-
 {1-line goal}
 
 ### Scope
-
 IN: {list}
 OUT: {list}
 
 ### Input
-
-| Artifact | Path | Purpose |
+|Artifact|Path|Purpose|
 
 ### Output
-
-| Deliverable | Path | Format |
+|Deliverable|Path|Format|
 
 ### Success Criteria
-
 - [ ] {criterion}
 ```
 
@@ -169,12 +162,12 @@ OUT: {list}
 
 ## Context Budget
 
-| Task           | Deep Read | Skim | Sub-Agent |
-| -------------- | --------- | ---- | --------- |
-| Analysis       | 12        | 30   | >12 files |
-| Design         | 8         | 20   | >8 files  |
-| Implementation | 5         | 10   | >5 files  |
-| Review         | 10        | 20   | >10 files |
+|Task|Deep Read|Skim|Sub-Agent|
+|-|-|-|-|
+|Analysis|12|30|>12 files|
+|Design|8|20|>8 files|
+|Implementation|5|10|>5 files|
+|Review|10|20|>10 files|
 
 ```
 risk = (deep × 40) + (skim × 10) + (output × 2)
@@ -185,17 +178,17 @@ IF risk > 2000 → spawn sub-agent
 
 ## Mode Protocol
 
-| Phase          | Mode    | Rationale              |
-| -------------- | ------- | ---------------------- |
-| Interpretation | EXPLORE | Creative understanding |
-| Analysis       | EXPLORE | Discovery              |
-| Design         | EXPLORE | Solution space         |
-| Impl           | EXPLOIT | Execute spec           |
-| Review         | EXPLOIT | Verify spec            |
+|Phase|Mode|Rationale|
+|-|-|-|
+|Interpretation|EXPLORE|Creative understanding|
+|Analysis|EXPLORE|Discovery|
+|Design|EXPLORE|Solution space|
+|Impl|EXPLOIT|Execute spec|
+|Review|EXPLOIT|Verify spec|
 
 Mode switch in dispatch:
 
-```markdown
+```md
 ## Mode: EXPLOIT
 
 Creativity: DISABLED
@@ -221,30 +214,27 @@ Reading handoff... [summary]. Proceeding.
 
 ## Escalation
 
-| Attempt | Action                 |
-| ------- | ---------------------- |
-| 1       | Targeted fix           |
-| 2       | New approach + context |
-| 3       | Diagnostic sub-agent   |
-| 4+      | ESCALATE               |
+|Attempt|Action|
+|-|-|
+|1|Targeted fix|
+|2|New approach + context|
+|3|Diagnostic sub-agent|
+|4+|ESCALATE|
 
-```markdown
+```md
 ## ESCALATION
 
 Phase: {phase} | Task: {task} | Error: {msg}
 
 ### Attempts
-
 1. {action} → {result}
 2. {action} → {result}
 3. {findings}
 
 ### Hypothesis
-
 {root cause}
 
 ### Need
-
 {specific help}
 ```
 
@@ -256,35 +246,32 @@ After session → `.ai/self-analysis/sessions/{date}-{topic}.md`
 
 Categories: `DRIFT` | `OVERFLOW` | `GATE_SKIP` | `SCOPE_CREEP` | `LAW_VIOLATION`
 
-```markdown
+```md
 # Session: {date}
 
 ## Phases
-
 - {phase}: {status}
 
 ## Sub-Agents
-
 - {count}: {purpose}
 
 ## Issues
-
-| Issue | Category | Trigger |
+|Issue|Category|Trigger|
 ```
 
 ---
 
 ## Tools
 
-| Need         | Tool            | When          |
-| ------------ | --------------- | ------------- |
-| Find files   | file_search     | Pattern known |
-| Find content | grep_search     | String known  |
-| Understand   | semantic_search | Concepts      |
-| Read         | read_file       | Full content  |
-| Write        | edit tools      | Artifacts     |
-| Complex task | runSubagent     | Threshold     |
-| Verify       | terminal        | Tests         |
+|Need|Tool|When|
+|-|-|-|
+|Find files|file_search|Pattern known|
+|Find content|grep_search|String known|
+|Understand|semantic_search|Concepts|
+|Read|read_file|Full content|
+|Write|edit tools|Artifacts|
+|Complex task|runSubagent|Threshold|
+|Verify|terminal|Tests|
 
 ---
 

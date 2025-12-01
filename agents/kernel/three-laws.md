@@ -10,12 +10,12 @@ Immutable. Non-negotiable. Inherited by all agents.
 
 ### Thresholds
 
-| Trigger              | Action                     |
-| -------------------- | -------------------------- |
-| >5 files to modify   | Sub-agent per domain       |
-| >2 domains crossed   | Domain-specific sub-agents |
-| >15 files to analyze | Partition + parallelize    |
-| Uncertainty high     | EXPLORE sub-agent first    |
+|Trigger|Action|
+|-|-|
+|>5 files to modify|Sub-agent per domain|
+|>2 domains crossed|Domain-specific sub-agents|
+|>15 files to analyze|Partition + parallelize|
+|Uncertainty high|EXPLORE sub-agent first|
 
 ### Enforcement
 
@@ -31,11 +31,11 @@ Immutable. Non-negotiable. Inherited by all agents.
 
 ### Required Artifacts
 
-| Context       | Artifact                    |
-| ------------- | --------------------------- |
-| Task complete | `_handoff.md`               |
-| Error exit    | `_error.md` + partial state |
-| Timeout       | `_timeout.md` + checkpoint  |
+|Context|Artifact|
+|-|-|
+|Task complete|`_handoff.md`|
+|Error exit|`_error.md` + partial state|
+|Timeout|`_timeout.md` + checkpoint|
 
 ### Handoff Contents
 
@@ -65,12 +65,12 @@ Phase N → [GATE: condition] → Phase N+1
 
 ### Gate Types
 
-| Gate                | Verification            |
-| ------------------- | ----------------------- |
-| Analysis complete   | Patterns documented     |
-| Design approved     | Covers all requirements |
-| Implementation done | Tests pass              |
-| Review passed       | No blocking issues      |
+|Gate|Verification|
+|-|-|
+|Analysis complete|Patterns documented|
+|Design approved|Covers all requirements|
+|Implementation done|Tests pass|
+|Review passed|No blocking issues|
 
 ### No-Skip Clause
 

@@ -30,32 +30,32 @@ Output: exact format below
 
 ## Review Types
 
-| Type       | Focus                                              |
-| ---------- | -------------------------------------------------- |
-| Technical  | Feasibility, architecture, performance, security   |
-| Functional | Requirements, UX, edge cases, business logic       |
-| Alignment  | Matches request? Scope correct? Assumptions valid? |
+|Type|Focus|
+|-|-|
+|Technical|Feasibility, architecture, performance, security|
+|Functional|Requirements, UX, edge cases, business logic|
+|Alignment|Matches request? Scope correct? Assumptions valid?|
 
 ---
 
 ## Input Context
 
-| Source           | Path                                |
-| ---------------- | ----------------------------------- |
-| Artifact         | `.ai/scratch/{topic}/{artifact}.md` |
-| Original Request | {request_source}                    |
-| Prior Review     | `.ai/scratch/{topic}/review_*.md`   |
+|Source|Path|
+|-|-|
+|Artifact|`.ai/scratch/{topic}/{artifact}.md`|
+|Original Request|{request_source}|
+|Prior Review|`.ai/scratch/{topic}/review_*.md`|
 
 ---
 
 ## Issue Severity
 
-| Level   | Definition          | Action      |
-| ------- | ------------------- | ----------- |
-| BLOCKER | Cannot proceed      | Must fix    |
-| MAJOR   | Significant problem | Should fix  |
-| MINOR   | Small issue         | Nice to fix |
-| NOTE    | Observation         | Document    |
+|Level|Definition|Action|
+|-|-|-|
+|BLOCKER|Cannot proceed|Must fix|
+|MAJOR|Significant problem|Should fix|
+|MINOR|Small issue|Nice to fix|
+|NOTE|Observation|Document|
 
 ---
 
@@ -89,82 +89,69 @@ Output: exact format below
 
 ### Primary: `.ai/scratch/{topic}/review_{type}.md`
 
-```markdown
+```md
 # Review: {Review Type}
 
 ## Summary
-
-| Verdict                 | Issues            |
-| ----------------------- | ----------------- |
-| {PASS/CONDITIONAL/FAIL} | {B:n M:n m:n N:n} |
+|Verdict|Issues|
+|-|-|
+|{PASS/CONDITIONAL/FAIL}|{B:n M:n m:n N:n}|
 
 ## Artifact Reviewed
-
 - File: `{path}`
 - Type: {Design/Implementation/etc.}
 
 ## Checklist Results
 
 ### {Category}
-
-| Check   | Status | Issue |
-| ------- | ------ | ----- |
-| {check} | ✓/✗    | #{n}  |
+|Check|Status|Issue|
+|-|-|-|
+|{check}|✓/✗|#{n}|
 
 ## Issues
 
 ### Issue #1: {Title}
-
-| Field    | Value                      |
-| -------- | -------------------------- |
-| Severity | {BLOCKER/MAJOR/MINOR/NOTE} |
-| Location | {where}                    |
-| Problem  | {what's wrong}             |
-| Fix      | {how to fix}               |
+|Field|Value|
+|-|-|
+|Severity|{BLOCKER/MAJOR/MINOR/NOTE}|
+|Location|{where}|
+|Problem|{what's wrong}|
+|Fix|{how to fix}|
 
 ### Issue #2: {Title}
-
 ...
 
 ## Positive Observations
-
 - {what's good}
 
 ## Recommendations
-
 1. {actionable recommendation}
 
 ## Verdict Rationale
-
 {why pass/fail}
 ```
 ````
 
 ### Handoff: `.ai/scratch/{topic}/_handoff.md`
 
-```markdown
+```md
 # Review Handoff: {Type}
 
 ## Verdict: {PASS/CONDITIONAL/FAIL}
 
 ## Summary
-
 {1-2 sentences}
 
 ## Blocking Issues
-
 - {must fix before proceeding}
 
 ## Conditional Items
-
 - {can proceed but track}
 
 ## Next Steps
-
 {what happens based on verdict}
 
 ## Gate: Review Complete
-
 - [ ] All categories covered
 - [ ] Issues documented
 - [ ] Recommendations actionable

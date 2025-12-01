@@ -12,13 +12,13 @@ Mandatory spawning rules. Non-bypassable.
 
 ## Spawning Thresholds
 
-| Condition                   | Action                          | Rationale                   |
-| --------------------------- | ------------------------------- | --------------------------- |
-| >5 files to modify          | Sub-agent per file group        | Context overflow prevention |
-| >15 files to analyze        | Partition + parallel sub-agents | Analysis quality            |
-| >2 domains crossed          | Domain-specific sub-agent       | Expertise isolation         |
-| Uncertainty high            | EXPLORE sub-agent first         | Risk reduction              |
-| Task >2000 tokens estimated | Consider partition              | Output quality              |
+|Condition|Action|Rationale|
+|-|-|-|
+|>5 files to modify|Sub-agent per file group|Context overflow prevention|
+|>15 files to analyze|Partition + parallel sub-agents|Analysis quality|
+|>2 domains crossed|Domain-specific sub-agent|Expertise isolation|
+|Uncertainty high|EXPLORE sub-agent first|Risk reduction|
+|Task >2000 tokens estimated|Consider partition|Output quality|
 
 ---
 
@@ -26,13 +26,13 @@ Mandatory spawning rules. Non-bypassable.
 
 ### Domain Definition
 
-| Domain         | Scope                     |
-| -------------- | ------------------------- |
-| Frontend       | UI, components, styling   |
-| Backend        | API, services, data       |
-| Infrastructure | Config, CI/CD, deployment |
-| Testing        | Tests, fixtures, mocks    |
-| Documentation  | Docs, comments, READMEs   |
+|Domain|Scope|
+|-|-|
+|Frontend|UI, components, styling|
+|Backend|API, services, data|
+|Infrastructure|Config, CI/CD, deployment|
+|Testing|Tests, fixtures, mocks|
+|Documentation|Docs, comments, READMEs|
 
 ### Cross-Domain Detection
 
@@ -80,7 +80,7 @@ Spawn: 3 domain-specific sub-agents
 
 Every sub-agent dispatch MUST include:
 
-```markdown
+```md
 # MANDATORY: Sub-Agent Prime Directives
 
 1. **DOCUMENT EVERYTHING** — Write to designated scratch space
@@ -91,14 +91,12 @@ Every sub-agent dispatch MUST include:
 ## Task: {specific task}
 
 ## Scope
-
 IN: {explicit list}
 OUT: {explicit exclusions}
 
 ## Mode: {EXPLORE | EXPLOIT}
 
 ## Output Requirements
-
 {exact artifacts expected}
 ```
 

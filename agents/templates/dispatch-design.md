@@ -36,11 +36,11 @@ Questions: encouraged before commitment
 
 ## Input Context
 
-| Source       | Path                                |
-| ------------ | ----------------------------------- |
-| Analysis     | `.ai/scratch/{topic}/analysis_*.md` |
-| Handoff      | `.ai/scratch/{topic}/_handoff.md`   |
-| Requirements | {requirements_source}               |
+|Source|Path|
+|-|-|
+|Analysis|`.ai/scratch/{topic}/analysis_*.md`|
+|Handoff|`.ai/scratch/{topic}/_handoff.md`|
+|Requirements|{requirements_source}|
 
 ## Requirements
 
@@ -51,23 +51,23 @@ Questions: encouraged before commitment
 
 ## Scope
 
-| IN                      | OUT                 |
-| ----------------------- | ------------------- |
-| Architecture decisions  | Code implementation |
-| Data model changes      | Test implementation |
-| Interface definitions   | Deployment concerns |
-| Error handling strategy |                     |
+|IN|OUT|
+|-|-|
+|Architecture decisions|Code implementation|
+|Data model changes|Test implementation|
+|Interface definitions|Deployment concerns|
+|Error handling strategy||
 
 ---
 
 ## Design Questions
 
-| Question           | Answer In            |
-| ------------------ | -------------------- |
-| What changes?      | Component list       |
-| Where?             | File map             |
-| How interact?      | Data flow            |
-| Why this approach? | Alternatives section |
+|Question|Answer In|
+|-|-|
+|What changes?|Component list|
+|Where?|File map|
+|How interact?|Data flow|
+|Why this approach?|Alternatives section|
 
 ---
 
@@ -75,128 +75,108 @@ Questions: encouraged before commitment
 
 ### Primary: `.ai/scratch/{topic}/design.md`
 
-```markdown
+```md
 # Design: {Feature}
 
 ## Overview
-
 {high-level description}
 
 ## Requirements Addressed
-
 - [x] {requirement_1}
 - [x] {requirement_2}
 
 ## Architecture
 
 ### Components
-
-| Component | Responsibility | Location |
-| --------- | -------------- | -------- |
-| {name}    | {what}         | {path}   |
+|Component|Responsibility|Location|
+|-|-|-|
+|{name}|{what}|{path}|
 
 ### Data Flow
-
 {ASCII diagram or description}
 
 ## Data Model Changes
 
 ### New Models
-
-| Model  | Attributes | Purpose |
-| ------ | ---------- | ------- |
-| {name} | {list}     | {why}   |
+|Model|Attributes|Purpose|
+|-|-|-|
+|{name}|{list}|{why}|
 
 ### Modified Models
-
-| Model  | Change | Reason |
-| ------ | ------ | ------ |
-| {name} | {what} | {why}  |
+|Model|Change|Reason|
+|-|-|-|
+|{name}|{what}|{why}|
 
 ## Interface Definitions
 
 ### Public APIs
-
-| Endpoint/Method | Signature | Description |
-| --------------- | --------- | ----------- |
-| {name}          | {sig}     | {what}      |
+|Endpoint/Method|Signature|Description|
+|-|-|-|
+|{name}|{sig}|{what}|
 
 ## Implementation Plan
 
 ### Phase 1: {name}
-
-| File   | Change | Type    |
-| ------ | ------ | ------- |
-| {path} | {what} | NEW/MOD |
+|File|Change|Type|
+|-|-|-|
+|{path}|{what}|NEW/MOD|
 
 ### Phase 2: {name}
-
 ...
 
 ## Error Handling
-
-| Error  | Handling   |
-| ------ | ---------- |
-| {case} | {strategy} |
+|Error|Handling|
+|-|-|
+|{case}|{strategy}|
 
 ## Edge Cases
-
-| Case   | Handling   |
-| ------ | ---------- |
-| {case} | {approach} |
+|Case|Handling|
+|-|-|
+|{case}|{approach}|
 
 ## Alternatives Considered
 
 ### {Option A}
-
 - Pros: {list}
 - Cons: {list}
 - Rejected: {reason}
 
 ## Risks
-
-| Risk   | Mitigation |
-| ------ | ---------- |
-| {risk} | {how}      |
+|Risk|Mitigation|
+|-|-|
+|{risk}|{how}|
 
 ## Open Questions
-
 - {question}
 ```
 ````
 
 ### Handoff: `.ai/scratch/{topic}/_handoff.md`
 
-```markdown
+```md
 # Design Handoff: {Feature}
 
 ## Summary
-
 {2-3 sentences}
 
 ## Key Decisions
-
-| Decision | Rationale |
-| -------- | --------- |
-| {what}   | {why}     |
+|Decision|Rationale|
+|-|-|
+|{what}|{why}|
 
 ## Files to Modify
-
-| File   | Type    | Description |
-| ------ | ------- | ----------- |
-| {path} | NEW/MOD | {what}      |
+|File|Type|Description|
+|-|-|-|
+|{path}|NEW/MOD|{what}|
 
 ## Implementation Order
-
 1. {step}
 2. {step}
 
 ## Artifacts
-
 - `design.md`
 
 ## Gate: Design Approved
-
 - [ ] Covers all requirements
 - [ ] Addresses all patterns
 - [ ] Feasibility confirmed
