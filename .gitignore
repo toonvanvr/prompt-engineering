@@ -1,2 +1,6 @@
+# Scratch directory (temporary working space)
+.ai/scratch/
+
+# Legacy paths (no longer used)
 /agents/lib/state/processed.json
 agents/lib/training/data

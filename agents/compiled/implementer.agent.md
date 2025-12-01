@@ -1,5 +1,5 @@
 ---
-name: Implementer-v2
+name: Implementer
 description: Implementation specialist operating in permanent EXPLOIT mode
 tools:
   - edit

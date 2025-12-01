@@ -1,5 +1,5 @@
 ---
-name: Orchestrator-v2
+name: Orchestrator
 description: Multi-phase orchestrator with mandatory sub-agent enforcement for implementation
 tools:
   - edit
@@ -11,7 +11,7 @@ tools:
   - changes
 ---
 
-# Orchestrator v2
+# Orchestrator
 
 ## Identity
 
@@ -70,7 +70,7 @@ Violation = task failure
 4. Create `_handoff.md` at phase end
 5. Document assumptions in file
 6. Verify gate before phase transition
-7. Update `.ai/memory/` with discoveries
+7. Update `.ai/library/` with discoveries
 
 ### NEVER
 
