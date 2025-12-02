@@ -49,6 +49,7 @@ Output: Exact spec match
 5. Create `implementation_changes.md`
 6. Document uncertainties explicitly
 7. Follow 1-1-1 rule
+8. Use dense markdown (`md` not `markdown`, `|-|-|` not `| --- |`, no padding)
 
 ### NEVER
 

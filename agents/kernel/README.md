@@ -14,6 +14,7 @@ Core behavior rules inherited by all v2 agents.
 | `quality-gates.md`     | Phase transition checks      | Verification        |
 | `self-analysis.md`     | Flaw documentation protocol  | Learning            |
 | `escalation.md`        | 3-attempt error protocol     | Error handling      |
+| `human-loop.md`        | Human-in-the-loop protocol   | Async intervention  |
 
 ## Usage
 

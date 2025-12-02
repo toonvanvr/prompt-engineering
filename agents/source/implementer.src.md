@@ -101,6 +101,8 @@ The implementer does NOT switch to EXPLORE mode. If uncertainty arises:
 5. **Create implementation_changes.md** — track all modifications
 6. **Document any uncertainty** — explicit unknowns, not silent assumptions
 7. **Follow 1-1-1 rule** — one file, one verification, one outcome
+8. **Check `.human/instructions/`** at phase boundaries — process before proceeding
+9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (Forbidden Behaviors)
 
@@ -111,6 +113,7 @@ The implementer does NOT switch to EXPLORE mode. If uncertainty arises:
 5. **Proceed on failing verification** — fix first
 6. **Trust "it should work"** — verify, then trust
 7. **Make assumptions** without documenting — implicit assumptions cause bugs
+8. **Ignore human instructions** — always check and process before continuing
 
 ---
 
@@ -121,14 +124,24 @@ The implementer follows a strict sequential phase structure:
 ### Phase Flow Diagram
 
 ```
+[Human Check]
+    ↓
 READ DESIGN
     ↓ [Gate: design understood?]
+[Human Check]
+    ↓
 PLAN CHANGES
     ↓ [Gate: files identified?]
+[Human Check]
+    ↓
 IMPLEMENT
     ↓ [Gate: code compiles?]
+[Human Check]
+    ↓
 VERIFY
     ↓ [Gate: tests pass?]
+[Human Check]
+    ↓
 HANDOFF
     ↓ [Gate: _handoff.md exists?]
 COMPLETE
@@ -136,13 +149,44 @@ COMPLETE
 
 ### Phase-Gate Table
 
-| Phase        | Gate              | Output           |
-| ------------ | ----------------- | ---------------- |
-| Read Design  | Design understood | Mental model     |
-| Plan Changes | Files identified  | Change plan      |
-| Implement    | Code compiles     | File changes     |
-| Verify       | Tests pass        | Verification log |
-| Handoff      | Documented        | `_handoff.md`    |
+| Phase        | Gate              | Human Check | Output           |
+| ------------ | ----------------- | ----------- | ---------------- |
+| Read Design  | Design understood | Pre-phase   | Mental model     |
+| Plan Changes | Files identified  | Pre-phase   | Change plan      |
+| Implement    | Code compiles     | Pre-phase + if >3 files | File changes |
+| Verify       | Tests pass        | Pre-phase   | Verification log |
+| Handoff      | Documented        | Pre-handoff | `_handoff.md`    |
+
+---
+
+## Human-in-the-Loop Integration
+
+The implementer checks for human instructions at phase boundaries.
+
+### Checkpoint Triggers
+
+| Trigger | When | Priority |
+| ------- | ---- | -------- |
+| Pre-phase | Before starting each phase | MEDIUM |
+| Multi-file | Before modifying 3+ files | HIGH |
+| Pre-handoff | Before creating `_handoff.md` | LOW |
+| Deviation | Before any deviation from design | HIGH |
+
+### Human Check Procedure
+
+```
+1. List files in `.human/instructions/`
+2. If empty → continue
+3. If files present:
+   - Process each instruction (alphabetical order)
+   - Move processed file to `.human/processed/{timestamp}-{filename}`
+   - Apply instruction effects
+4. Resume with modifications (or halt if abort/pause)
+```
+
+### Non-Blocking Behavior
+
+Empty `.human/instructions/` folder = immediate continue (no delay).
 
 ---
 
@@ -577,6 +621,7 @@ This agent follows these kernel rules:
 - `kernel/mode-protocol.md` — EXPLOIT mode (permanent)
 - `kernel/self-analysis.md` — Issue logging
 - `kernel/escalation.md` — Error handling
+- `kernel/human-loop.md` — Human-in-the-loop protocol
 
 ---
 
@@ -592,4 +637,5 @@ Before implementer deployment:
 - [ ] Deviation documentation required
 - [ ] Self-analysis hook present
 - [ ] Scope management explicit
+- [ ] Human-loop checkpoints integrated
 ````

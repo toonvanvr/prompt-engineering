@@ -165,6 +165,7 @@ OUTPUT + METRICS
 |Fence `yaml`|SHORT|`yml`|
 |Fence `javascript`|SHORT|`js`|
 |Fence `typescript`|SHORT|`ts`|
+|Fence `python`|SHORT|`py`|
 |Flow diagram indent|REMOVE|0 spaces per level|
 
 ### Phase 2: Moderate (FULL Only)
@@ -195,6 +196,7 @@ OUTPUT + METRICS
 1. Report token counts (before/after)
 2. Preserve all examples
 3. Preserve emphasis markers
+4. Use dense markdown in own output (`md` not `markdown`, `|-|-|` not `| --- |`, no padding)
 4. Validate output structure = input intent
 5. Flag high-risk compressions in warnings
 6. Maintain semantic equivalence

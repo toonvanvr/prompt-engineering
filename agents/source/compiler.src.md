@@ -241,6 +241,7 @@ Use minimal syntax to save tokens:
 | Fence tag: yaml            | ` ```yaml `                       | ` ```yml `     | 1 char  |
 | Fence tag: javascript      | ` ```javascript `                 | ` ```js `      | 7 chars |
 | Fence tag: typescript      | ` ```typescript `                 | ` ```ts `      | 7 chars |
+| Fence tag: python          | ` ```python `                     | ` ```py `      | 3 chars |
 | Flow diagram indent        | 4 spaces per level                | 0 spaces       | 4/line  |
 | Table column padding       | Spaces to align columns           | No padding     | Many    |
 
@@ -509,6 +510,7 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 1. **Report token counts** before and after — metrics are mandatory, not optional
 2. **Preserve all examples** exactly as written — examples anchor interpretation
 3. **Preserve emphasis markers** (MUST, NEVER, ALWAYS) — they carry behavioral weight
+4. **Use dense markdown in own output** — `md` not `markdown`, `|-|-|` not `| --- | --- |`, no table padding
 4. **Validate output structure** matches input intent — structure is meaning
 5. **Flag high-risk compressions** in warnings — visibility prevents drift
 6. **Maintain semantic equivalence** — the compressed version must behave identically

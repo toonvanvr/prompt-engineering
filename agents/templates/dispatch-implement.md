@@ -104,6 +104,18 @@ FULL CONSTRAINT STACK:
 
 ---
 
+## Human Checkpoints
+
+|Trigger|When|Action|
+|-|-|-|
+|Start|Before reading design|Check `.human/instructions/`|
+|Multi-file|Before modifying 3+ files|Check `.human/instructions/`|
+|Pre-handoff|Before creating handoff|Check `.human/instructions/`|
+
+Process instructions if found. Move to `.human/processed/` with timestamp.
+
+---
+
 ## Constraints
 
 |Limit|Value|Action if Exceeded|
@@ -197,11 +209,13 @@ Use edit tools to apply changes to files.
 
 ## Success Criteria
 
+- [ ] Human instructions checked at start
 - [ ] All design components implemented
 - [ ] Code compiles/parses
 - [ ] Project conventions followed
 - [ ] Changes documented
 - [ ] Each change verified
+- [ ] Human instructions checked before handoff
 - [ ] Handoff complete
 - [ ] Gate passed
 

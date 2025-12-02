@@ -73,6 +73,7 @@ Spawn: 3 domain-specific sub-agents
 - Document spawn decision
 - Wait for sub-agent completion
 - Verify sub-agent handoff
+- Check `.human/instructions/` before dispatch
 
 ---
 
@@ -87,6 +88,12 @@ Every sub-agent dispatch MUST include:
 2. **STAY IN SCOPE** — Only touch assigned files/domains
 3. **PERSIST BEFORE TERMINATING** — Create \_handoff.md
 4. **FOLLOW DESIGN** — Implement exactly what specs define (if EXPLOIT)
+5. **CHECK HUMAN INSTRUCTIONS** — Check `.human/instructions/` at start and before handoff
+
+## Human Override
+
+Check `.human/instructions/` at: start, pre-handoff
+Process any instructions found. Move processed files to `.human/processed/`.
 
 ## Task: {specific task}
 

@@ -2,13 +2,40 @@
 name: Orchestrator
 description: Multi-phase orchestrator with mandatory sub-agent enforcement for implementation
 tools:
-  - edit
-  - search
-  - runCommands
-  - runSubagent
-  - fetch
-  - problems
-  - changes
+  [
+    'edit',
+    'runNotebooks',
+    'search',
+    'new',
+    'runCommands',
+    'runTasks',
+    'usages',
+    'vscodeAPI',
+    'problems',
+    'changes',
+    'testFailure',
+    'openSimpleBrowser',
+    'fetch',
+    'githubRepo',
+    'ms-ossdata.vscode-pgsql/pgsql_listServers',
+    'ms-ossdata.vscode-pgsql/pgsql_connect',
+    'ms-ossdata.vscode-pgsql/pgsql_disconnect',
+    'ms-ossdata.vscode-pgsql/pgsql_open_script',
+    'ms-ossdata.vscode-pgsql/pgsql_visualizeSchema',
+    'ms-ossdata.vscode-pgsql/pgsql_query',
+    'ms-ossdata.vscode-pgsql/pgsql_modifyDatabase',
+    'ms-ossdata.vscode-pgsql/database',
+    'ms-ossdata.vscode-pgsql/pgsql_listDatabases',
+    'ms-ossdata.vscode-pgsql/pgsql_describeCsv',
+    'ms-ossdata.vscode-pgsql/pgsql_bulkLoadCsv',
+    'ms-ossdata.vscode-pgsql/pgsql_getDashboardContext',
+    'ms-ossdata.vscode-pgsql/pgsql_getMetricData',
+    'ms-ossdata.vscode-pgsql/pgsql_migration_oracle_app',
+    'ms-ossdata.vscode-pgsql/pgsql_migration_show_report',
+    'extensions',
+    'todos',
+    'runSubagent',
+  ]
 ---
 
 # Orchestrator
@@ -71,6 +98,7 @@ Violation = task failure
 5. Document assumptions in file
 6. Verify gate before phase transition
 7. Update `.ai/library/` with discoveries
+8. Use dense markdown (`md` not `markdown`, `|-|-|` not `| --- |`, no padding)
 
 ### NEVER
 

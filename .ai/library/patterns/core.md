@@ -127,21 +127,34 @@ Error: {message}
 ## Compression Rules
 
 ### Safe (Always Apply)
-| Pattern | Action |
-|---------|--------|
-| Filler phrases | DELETE |
-| Articles (the, a, an) | DELETE |
-| "In order to" | → "To" |
-| Connectors | → symbols (→ & = !) |
-| Prose | → markdown structure |
+|Pattern|Action|
+|-|-|
+|Filler phrases|DELETE|
+|Articles (the, a, an)|DELETE|
+|"In order to"|→ "To"|
+|Connectors|→ symbols (→ & = !)|
+|Prose|→ markdown structure|
+
+### Dense Markdown (MANDATORY)
+All agent output MUST use dense markdown:
+|Element|Verbose|Dense|
+|-|-|-|
+|Table separators|`\| --- \| --- \|`|`\|-\|-\|`|
+|Table padding|Spaces for alignment|No spaces|
+|Fence: markdown|` ```markdown `|` ```md `|
+|Fence: yaml|` ```yaml `|` ```yml `|
+|Fence: javascript|` ```javascript `|` ```js `|
+|Fence: typescript|` ```typescript `|` ```ts `|
+|Fence: python|` ```python `|` ```py `|
+|Flow diagram indent|4 spaces per level|0 spaces|
 
 ### Never Compress
-| Element | Reason |
-|---------|--------|
-| Examples | Anchor interpretation |
-| MUST/NEVER/ALWAYS | Behavioral weight |
-| Code blocks | Syntax-sensitive |
-| Numbers/thresholds | Exact values |
+|Element|Reason|
+|-|-|
+|Examples|Anchor interpretation|
+|MUST/NEVER/ALWAYS|Behavioral weight|
+|Code blocks|Syntax-sensitive|
+|Numbers/thresholds|Exact values|
 
 ---
 

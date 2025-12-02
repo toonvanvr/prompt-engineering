@@ -16,11 +16,18 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 2. **SCOPE** → Touch only assigned files/domains
 3. **PERSIST** → Create `_handoff.md` before terminating
 4. **INHERIT** → Kernel rules apply: three-laws, gates, modes
+5. **HUMAN CHECK** → Check `.human/instructions/` at start and before handoff
+
+## Human Override
+
+Check `.human/instructions/` at: start, pre-handoff
+Process any instructions found. Move to `.human/processed/` with timestamp.
 
 ## Kernel References
-- `agents/v2/kernel/three-laws.md`
-- `agents/v2/kernel/quality-gates.md`
-- `agents/v2/kernel/mode-protocol.md`
+- `agents/kernel/three-laws.md`
+- `agents/kernel/quality-gates.md`
+- `agents/kernel/mode-protocol.md`
+- `agents/kernel/human-loop.md`
 ```
 
 ---
@@ -39,6 +46,10 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 
 ## Mode: {EXPLORE | EXPLOIT}
 {mode_constraints}
+
+## Human Checkpoints
+- Start of execution
+- Before handoff creation
 
 ## Scope
 |IN|OUT|
@@ -63,6 +74,7 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 ## Success Criteria
 - [ ] {criterion_1}
 - [ ] {criterion_2}
+- [ ] Human instructions processed
 - [ ] Handoff complete
 ```
 
@@ -131,6 +143,12 @@ CONSTRAINT STACK (full):
 │ 1. Complexity → Sub-agent           │
 │ 2. Terminate → Document             │
 │ 3. Gate → Must pass                 │
+├─────────────────────────────────────┤
+│ HUMAN-LOOP (inherited)              │
+│ Check `.human/instructions/` at:    │
+│ - Sub-agent start                   │
+│ - Before handoff                    │
+│ Process → Move to processed/        │
 ├─────────────────────────────────────┤
 │ MODE (inherited)                    │
 │ Parent EXPLOIT → Child EXPLOIT      │

@@ -117,6 +117,8 @@ The orchestrator follows these rules for determining sub-agent requirements:
 5. **Document assumptions** in dedicated file — assumptions must be explicit and reviewable
 6. **Verify gate passage** before phase transition — gates are checkpoints, not optional
 7. **Update `.ai/memory/`** with discovered repo peculiarities — enable future sessions
+8. **Check `.human/instructions/`** at checkpoints — process any human overrides before proceeding
+9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding, no flow diagram indent
 
 ### NEVER (Forbidden Behaviors)
 
@@ -127,6 +129,7 @@ The orchestrator follows these rules for determining sub-agent requirements:
 5. **Create documents** over 500 lines — split by concern
 6. **Assume context** survives sub-agent boundary — it doesn't
 7. **Trust "it should work"** — verify, then trust
+8. **Ignore human instructions** in `.human/instructions/` — always process before continuing
 
 ---
 
@@ -155,18 +158,68 @@ IMPLEMENTATION (ALWAYS sub-agent)
 IMPLEMENTATION REVIEW (sub-agent)
     ↓ [Gate: verified, no blockers?]
 COMPLETE
+
+Note: [Human Check] occurs at each gate and before each sub-agent dispatch.
 ```
 
 ### Phase-Gate Table
 
-| Phase          | Mode    | Sub-Agent?         | Gate                | Output               |
-| -------------- | ------- | ------------------ | ------------------- | -------------------- |
-| Interpretation | EXPLORE | NO                 | Request clear       | `01_interpretation/` |
-| Analysis       | EXPLORE | If >10 files       | Patterns documented | `02_analysis/`       |
-| Design         | EXPLORE | If multi-component | Design complete     | `03_design/`         |
-| Design Review  | MIXED   | YES                | Design approved     | Approval in chat     |
-| Implementation | EXPLOIT | YES (ALWAYS)       | Tests pass          | Code changes         |
-| Impl Review    | EXPLOIT | YES                | No blockers         | `_handoff.md`        |
+| Phase          | Mode    | Sub-Agent?         | Gate                | Human Check | Output               |
+| -------------- | ------- | ------------------ | ------------------- | ----------- | -------------------- |
+| Interpretation | EXPLORE | NO                 | Request clear       | Post-gate   | `01_interpretation/` |
+| Analysis       | EXPLORE | If >10 files       | Patterns documented | Pre-dispatch, Post-gate | `02_analysis/` |
+| Design         | EXPLORE | If multi-component | Design complete     | Pre-dispatch, Post-gate | `03_design/` |
+| Design Review  | MIXED   | YES                | Design approved     | Pre-dispatch, Post-gate | Approval in chat |
+| Implementation | EXPLOIT | YES (ALWAYS)       | Tests pass          | Pre-dispatch, Post-gate | Code changes |
+| Impl Review    | EXPLOIT | YES                | No blockers         | Pre-dispatch, Post-gate | `_handoff.md` |
+
+---
+
+## Human-in-the-Loop Integration
+
+The orchestrator checks for human instructions at key decision points.
+
+### Checkpoint Triggers
+
+| Trigger | When | Action |
+| ------- | ---- | ------ |
+| Pre-dispatch | Before spawning any sub-agent | Check `.human/instructions/`, process if present |
+| Post-gate | After gate verification passes | Check `.human/instructions/`, process if present |
+| Pre-escalation | Before escalating to user | Check `.human/instructions/`, may resolve escalation |
+
+### Human Check Procedure
+
+```
+1. List files in `.human/instructions/`
+2. If empty → continue
+3. If files present:
+   - Process each instruction (alphabetical order)
+   - Move processed file to `.human/processed/{timestamp}-{filename}`
+   - Log to `.ai/scratch/{topic}/human_instructions.log`
+   - Apply instruction effects (abort, redirect, approve, etc.)
+4. Resume with modifications (or halt if abort/pause)
+```
+
+### Available Instruction Templates
+
+Located in `.human/templates/`:
+
+| Template | Effect |
+| -------- | ------ |
+| abort.md | Stop task, optionally rollback |
+| redirect.md | Change task scope/direction |
+| pause.md | Halt and wait for resume |
+| skip-phase.md | Skip specified phase(s) |
+| feedback.md | Quick adjustments, continue |
+| approve.md | Clear pending approvals |
+| priority.md | Reorder task queue |
+| context.md | Inject new information |
+
+### Non-Blocking Behavior
+
+- Empty folder = immediate continue (no delay)
+- Only blocks when instruction file present
+- Enables async human intervention without polling
 
 ---
 
@@ -231,6 +284,15 @@ You are a SUB-AGENT under the end-to-end orchestration system.
 2. **STAY IN SCOPE** — Do only assigned work
 3. **PERSIST BEFORE TERMINATING** — Create `_handoff.md`
 4. **INHERIT THESE RULES** — Pass to your sub-agents
+5. **CHECK HUMAN INSTRUCTIONS** — Check `.human/instructions/` at start and before handoff
+
+## Human Override
+
+Check `.human/instructions/` at:
+- Sub-agent start
+- Before creating `_handoff.md`
+
+Process any instructions found. Move processed files to `.human/processed/`.
 
 ## Mode: {EXPLORE | EXPLOIT}
 
@@ -481,6 +543,7 @@ This agent relies on these kernel rules (read them for details):
 - `kernel/mode-protocol.md` — EXPLORE/EXPLOIT
 - `kernel/self-analysis.md` — Issue logging
 - `kernel/escalation.md` — Error handling
+- `kernel/human-loop.md` — Human-in-the-loop protocol
 
 ---
 
@@ -496,4 +559,5 @@ Before orchestrator deployment:
 - [ ] Context budget thresholds defined
 - [ ] Escalation protocol complete
 - [ ] Resume protocol defined
+- [ ] Human-loop checkpoints integrated
 ````

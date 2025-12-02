@@ -15,13 +15,14 @@ library/
 
 ## Patterns
 
-| Pattern | File | Use Case |
-|---------|------|----------|
-| Identity Matrix | patterns/core.md | Agent persona |
-| Three Laws | patterns/core.md | Behavioral anchor |
-| ALWAYS/NEVER | patterns/core.md | Binary constraints |
-| Compression Rules | patterns/core.md | Token optimization |
-| Register Taxonomy | research/findings.md | Language selection |
+|Pattern|File|Use Case|
+|-|-|-|
+|Identity Matrix|patterns/core.md|Agent persona|
+|Three Laws|patterns/core.md|Behavioral anchor|
+|ALWAYS/NEVER|patterns/core.md|Binary constraints|
+|Compression Rules|patterns/core.md|Token optimization|
+|Dense Markdown|patterns/core.md|Output formatting (MANDATORY)|
+|Register Taxonomy|research/findings.md|Language selection|
 
 ## Usage
 
@@ -40,4 +41,4 @@ After compilation:
 
 ---
 
-*Last updated: 2025-12-01*
+*Last updated: 2025-12-02*
