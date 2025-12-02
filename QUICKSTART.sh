@@ -3,14 +3,18 @@
 #
 # Usage: ./QUICKSTART.sh /path/to/workspace
 #
-# This creates a symlink from {workspace}/.github/agents to this repository's
-# compiled agents, making them available for use in the target workspace.
+# This script:
+# 1. Symlinks individual *.agent.md files → .github/agents/
+# 2. Symlinks lib/templates/ → .github/agents/lib/
+# 3. Scaffolds .human/ folder (copies templates, overwrites with newer versions)
 
 set -e
 
 # Get the directory where this script lives (the prompt-engineering repo)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 AGENTS_DIR="$SCRIPT_DIR/agents/compiled"
+TEMPLATES_DIR="$SCRIPT_DIR/agents/templates"
+HUMAN_DIR="$SCRIPT_DIR/.human"
 
 # Validate arguments
 if [ -z "$1" ]; then
@@ -27,44 +31,90 @@ TARGET_WORKSPACE="$(cd "$1" 2>/dev/null && pwd)" || {
 
 TARGET_GITHUB="$TARGET_WORKSPACE/.github"
 TARGET_AGENTS="$TARGET_GITHUB/agents"
+TARGET_LIB="$TARGET_AGENTS/lib"
+TARGET_HUMAN="$TARGET_WORKSPACE/.human"
 
-echo "Installing agents..."
-echo "  Source: $AGENTS_DIR"
-echo "  Target: $TARGET_AGENTS"
+echo "Installing prompt-engineering agents..."
+echo "  Source: $SCRIPT_DIR"
+echo "  Target: $TARGET_WORKSPACE"
 echo ""
 
-# Create .github directory if needed
-if [ ! -d "$TARGET_GITHUB" ]; then
-    echo "Creating $TARGET_GITHUB/"
-    mkdir -p "$TARGET_GITHUB"
-fi
-
-# Handle existing agents directory/symlink
-if [ -L "$TARGET_AGENTS" ]; then
-    CURRENT_LINK="$(readlink "$TARGET_AGENTS")"
-    if [ "$CURRENT_LINK" = "$AGENTS_DIR" ]; then
-        echo "✓ Already installed correctly"
-        exit 0
-    fi
-    echo "Updating existing symlink (was: $CURRENT_LINK)"
+# Create .github/agents directory if needed
+if [ ! -d "$TARGET_AGENTS" ]; then
+    echo "Creating $TARGET_AGENTS/"
+    mkdir -p "$TARGET_AGENTS"
+elif [ -L "$TARGET_AGENTS" ]; then
+    # Old-style symlink to entire folder - remove it
+    echo "Removing old-style folder symlink..."
     rm "$TARGET_AGENTS"
-elif [ -d "$TARGET_AGENTS" ]; then
-    echo "Warning: $TARGET_AGENTS exists as a directory"
-    echo "  Backing up to $TARGET_AGENTS.backup"
-    mv "$TARGET_AGENTS" "$TARGET_AGENTS.backup"
-elif [ -e "$TARGET_AGENTS" ]; then
-    echo "Error: $TARGET_AGENTS exists but is not a directory or symlink"
-    exit 1
+    mkdir -p "$TARGET_AGENTS"
 fi
 
-# Create symlink
-ln -s "$AGENTS_DIR" "$TARGET_AGENTS"
+# Symlink individual agent files
+echo "Linking agents..."
+for agent_file in "$AGENTS_DIR"/*.agent.md; do
+    if [ -f "$agent_file" ]; then
+        agent_name="$(basename "$agent_file")"
+        target_link="$TARGET_AGENTS/$agent_name"
+        
+        if [ -L "$target_link" ]; then
+            rm "$target_link"
+        elif [ -f "$target_link" ]; then
+            echo "  Backing up existing $agent_name"
+            mv "$target_link" "$target_link.backup"
+        fi
+        
+        ln -s "$agent_file" "$target_link"
+        echo "  ✓ $agent_name"
+    fi
+done
+
+# Create lib directory and symlink templates
+echo ""
+echo "Linking lib/templates..."
+mkdir -p "$TARGET_LIB"
+
+if [ -L "$TARGET_LIB/templates" ]; then
+    rm "$TARGET_LIB/templates"
+elif [ -d "$TARGET_LIB/templates" ]; then
+    echo "  Backing up existing lib/templates"
+    mv "$TARGET_LIB/templates" "$TARGET_LIB/templates.backup"
+fi
+
+ln -s "$TEMPLATES_DIR" "$TARGET_LIB/templates"
+echo "  ✓ lib/templates → agents/templates"
+
+# Scaffold .human folder (copy, not symlink - workspace-local)
+echo ""
+echo "Scaffolding .human/ folder..."
+
+# Create structure
+mkdir -p "$TARGET_HUMAN/instructions"
+mkdir -p "$TARGET_HUMAN/processed"
+mkdir -p "$TARGET_HUMAN/templates"
+
+# Copy templates (overwrite with newer versions)
+# This is the single documented command for auto-allow:
+# cp -r overwrites existing files with source versions
+cp -r "$HUMAN_DIR/templates/"* "$TARGET_HUMAN/templates/" 2>/dev/null || true
+echo "  ✓ .human/instructions/"
+echo "  ✓ .human/processed/"
+echo "  ✓ .human/templates/ ($(ls -1 "$TARGET_HUMAN/templates/" 2>/dev/null | wc -l | tr -d ' ') templates)"
 
 echo ""
-echo "✓ Agents installed successfully"
+echo "═══════════════════════════════════════════════════════"
+echo "✓ Installation complete"
+echo "═══════════════════════════════════════════════════════"
 echo ""
-echo "Available agents:"
-ls -1 "$TARGET_AGENTS"/*.agent.md 2>/dev/null | xargs -I {} basename {} | sed 's/^/  - /'
+echo "Installed agents:"
+ls -1 "$TARGET_AGENTS"/*.agent.md 2>/dev/null | xargs -I {} basename {} .agent.md | sed 's/^/  • /'
 echo ""
-echo "To use in VS Code with GitHub Copilot:"
+echo "Human instruction templates:"
+ls -1 "$TARGET_HUMAN/templates/"*.md 2>/dev/null | xargs -I {} basename {} .md | sed 's/^/  • /'
+echo ""
+echo "Usage in VS Code with GitHub Copilot:"
 echo "  @workspace Use the Orchestrator agent"
+echo ""
+echo "To inject instructions during task execution:"
+echo "  Copy a template from .human/templates/ to .human/instructions/"
+echo "  Edit checkboxes/values, save → agent processes at next checkpoint"
