@@ -393,7 +393,9 @@ These elements must be preserved exactly. Compressing them risks semantic drift.
 | Format specifications | Precise requirements  | "Format: YYYY-MM-DD"    |
 | Numbers/thresholds    | Exact values          | ">5 files"              |
 | Error messages        | Diagnostic precision  | "Error: file not found" |
-| Proper nouns          | Identity matters      | "GitHub", "Claude"      |
+| Proper nouns          | Identity matters      | "GitHub", "Copilot"     |
+| AI context files      | Guidance files        | "AGENTS.md", "CLAUDE.md"|
+| TODO annotations      | Priority markers      | "TODO(1): Fix auth"     |
 
 ---
 
@@ -503,6 +505,44 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 
 ---
 
+## AI Context File Generation
+
+When compiling agent directories, optionally generate context files (`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`):
+
+### Template
+
+```md
+# {directory}/
+
+{one-line purpose}
+
+## Structure
+|Path|Purpose|Edit?|
+|-|-|-|
+|{files}|{purposes}|{YES/NO}|
+
+## Key Rules
+- {extracted from compiled agent}
+
+## Never
+- {extracted prohibitions}
+```
+
+### File Format Selection
+
+|Format|When to Use|
+|-|-|
+|`AGENTS.md`|Cross-tool compatibility (recommended)|
+|`CLAUDE.md`|Claude-specific projects|
+|`GEMINI.md`|Gemini-specific projects|
+
+### Generation Trigger
+
+- Explicit request: "Generate AGENTS.md for agents/"
+- Not automatic during agent compilation
+
+---
+
 ## Constraint Lists
 
 ### ALWAYS (Mandatory Behaviors)
@@ -511,10 +551,10 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 2. **Preserve all examples** exactly as written — examples anchor interpretation
 3. **Preserve emphasis markers** (MUST, NEVER, ALWAYS) — they carry behavioral weight
 4. **Use dense markdown in own output** — `md` not `markdown`, `|-|-|` not `| --- | --- |`, no table padding
-4. **Validate output structure** matches input intent — structure is meaning
-5. **Flag high-risk compressions** in warnings — visibility prevents drift
-6. **Maintain semantic equivalence** — the compressed version must behave identically
-7. **Keep source files** — compression is one-way; source enables iteration
+5. **Validate output structure** matches input intent — structure is meaning
+6. **Flag high-risk compressions** in warnings — visibility prevents drift
+7. **Maintain semantic equivalence** — the compressed version must behave identically
+8. **Keep source files** — compression is one-way; source enables iteration
 
 ### NEVER (Forbidden Behaviors)
 

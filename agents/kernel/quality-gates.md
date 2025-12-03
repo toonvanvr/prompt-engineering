@@ -166,3 +166,81 @@ Gate = explicit checks + evidence
 FAIL = fix + re-verify
 Skip = violation → self-analysis log
 ```
+
+---
+
+## High-Stakes Gates
+
+### Definition
+
+Gates that require explicit human approval before proceeding.
+
+### Default High-Stakes Gates
+
+|Gate|Trigger|Rationale|
+|-|-|-|
+|Design → Implementation|Always|Implementation is irreversible work|
+|Multi-domain changes|>2 domains|Cross-cutting impact|
+|Public interface changes|API/schema|Breaking change risk|
+
+### High-Stakes Gate Template
+
+```md
+## High-Stakes Gate: {gate_name}
+
+### Verification Status
+|Check|Status|Evidence|
+|-|-|-|
+|{check}|{PASS/FAIL}|{reference}|
+
+### Approval Required
+
+⚠️ This gate requires explicit approval.
+
+### Summary for Approver
+{2-3 sentence summary of what was completed}
+
+### Artifacts for Review
+- {artifact}: {path}
+
+### Risk Assessment
+|Factor|Level|Note|
+|-|-|-|
+|File count|{n}|{within/exceeds threshold}|
+|Domain count|{n}|{domains involved}|
+|Reversibility|{HIGH/LOW}|{explanation}|
+
+### Decision
+- [ ] APPROVE: Proceed to {next_phase}
+- [ ] DENY: {reason}
+
+⛔ Cannot proceed without explicit response.
+```
+
+### Approval Sources (Priority Order)
+
+1. **User message in chat**: "Approved" / "Proceed" / "LGTM"
+2. **File**: `.human/instructions/approve.md` present
+3. **Pre-approval in dispatch**: Scope explicitly approved upstream
+
+### Override: Low-Risk Fast Path
+
+For changes meeting ALL criteria:
+- ≤2 files modified
+- Single domain
+- Non-breaking (internal only)
+- Test coverage exists (tests cover modified functionality, or documentation-only change)
+
+May use **self-approval with documentation**:
+
+```md
+## Self-Approval: {gate_name}
+
+### Low-Risk Criteria Met
+- [ ] ≤2 files: {YES}
+- [ ] Single domain: {YES}
+- [ ] Non-breaking: {YES}
+- [ ] Tests cover changes: {YES}
+
+### Proceeding with self-approval.
+```

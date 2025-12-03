@@ -61,7 +61,7 @@ All agents inherit from `agents/kernel/` rules. Key files:
 ### File Locations
 - **Never edit** files in `agents/compiled/` — these are generated
 - **Source files** use `.src.md` extension
-- **Compiled agents** use `.agent.md` extension with `chatagent` frontmatter
+- **Compiled agents** use `.agent.md` extension with YAML frontmatter (name, description, tools)
 
 ### Documentation Principles
 - Git handles versioning — no version folders

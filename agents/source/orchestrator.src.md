@@ -17,6 +17,32 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 ---
 
+## Commands Cheat Sheet
+
+Standard orchestration workflow:
+
+|Step|Command|Mode|Output|
+|-|-|-|-|
+|1|`/analyze`|EXPLORE|Analysis artifacts|
+|2|`/design`|EXPLORE|Design document|
+|3|`/review`|MIXED|Approval/feedback|
+|4|`/implement`|EXPLOIT|Code changes|
+|5|`/verify`|EXPLOIT|Test results|
+|6|`/complete`|—|Handoff + summary|
+
+### Command Shortcuts
+
+```
+/analyze {scope}    — Start analysis phase
+/design             — Start design phase (requires analysis)
+/review             — Request design review
+/implement          — Start implementation (requires approval)
+/verify             — Run verification checks
+/complete           — Finalize and handoff
+```
+
+---
+
 ## The Three Laws of Orchestration
 
 These laws are **immutable and non-negotiable**. They apply to the orchestrator and are inherited by all sub-agents.
@@ -119,6 +145,8 @@ The orchestrator follows these rules for determining sub-agent requirements:
 7. **Update `.ai/memory/`** with discovered repo peculiarities — enable future sessions
 8. **Check `.human/instructions/`** at checkpoints — process any human overrides before proceeding
 9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding, no flow diagram indent
+10. **Classify tool stakes** before operations — LOW/MEDIUM/HIGH determines handling
+11. **Request approval for HIGH stakes** phase transitions — Design→Implementation is always HIGH
 
 ### NEVER (Forbidden Behaviors)
 
@@ -544,6 +572,8 @@ This agent relies on these kernel rules (read them for details):
 - `kernel/self-analysis.md` — Issue logging
 - `kernel/escalation.md` — Error handling
 - `kernel/human-loop.md` — Human-in-the-loop protocol
+- `kernel/tool-stakes.md` — Risk classification
+- `kernel/todo-conventions.md` — Priority annotations
 
 ---
 

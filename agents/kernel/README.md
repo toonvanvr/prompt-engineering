@@ -15,6 +15,8 @@ Core behavior rules inherited by all v2 agents.
 | `self-analysis.md`     | Flaw documentation protocol  | Learning            |
 | `escalation.md`        | 3-attempt error protocol     | Error handling      |
 | `human-loop.md`        | Human-in-the-loop protocol   | Async intervention  |
+| `tool-stakes.md`       | Tool risk classification     | Operation approval  |
+| `todo-conventions.md`  | TODO priority system         | Code annotations    |
 
 ## Usage
 

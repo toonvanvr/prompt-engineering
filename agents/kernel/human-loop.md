@@ -179,3 +179,87 @@ File: {filename}
 Action: {instruction_type}
 Effect: {what changed}
 ```
+
+---
+
+## Multi-Channel Awareness (Conceptual)
+
+### Current Implementation
+
+File-based communication via `.human/instructions/`.
+
+### Conceptual Channels
+
+When documenting escalation needs, specify preferred channel:
+
+|Escalation Type|Preferred Channel|Fallback|
+|-|-|-|
+|Technical blocker|Developer (Slack)|File|
+|Design approval|Stakeholder (Email)|File + Chat|
+|Urgent abort|Any available|All|
+
+### Channel Documentation
+
+In escalation templates, include:
+
+```md
+## Preferred Channel
+- Type: {Slack | Email | File | Chat}
+- Recipient: {role description}
+- Urgency: {HIGH | MEDIUM | LOW}
+```
+
+### Future Integration Path
+
+SDK integration for real-time channels:
+
+```
+Current: .human/instructions/ → AI reads → AI processes
+Future:  SDK event → Channel routing → Real-time response
+```
+
+**Note:** Runtime integration is out of scope. This documents the conceptual model for future enhancement.
+
+---
+
+## Approval Request Pattern
+
+### For High-Stakes Gates
+
+When quality gate requires explicit approval:
+
+```md
+## Approval Required: {gate_name}
+
+### Summary
+{what needs approval}
+
+### Artifacts for Review
+|Artifact|Path|
+|-|-|
+|{name}|{path}|
+
+### Risk Level
+- Stakes: HIGH
+- Impact: {description}
+
+### Decision Required
+- [ ] APPROVE: Proceed to {next_phase}
+- [ ] DENY: {reason} — return to {previous_phase}
+
+### Timeout Behavior
+If no response within {timeframe}:
+- Default: WAIT (blocking)
+- Override: Set in dispatch
+
+⚠️ Cannot proceed without explicit approval response.
+```
+
+### Approval Processing
+
+When approval received:
+
+1. Log approval to scratch space
+2. Update gate status to PASS
+3. Proceed to next phase
+4. Document approver in handoff

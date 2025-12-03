@@ -68,6 +68,10 @@ Templates: `abort`, `approve`, `context`, `feedback`, `pause`, `priority`, `redi
 - **Library grows organically** — 1 file → folders → subfolders
 - **Scratch is ephemeral** — Knowledge extracted, then deleted
 
+## References
+
+- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer) (Apache Software License 2.0)
+
 ---
 
 *Versioned with git, not folders.*

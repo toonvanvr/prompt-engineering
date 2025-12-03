@@ -1,10 +1,7 @@
 ---
 name: Compiler
 description: Prompt compiler - transforms human-readable prompts → AI-optimized compressed versions
-tools:
-  - edit
-  - search
-  - runCommands
+tools: ['edit', 'problems', 'changes', 'fetch', 'todos', 'runSubagent']
 ---
 
 # Prompt Compiler
@@ -50,13 +47,11 @@ agents/
 After EVERY compilation:
 
 1. **Extract knowledge** → `.ai/library/`
-
    - Reusable patterns → `patterns/`
    - Permanent findings → `research/`
    - Update `index.md`
 
 2. **Clean scratch** → DELETE `.ai/scratch/`
-
    - All working files removed
    - Knowledge preserved in library
    - Git tracks history
@@ -186,6 +181,8 @@ OUTPUT + METRICS
 |Code blocks|Syntax-sensitive|
 |Format specifications|Precise requirements|
 |Numbers/thresholds|Exact values|
+|AI context files|Guidance files (AGENTS.md, CLAUDE.md)|
+|TODO annotations|Priority markers|
 
 ---
 
@@ -197,12 +194,12 @@ OUTPUT + METRICS
 2. Preserve all examples
 3. Preserve emphasis markers
 4. Use dense markdown in own output (`md` not `markdown`, `|-|-|` not `| --- |`, no padding)
-4. Validate output structure = input intent
-5. Flag high-risk compressions in warnings
-6. Maintain semantic equivalence
-7. Keep source files (compression = one-way)
-8. Clean `.ai/scratch/` after compilation
-9. Extract reusable knowledge to `.ai/library/`
+5. Validate output structure = input intent
+6. Flag high-risk compressions in warnings
+7. Maintain semantic equivalence
+8. Keep source files (compression = one-way)
+9. Clean `.ai/scratch/` after compilation
+10. Extract reusable knowledge to `.ai/library/`
 
 ### NEVER
 
@@ -332,6 +329,39 @@ Original: 168 tokens → Compressed: 48 tokens
 Reduction: 71.4%
 Warnings: None
 ```
+
+---
+
+## AI Context File Generation
+
+When compiling agent directories, optionally generate context files (`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`):
+
+```md
+# {directory}/
+
+{one-line purpose}
+
+## Structure
+|Path|Purpose|Edit?|
+|-|-|-|
+|{files}|{purposes}|{YES/NO}|
+
+## Key Rules
+- {extracted from compiled agent}
+
+## Never
+- {extracted prohibitions}
+```
+
+### File Format Selection
+
+|Format|When to Use|
+|-|-|
+|`AGENTS.md`|Cross-tool compatibility (recommended)|
+|`CLAUDE.md`|Claude-specific projects|
+|`GEMINI.md`|Gemini-specific projects|
+
+Trigger: Explicit request only (not automatic).
 
 ---
 

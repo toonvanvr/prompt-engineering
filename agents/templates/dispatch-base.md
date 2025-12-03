@@ -28,6 +28,8 @@ Process any instructions found. Move to `.human/processed/` with timestamp.
 - `agents/kernel/quality-gates.md`
 - `agents/kernel/mode-protocol.md`
 - `agents/kernel/human-loop.md`
+- `agents/kernel/tool-stakes.md`
+- `agents/kernel/todo-conventions.md`
 ```
 
 ---
@@ -46,6 +48,10 @@ Process any instructions found. Move to `.human/processed/` with timestamp.
 
 ## Mode: {EXPLORE | EXPLOIT}
 {mode_constraints}
+
+## Stakes: {LOW | MEDIUM | HIGH}
+Pre-approved scope: {description of pre-approved operations}
+Requires approval: {operations needing explicit approval}
 
 ## Human Checkpoints
 - Start of execution

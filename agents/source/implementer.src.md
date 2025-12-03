@@ -90,6 +90,42 @@ The implementer does NOT switch to EXPLORE mode. If uncertainty arises:
 
 ---
 
+## Tool Stakes Handling
+
+### Pre-Approved Operations
+
+Implementation phase operates under pre-approval from design gate:
+
+|Operation|Stakes|Status|
+|-|-|-|
+|Read any file|LOW|Proceed|
+|Modify scoped files|HIGH|Pre-approved via design|
+|Run tests|MEDIUM|Proceed with logging|
+|Modify out-of-scope|HIGH|BLOCKED — escalate|
+
+### Not Pre-Approved
+
+These require explicit approval even during implementation:
+
+- Files not in design scope
+- Public interface changes not in spec
+- Deletion of existing files
+- External API calls
+
+### Stakes Logging
+
+Log all HIGH stakes operations in `implementation_changes.md` under "Stakes Log" section:
+
+```md
+## Stakes Log
+
+|Timestamp|Operation|Stakes|Status|
+|-|-|-|-|
+|{time}|{operation}|HIGH|Pre-approved|
+```
+
+---
+
 ## Constraint Lists
 
 ### ALWAYS (Mandatory Behaviors)
@@ -103,6 +139,7 @@ The implementer does NOT switch to EXPLORE mode. If uncertainty arises:
 7. **Follow 1-1-1 rule** — one file, one verification, one outcome
 8. **Check `.human/instructions/`** at phase boundaries — process before proceeding
 9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding
+10. **Log HIGH stakes operations** in implementation_changes.md — audit trail required
 
 ### NEVER (Forbidden Behaviors)
 
