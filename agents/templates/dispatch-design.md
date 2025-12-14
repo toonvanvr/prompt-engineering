@@ -38,8 +38,8 @@ Questions: encouraged before commitment
 
 |Source|Path|
 |-|-|
-|Analysis|`.ai/scratch/{topic}/analysis_*.md`|
-|Handoff|`.ai/scratch/{topic}/_handoff.md`|
+|Analysis|`.ai/scratch/YYYY-MM-DD_{topic}/analysis_*.md`|
+|Handoff|`.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`|
 |Requirements|{requirements_source}|
 
 ## Requirements
@@ -73,7 +73,7 @@ Questions: encouraged before commitment
 
 ## Output Requirements
 
-### Primary: `.ai/scratch/{topic}/design.md`
+### Primary: `.ai/scratch/YYYY-MM-DD_{topic}/design.md`
 
 ```md
 # Design: {Feature}
@@ -151,7 +151,7 @@ Questions: encouraged before commitment
 ```
 ````
 
-### Handoff: `.ai/scratch/{topic}/_handoff.md`
+### Handoff: `.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`
 
 ```md
 # Design Handoff: {Feature}

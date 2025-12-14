@@ -42,9 +42,9 @@ Output: exact format below
 
 |Source|Path|
 |-|-|
-|Artifact|`.ai/scratch/{topic}/{artifact}.md`|
+|Artifact|`.ai/scratch/YYYY-MM-DD_{topic}/{artifact}.md`|
 |Original Request|{request_source}|
-|Prior Review|`.ai/scratch/{topic}/review_*.md`|
+|Prior Review|`.ai/scratch/YYYY-MM-DD_{topic}/review_*.md`|
 
 ---
 
@@ -87,7 +87,7 @@ Output: exact format below
 
 ## Output Requirements
 
-### Primary: `.ai/scratch/{topic}/review_{type}.md`
+### Primary: `.ai/scratch/YYYY-MM-DD_{topic}/review_{type}.md`
 
 ```md
 # Review: {Review Type}
@@ -132,7 +132,7 @@ Output: exact format below
 ```
 ````
 
-### Handoff: `.ai/scratch/{topic}/_handoff.md`
+### Handoff: `.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`
 
 ```md
 # Review Handoff: {Type}

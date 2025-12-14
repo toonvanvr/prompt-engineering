@@ -71,9 +71,9 @@ FULL CONSTRAINT STACK:
 
 |Source|Path|
 |-|-|
-|Design|`.ai/scratch/{topic}/design.md`|
-|Analysis|`.ai/scratch/{topic}/analysis_*.md`|
-|Review|`.ai/scratch/{topic}/review_*.md`|
+|Design|`.ai/scratch/YYYY-MM-DD_{topic}/design.md`|
+|Analysis|`.ai/scratch/YYYY-MM-DD_{topic}/analysis_*.md`|
+|Review|`.ai/scratch/YYYY-MM-DD_{topic}/review_*.md`|
 
 ---
 
@@ -142,7 +142,7 @@ Process instructions if found. Move to `.human/processed/` with timestamp.
 
 Use edit tools to apply changes to files.
 
-### Change Log: `.ai/scratch/{topic}/implementation_{component}.md`
+### Change Log: `.ai/scratch/YYYY-MM-DD_{topic}/implementation_{component}.md`
 
 ```md
 # Implementation: {Component}
@@ -178,7 +178,7 @@ Use edit tools to apply changes to files.
 ```
 ````
 
-### Handoff: `.ai/scratch/{topic}/_handoff.md`
+### Handoff: `.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`
 
 ```md
 # Implementation Handoff: {Component}

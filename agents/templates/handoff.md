@@ -47,7 +47,7 @@ Standard template for phase transitions.
 ## Artifacts Produced
 |Artifact|Path|Description|
 |-|-|-|
-|{name}|`.ai/scratch/{topic}/{file}`|{contents}|
+|{name}|`.ai/scratch/YYYY-MM-DD_{topic}/{file}`|{contents}|
 
 ---
 
@@ -92,12 +92,26 @@ Standard template for phase transitions.
 
 ---
 
+## Context Consumed
+|Metric|Count|
+|-|-|
+|Deep reads|{n}|
+|Skim reads|{n}|
+|Output lines|{n}|
+|Cumulative load|{score}|
+
+**Load status:** {OK|WARN|SPLIT_NEEDED}
+
+---
+
 ## Acceptance Checklist
 Before proceeding, verify:
 - [ ] All artifacts accessible
 - [ ] Summary clear
 - [ ] No blocking questions
 - [ ] Context sufficient
+- [ ] Context consumed recorded
+- [ ] Cumulative load within threshold
 ```
 
 ---

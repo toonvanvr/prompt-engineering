@@ -72,7 +72,7 @@ Questions: encouraged before assumptions
 
 ## Output Requirements
 
-### Primary: `.ai/scratch/{topic}/analysis_{domain}.md`
+### Primary: `.ai/scratch/YYYY-MM-DD_{topic}/analysis_{domain}.md`
 
 ```md
 # Analysis: {Domain}
@@ -115,7 +115,7 @@ Questions: encouraged before assumptions
 ```
 ````
 
-### Handoff: `.ai/scratch/{topic}/_handoff.md`
+### Handoff: `.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`
 
 ```md
 # Analysis Handoff: {Domain}

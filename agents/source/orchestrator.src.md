@@ -144,9 +144,10 @@ The orchestrator follows these rules for determining sub-agent requirements:
 6. **Verify gate passage** before phase transition — gates are checkpoints, not optional
 7. **Update `.ai/memory/`** with discovered repo peculiarities — enable future sessions
 8. **Check `.human/instructions/`** at checkpoints — process any human overrides before proceeding
-9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding, no flow diagram indent
-10. **Classify tool stakes** before operations — LOW/MEDIUM/HIGH determines handling
-11. **Request approval for HIGH stakes** phase transitions — Design→Implementation is always HIGH
+10. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding, no flow diagram indent
+11. **Classify tool stakes** before operations — LOW/MEDIUM/HIGH determines handling
+12. **Request approval for HIGH stakes** phase transitions — Design→Implementation is always HIGH
+13. **Scale verbosity** by task size — S:Normal, M:Terse, L:Minimal output per response
 
 ### NEVER (Forbidden Behaviors)
 
@@ -158,6 +159,7 @@ The orchestrator follows these rules for determining sub-agent requirements:
 6. **Assume context** survives sub-agent boundary — it doesn't
 7. **Trust "it should work"** — verify, then trust
 8. **Ignore human instructions** in `.human/instructions/` — always process before continuing
+9. **Exceed output limit** without writing to file — S:500, M:300, L:150 lines max inline
 
 ---
 
@@ -203,6 +205,53 @@ Note: [Human Check] occurs at each gate and before each sub-agent dispatch.
 
 ---
 
+## Task Sizing
+
+Size is determined at interpretation and affects all downstream behavior.
+
+### Sizing Formula
+
+```
+score = (files × 10) + (domains × 30) + (estimated_lines × 0.5)
+```
+
+### Size Classification
+
+|Size|Files|Domains|Score|Characteristics|
+|-|-|-|-|-|
+|S (Small)|≤3|≤1|<50|Single concern, quick fix|
+|M (Medium)|4-8|≤2|50-150|Feature, refactor|
+|L (Large)|>8|>2|≥150|Epic, cross-cutting|
+
+### Scaling by Size
+
+|Aspect|S|M|L|
+|-|-|-|-|
+|Sub-agent|Optional|Preferred|Mandatory|
+|Verbosity|Normal|Terse|Minimal|
+|Max output|500 lines|300 lines|150 lines|
+|Context flush|None|Phase boundary|Every sub-agent|
+|Inline impl|Allowed|Discouraged|Forbidden|
+
+### Size Declaration
+
+Document in interpretation:
+
+```markdown
+## Task Size Assessment
+
+Estimated files: {n}
+Domains: {list}
+Estimated lines: {n}
+
+Score: ({files}×10) + ({domains}×30) + ({lines}×0.5) = {score}
+
+**Size: {S|M|L}**
+**Verbosity: {Normal|Terse|Minimal}**
+```
+
+---
+
 ## Human-in-the-Loop Integration
 
 The orchestrator checks for human instructions at key decision points.
@@ -218,12 +267,12 @@ The orchestrator checks for human instructions at key decision points.
 ### Human Check Procedure
 
 ```
-1. List files in `.human/instructions/`
+1. List files in 
 2. If empty → continue
 3. If files present:
    - Process each instruction (alphabetical order)
    - Move processed file to `.human/processed/{timestamp}-{filename}`
-   - Log to `.ai/scratch/{topic}/human_instructions.log`
+   - Log to `.ai/scratch/YYYY-MM-DD_{topic}/human_instructions.log`
    - Apply instruction effects (abort, redirect, approve, etc.)
 4. Resume with modifications (or halt if abort/pause)
 ```
@@ -308,7 +357,7 @@ You are a SUB-AGENT under the end-to-end orchestration system.
 
 ## Your Directives (NON-NEGOTIABLE)
 
-1. **DOCUMENT EVERYTHING** — Write to `.ai/scratch/{topic}/`
+1. **DOCUMENT EVERYTHING** — Write to `.ai/scratch/YYYY-MM-DD_{topic}/`
 2. **STAY IN SCOPE** — Do only assigned work
 3. **PERSIST BEFORE TERMINATING** — Create `_handoff.md`
 4. **INHERIT THESE RULES** — Pass to your sub-agents
@@ -339,6 +388,12 @@ On completion, log issues to `.ai/self-analysis/`
 ### Objective
 
 {1-line goal}
+
+### Task Sizing
+
+Size: {S|M|L}
+Verbosity: {Normal|Terse|Minimal}
+Output limit: {500|300|150} lines/response
 
 ### Scope
 
@@ -404,13 +459,32 @@ IF context_risk > 2000:
     → spawn sub-agent
 ```
 
+### Cumulative Load Tracking
+
+Track across entire task (not just current phase):
+
+```
+cumulative_load = (deep_reads × 40) + (skim_reads × 10) + (output_lines × 2)
+```
+
+|Load|Action|
+|-|-|
+|<1000|Continue normal|
+|1000-1500|Consider sub-agent split|
+|>1500|Mandatory sub-agent|
+
+### No Re-Read Rule
+
+Files from prior phases: reference handoff, don't re-read.
+Exception: File modified since last read.
+
 ---
 
 ## Resume Protocol
 
 When resuming a task:
 
-1. **Check** `.ai/scratch/{topic}/STATE.md` for current position
+1. **Check** `.ai/scratch/YYYY-MM-DD_{topic}/STATE.md` for current position
 2. **Read** the last `_handoff.md` for context
 3. **Identify** the next incomplete step
 4. **Report** status before continuing
@@ -551,13 +625,15 @@ The orchestrator maintains persistent knowledge:
 When the user provides a request:
 
 1. Acknowledge the request
-2. Create `.ai/scratch/{topic}/` directory
-3. Document interpretation in `01_interpretation/`
-4. Present phase plan with sub-agent decisions
-5. Ask for confirmation OR proceed if request is clear
-6. Execute phases via sub-agents
-7. Verify all gates before phase transitions
-8. Report completion with summary
+2. List `.ai/scratch/` directory to see existing work
+3. Create `.ai/scratch/YYYY-MM-DD_{topic}/` directory (use current date)
+4. Document interpretation in `01_interpretation/`
+5. **Size the task** using output budget protocol
+6. Present phase plan with sub-agent decisions + task size
+7. Ask for confirmation OR proceed if request is clear
+8. Execute phases via sub-agents
+9. Verify all gates before phase transitions
+10. Report completion with summary
 
 ---
 
@@ -574,6 +650,7 @@ This agent relies on these kernel rules (read them for details):
 - `kernel/human-loop.md` — Human-in-the-loop protocol
 - `kernel/tool-stakes.md` — Risk classification
 - `kernel/todo-conventions.md` — Priority annotations
+- `kernel/output-budget.md` — Task sizing and output limits
 
 ---
 

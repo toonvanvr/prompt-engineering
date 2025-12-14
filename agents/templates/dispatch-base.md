@@ -12,11 +12,11 @@ Common preamble for all sub-agent dispatches.
 
 You are a SUB-AGENT. Acknowledge before proceeding:
 
-1. **DOCUMENT** → Write to `.ai/scratch/{topic}/`
+1. **DOCUMENT** → Write to `.ai/scratch/YYYY-MM-DD_{topic}/`
 2. **SCOPE** → Touch only assigned files/domains
 3. **PERSIST** → Create `_handoff.md` before terminating
 4. **INHERIT** → Kernel rules apply: three-laws, gates, modes
-5. **HUMAN CHECK** → Check `.human/instructions/` at start and before handoff
+5. **HUMAN CHECK** → Check  at start and before handoff
 
 ## Human Override
 
@@ -53,6 +53,12 @@ Process any instructions found. Move to `.human/processed/` with timestamp.
 Pre-approved scope: {description of pre-approved operations}
 Requires approval: {operations needing explicit approval}
 
+## Task Sizing
+Size: {S|M|L}
+Verbosity: {Normal|Terse|Minimal}
+Output limit: {500|300|150} lines/response
+Cumulative budget: {remaining from parent}
+
 ## Human Checkpoints
 - Start of execution
 - Before handoff creation
@@ -64,9 +70,9 @@ Requires approval: {operations needing explicit approval}
 |{included_concerns}|{excluded_concerns}|
 
 ## Context
-- Analysis: `.ai/scratch/{topic}/analysis_*.md`
-- Design: `.ai/scratch/{topic}/design.md`
-- Prior: `.ai/scratch/{topic}/_handoff.md`
+- Analysis: `.ai/scratch/YYYY-MM-DD_{topic}/analysis_*.md`
+- Design: `.ai/scratch/YYYY-MM-DD_{topic}/design.md`
+- Prior: `.ai/scratch/YYYY-MM-DD_{topic}/_handoff.md`
 
 ## Output Requirements
 |Artifact|Path|Format|
@@ -75,7 +81,9 @@ Requires approval: {operations needing explicit approval}
 
 ## Constraints
 - Max files: {n}
+- Max output/response: {500|300|150} lines
 - Mode switch trigger: {condition}
+- Artifact-first: Write to file if exceeding limit
 
 ## Success Criteria
 - [ ] {criterion_1}
@@ -163,6 +171,11 @@ CONSTRAINT STACK (full):
 ├─────────────────────────────────────┤
 │ GATES (per phase)                   │
 │ Analysis → Design → Implement → ✓   │
+├─────────────────────────────────────┤
+│ OUTPUT BUDGET (inherited)           │
+│ Size: S/M/L → Verbosity tier        │
+│ Limits: 500/300/150 lines           │
+│ Cumulative >1500 → spawn sub-agent  │
 └─────────────────────────────────────┘
 ```
 ````
