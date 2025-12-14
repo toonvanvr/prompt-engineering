@@ -2,6 +2,9 @@
 
 Standard template for high-stakes gate approvals.
 
+> **SCOPE:** Use ONLY for escalation scenarios (3+ failed attempts per escalation protocol).
+> Standard enterprise flows self-approve. This template is NOT for asking "should I proceed?"
+
 ---
 
 ```md
@@ -58,14 +61,13 @@ To: {next_phase}
 
 ## Decision Required
 
-⚠️ **Cannot proceed without explicit response.**
+⚠️ **Escalation scenario — requires explicit response.**
 
 - [ ] **APPROVE**: Proceed to {next_phase}
 - [ ] **DENY**: Reason: _______________
 
-### Approval Methods
-1. Reply "Approved" / "Proceed" / "LGTM" in chat
-2. Create `.human/instructions/approve.md`
+### Context
+This request was triggered by escalation protocol (3+ failed attempts). Standard flows self-approve.
 
 ---
 

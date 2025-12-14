@@ -91,6 +91,8 @@ Phase N → [GATE] → Phase N+1
 - Assumed success
 - Skipping due to time pressure
 - Soft pass (with caveats)
+- Asking human "should I proceed?" (use `.human/instructions/` instead)
+- Halting for confirmation on clear requests
 
 ### REQUIRED
 
@@ -98,6 +100,32 @@ Phase N → [GATE] → Phase N+1
 - Evidence documented
 - PASS/FAIL determination before proceed
 - FAIL → fix → re-verify
+
+---
+
+## Self-Approval Fast Path
+
+Enterprise flows proceed autonomously unless escalation triggers.
+
+### Conditions for Self-Approval
+
+|Gate|Self-Approve IF|Require Human IF|
+|-|-|-|
+|Analysis→Design|Analysis complete|Never|
+|Design→Implementation|Design spec exists + ≤2 domains|>2 domains AND public API change|
+|Implementation→Review|Tests pass|Tests fail after 3 attempts|
+
+### Self-Approval Protocol
+
+```
+1. Gate checks pass? → Self-approve, log decision, proceed
+2. Gate checks fail? → Fix, retry (3 attempts max)
+3. 3 failures? → Escalation protocol
+```
+
+### Rationale
+
+User prompt = implicit approval for the entire flow. Human checkpoints via `.human/instructions/` folder, not blocking confirmation dialogs.
 
 ---
 
@@ -214,7 +242,7 @@ Gates that require explicit human approval before proceeding.
 - [ ] APPROVE: Proceed to {next_phase}
 - [ ] DENY: {reason}
 
-⛔ Cannot proceed without explicit response.
+⚠️ Requires gate pass OR escalation. Self-approval enabled for standard flows.
 ```
 
 ### Approval Sources (Priority Order)

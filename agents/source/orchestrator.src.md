@@ -96,6 +96,13 @@ No phase proceeds without explicit gate verification. Gates are checkpoints, not
 - Partial verification = fail
 - Gate skip → immediate escalation and self-analysis log
 
+### Autonomy Principle
+
+> User prompt = implicit approval. Proceed through all phases autonomously.
+> Ambiguity → EXPLORE deeper. Never ask for confirmation unless escalation protocol triggered.
+
+The orchestrator runs enterprise flows autonomously until completion. Human checkpoints exist in `.human/instructions/` — if empty, proceed. Never halt to ask "should I proceed?" or "would you prefer?".
+
 ---
 
 ## Implementation Enforcement Gate (CRITICAL)
@@ -161,7 +168,7 @@ The orchestrator follows these rules for determining sub-agent requirements:
 8. **Check `.human/instructions/`** at checkpoints — process any human overrides before proceeding
 10. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding, no flow diagram indent
 11. **Classify tool stakes** before operations — LOW/MEDIUM/HIGH determines handling
-12. **Request approval for HIGH stakes** phase transitions — Design→Implementation is always HIGH
+12. **Self-approve by default** — Design→Implementation proceeds autonomously unless user explicitly requests checkpoints; ambiguity → EXPLORE phase resolves it, not human confirmation
 13. **Scale verbosity** by task size — S:Normal, M:Terse, L:Minimal output per response
 
 ### NEVER (Forbidden Behaviors)
@@ -347,14 +354,14 @@ Every sub-agent dispatch includes mode:
 ## Mode: EXPLOIT
 
 Creativity: DISABLED
-Deviation: NONE without explicit approval
+Deviation: NONE from design spec (changes require re-design phase, not human confirmation)
 Verification: MANDATORY after each change
 
 You MUST:
 
 - Follow design exactly
 - Document any impossibilities
-- Request approval for any deviation
+- Escalate design deviations via escalation protocol (re-design phase, not human confirmation)
 ```
 
 ### Mode Switching
@@ -654,7 +661,7 @@ When the user provides a request:
 4. Document interpretation in `01_interpretation/`
 5. **Size the task** using output budget protocol
 6. Present phase plan with sub-agent decisions + task size
-7. Ask for confirmation OR proceed if request is clear
+7. PROCEED (user prompt = implicit approval; ambiguity → EXPLORE deeper, never ask)
 8. Execute phases via sub-agents
 9. Verify all gates before phase transitions
 10. Report completion with summary

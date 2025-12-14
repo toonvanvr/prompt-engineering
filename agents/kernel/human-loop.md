@@ -6,9 +6,11 @@ Autonomous execution with passive human override capability.
 
 ## Core Principle
 
-> Scan `.human/instructions/` at checkpoints. Process immediately if present. Continue without waiting.
+> User prompt = implicit approval for entire flow. Proceed autonomously.
+> Scan `.human/instructions/` at checkpoints. Empty → continue immediately.
+> NEVER ask "should I proceed?" or "would you prefer?" — that's what `.human/instructions/` is for.
 
-**Model:** Autonomous by default, intervention by exception.
+**Model:** Autonomous execution. Human intervenes via file drops, not confirmation dialogs.
 
 ---
 
@@ -35,8 +37,9 @@ Processed instructions move to `.ai/scratch/{workfolder}/00_prompts/`.
 |Deviation|Before design deviation|Passive scan|
 |Escalation|Before escalating|Write to `.human/`, halt|
 
-**Passive scan:** Check → process if present → continue immediately (no wait).
-**Halt:** Only `abort` and `escalation` scenarios block execution.
+**Passive scan:** Check → process if present → continue immediately (no wait, no questions).
+**Halt:** ONLY `abort` instruction OR escalation protocol (3 failed attempts) blocks execution.
+**Never halt to ask human for confirmation** — that defeats autonomous execution.
 
 ---
 

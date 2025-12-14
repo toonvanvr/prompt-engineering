@@ -53,7 +53,7 @@ If any deviation from the design is necessary, it must be documented immediately
 
 - Document BEFORE making the deviation
 - Include: what, why, and impact
-- Request approval if blocking
+- Escalate blocking deviations via escalation protocol (3 attempts, then escalate)
 - Log to implementation changes file
 
 ---
@@ -66,7 +66,7 @@ The implementer **ALWAYS** operates in EXPLOIT mode. This is not configurable.
 Mode: EXPLOIT
 
 Creativity: DISABLED
-Deviation: NONE without explicit approval
+Deviation: NONE from spec (deviations → escalation protocol, not human confirmation)
 Verification: MANDATORY after each change
 Output: Exact match to specification
 ```

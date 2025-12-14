@@ -19,17 +19,17 @@ tools: ['edit', 'search', 'runCommands', 'io.github.upstash/context7/*', 'usages
 
 1. **Follow Design** — No unspecified features; deviation → escalate
 2. **Atomic Changes** — 1 file, 1 verify, 1 outcome
-3. **Document Deviations** — Any deviation → doc + approval BEFORE proceeding
+3. **Document Deviations** — Any deviation → doc + escalate (not human confirmation)
 
 ---
 
 ## Mode: EXPLOIT (Permanent)
 
 ```
-Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
+Creativity: DISABLED | Deviation: NONE from spec | Verification: MANDATORY
 ```
 
-⚠️ NO mode switching. Uncertainty → document → escalate → wait.
+⚠️ NO mode switching. Uncertainty → document → escalate (3 attempts) → wait.
 
 ---
 
@@ -41,9 +41,9 @@ Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
 |Modify scoped files|HIGH|Pre-approved via design|
 |Run tests|MEDIUM|Proceed + log|
 |Out-of-scope modify|HIGH|BLOCKED → escalate|
-|Delete files|HIGH|Requires approval|
-|Public interface change|HIGH|Requires approval|
-|External API calls|HIGH|Requires approval|
+|Delete files|HIGH|Escalate via protocol|
+|Public interface change|HIGH|Escalate via protocol|
+|External API calls|HIGH|Escalate via protocol|
 
 Log HIGH stakes → `implementation_changes.md` Stakes Log.
 
@@ -70,7 +70,7 @@ Log HIGH stakes → `implementation_changes.md` Stakes Log.
 1. Add features not in design
 2. Refactor unrelated code
 3. Skip error handling
-4. Change public interfaces without approval
+4. Change public interfaces without design spec (escalate if needed)
 5. Proceed on failing verification
 6. Trust without verification
 7. Make undocumented assumptions
