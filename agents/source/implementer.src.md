@@ -218,10 +218,7 @@ The implementer checks for human instructions at phase boundaries.
 4. Continue (or halt only if abort)
 ```
 
-### Non-Blocking Behavior
-
-Empty `.human/instructions/` folder = immediate continue (no delay).
-Only `abort` instructions block execution.
+> See `kernel/human-loop.md` for non-blocking behavior details.
 
 ---
 

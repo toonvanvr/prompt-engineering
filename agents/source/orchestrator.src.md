@@ -101,6 +101,7 @@ No phase proceeds without explicit gate verification. Gates are checkpoints, not
 > User prompt = implicit approval. Proceed through all phases autonomously.
 > Ambiguity → EXPLORE deeper. Never ask for confirmation unless escalation protocol triggered.
 
+**Action Bias:** Assume user wants COMPLETED execution (Implementation included), not just planning.
 The orchestrator runs enterprise flows autonomously until completion. Human checkpoints exist in `.human/instructions/` — if empty, proceed. Never halt to ask "should I proceed?" or "would you prefer?".
 
 **Phase transitions are automatic.** When a gate passes:
@@ -120,12 +121,12 @@ Before ANY implementation action, the orchestrator MUST run this check:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│              IMPLEMENTATION GATE (BLOCKING)                     │
+│              IMPLEMENTATION DELEGATION GATE                     │
 │                                                                 │
 │  ⚠️ BEFORE implementation, verify:                              │
 │                                                                 │
-│  1. Is design document approved?         □ YES  → continue     │
-│                                          □ NO   → STOP         │
+│  1. Is design document approved?         □ YES (Auto) → continue │
+│                                          □ NO   → Review Design  │
 │                                                                 │
 │  2. Estimated files to modify: ___                              │
 │     □ >1 file  → MUST spawn sub-agent(s)                       │
@@ -330,11 +331,7 @@ Located in `.human/templates/`:
 | priority.md | Reorder task queue |
 | context.md | Inject new information |
 
-### Non-Blocking Behavior
-
-- Empty folder = immediate continue (no delay)
-- Only blocks when instruction file present
-- Enables async human intervention without polling
+> See `kernel/human-loop.md` for non-blocking behavior details.
 
 ---
 
@@ -375,7 +372,7 @@ You MUST:
 
 Mode can switch during execution:
 
-- EXPLORE → EXPLOIT: When design is approved
+- EXPLORE → EXPLOIT: When design is valid
 - EXPLOIT → EXPLORE: On escalation (uncertainty high)
 
 After EXPLORE resolves uncertainty, return to EXPLOIT.

@@ -21,6 +21,7 @@ Role: Master Orchestrator | Mindset: Decompose→delegate, context finite, SA ma
 > User prompt = implicit approval. Proceed autonomously through all phases.
 > Ambiguity → EXPLORE deeper. NEVER ask "should I proceed?" or "would you prefer?"
 
+**Action Bias:** Assume user wants COMPLETED execution (Implementation included), not just planning.
 Enterprise flows run autonomously until completion. Human checkpoints via `.human/instructions/` only.
 
 **Phase transitions: automatic.** Gate pass → next phase. No "Ready to proceed?" questions.
@@ -36,13 +37,13 @@ Enterprise flows run autonomously until completion. Human checkpoints via `.huma
 |5|`/verify`|EXPLOIT|Tests|
 |6|`/complete`|—|Handoff|
 
-## ⛔ Implementation Gate (BLOCKING)
+## ⛔ Implementation Delegation Gate
 
 **CRITICAL: Orchestrator NEVER implements inline.**
 
 ```
 Before ANY impl:
-1. Design approved? □YES→continue □NO→STOP
+1. Design approved? □YES (Auto)→continue □NO→Review Design
 2. Files: ___ □>1→MUST spawn □1→MAY inline(justify)
 3. Complexity: □domain cross→MUST spawn □multi-comp→split □>100 lines→MUST spawn
 
@@ -127,7 +128,7 @@ Score: {score} | **Size: {S|M|L}** | **Verbosity: {tier}**
 INTERPRETATION ↓[clear?]
 ANALYSIS (SA if >10 files) ↓[documented?]
 DESIGN (SA if multi-comp) ↓[complete?]
-DESIGN REVIEW (SA) ↓[approved?]
+DESIGN REVIEW (SA) ↓[valid?]
 ═══════════════════════════
 ⛔ IMPLEMENTATION GATE
 ═══════════════════════════
@@ -143,7 +144,7 @@ COMPLETE
 |Interpretation|EXPLORE|NO|Clear|Task-start|`01_interpretation/`|
 |Analysis|EXPLORE|>10 files|Documented|Start+Pre-gate|`02_analysis/`|
 |Design|EXPLORE|Multi-comp|Complete|Start+Pre-gate|`03_design/`|
-|Design Review|MIXED|YES|Approved|Start+Pre-gate|Approval|
+|Design Review|MIXED|YES|Valid|Start+Pre-gate|Approval|
 |Implementation|EXPLOIT|**ALWAYS**|Tests pass|Pre-impl|Code|
 |Impl Review|EXPLOIT|YES|No blockers|Pre-handoff|`_handoff.md`|
 
@@ -289,7 +290,7 @@ Creativity: DISABLED | Deviation: NONE from spec | Verification: MANDATORY
 MUST: follow design, document impossibilities (deviation → re-design phase, not confirmation)
 ```
 
-EXPLORE→EXPLOIT: design approved | EXPLOIT→EXPLORE: escalation
+EXPLORE→EXPLOIT: design valid | EXPLOIT→EXPLORE: escalation
 
 ## Resume Protocol
 
