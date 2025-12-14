@@ -8,20 +8,21 @@ All notable changes to the agent system.
 - **agents/lib/** folder — Empty concept, eliminated
 - **.ai/suggestions/** — Unused, replaced by feedback
 - **.ai/feedback-outbox/** — Replaced by `.github/agents/feedback/`
-- **QUICKSTART scaffolding** — .human/, lib/ no longer created at install
 
 ### Changed
-- **QUICKSTART.sh** — Now creates only agent symlinks + README (87.5% folder reduction)
+- **QUICKSTART.sh** — Now creates `.human/` folder with templates + agent symlinks
 - **Feedback location** — Consolidated to `.github/agents/feedback/`
+- **Async scan checkpoints** — Expanded from 4 to 6 (added Phase-start, Pre-gate for planning phases)
 
 ### Added
 - **.github/agents/README.md** — Usage instructions for third-party repos
 - **.github/agents/.source** — Stores source repo path for on-demand features
+- **QUICKSTART .gitignore handling** — Appends 3 agent symlink entries if not present
 
 ## [Unreleased] - 2025-12-14
 
 ### Added
-- **Autonomous execution model** — Agents now run autonomously by default; human checkpoints reduced from 18 to 4 (Task-start, Pre-impl, Deviation, Escalation)
+- **Autonomous execution model** — Agents run autonomously; async `.human/` scans at 6 checkpoints (Task-start, Phase-start, Pre-gate, Pre-impl, Deviation, Escalation)
 - **Thoroughness kernel** — New `kernel/thoroughness.md` with read-completeness guarantees and size-aware strategies
 - **Multi-lens review** — 5-persona review lenses (Adversary, Simplifier, Tired User, Newcomer, Maintainer) for design review phase
 - **VSCode sub-agent optimization** — Agent descriptions optimized for `chat.customAgentInSubagent.enabled` inference
@@ -44,12 +45,14 @@ All notable changes to the agent system.
 
 ## Design Decisions
 
-### Why 4 checkpoints instead of 18?
-The goal is autonomous execution. Original 18 checkpoints created friction requiring "skip human checks" commands. The 4 remaining checkpoints cover:
+### Why 6 checkpoints instead of 18?
+The goal is autonomous execution with async override capability. Original 18 checkpoints created friction requiring "skip human checks" commands. The 6 remaining checkpoints cover:
 1. **Task-start** — Capture pre-seeded instructions
-2. **Pre-implementation** — Last chance before irreversible changes
-3. **Deviation** — Contract violation requires intervention
-4. **Escalation** — Human already involved
+2. **Phase-start** — Before Analysis/Design/Review phases begin
+3. **Pre-gate** — Before phase gates (last chance to influence planning)
+4. **Pre-implementation** — Last chance before irreversible changes
+5. **Deviation** — Contract violation requires intervention
+6. **Escalation** — Write to `.human/` and halt
 
 ### Why Mermaid over ASCII?
 Human feedback: "ASCII charts are forbidden and should all be done in mermaid." Mermaid provides:

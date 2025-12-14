@@ -16,10 +16,11 @@ Autonomous execution with passive human override capability.
 
 ```
 .human/
-├── templates/       # Pre-defined instruction templates (user source)
-├── instructions/    # Active instructions (AI reads)
-└── processed/       # → .ai/scratch/{workfolder}/00_prompts/
+├── templates/       # Pre-defined instruction templates (copy to instructions/)
+└── instructions/    # Active instructions (AI scans at checkpoints)
 ```
+
+Processed instructions move to `.ai/scratch/{workfolder}/00_prompts/`.
 
 ---
 
