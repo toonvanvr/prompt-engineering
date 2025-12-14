@@ -28,6 +28,18 @@ Output: exact format below
 
 ---
 
+## Multi-Lens Review (M/L Tasks)
+
+|Lens|Asks|Flags|
+|-|-|-|
+|🛡️ Adversary|How break?|Unvalidated input, race conditions, cascades|
+|🧹 Simplifier|Necessary?|Gold-plating, premature abstraction|
+|😴 Tired User|Must I think?|Multi-step, hidden options, expert-only|
+|👤 Newcomer|Understand?|Jargon, acronyms, implicit context|
+|🔮 Maintainer|Hate past-me?|Magic numbers, no comments, coupling|
+
+---
+
 ## Review Types
 
 |Type|Focus|

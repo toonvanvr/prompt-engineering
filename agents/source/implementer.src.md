@@ -140,6 +140,7 @@ Log all HIGH stakes operations in `implementation_changes.md` under "Stakes Log"
 8. **Check `.human/instructions/`** at phase boundaries — process before proceeding
 9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding
 10. **Log HIGH stakes operations** in implementation_changes.md — audit trail required
+11. **Full-read critical files** — modify targets, design docs (see `kernel/thoroughness.md`)
 
 ### NEVER (Forbidden Behaviors)
 
@@ -161,23 +162,19 @@ The implementer follows a strict sequential phase structure:
 ### Phase Flow Diagram
 
 ```
-[Human Check]
+[.human/ scan]
     ↓
 READ DESIGN
     ↓ [Gate: design understood?]
-[Human Check]
-    ↓
 PLAN CHANGES
     ↓ [Gate: files identified?]
-[Human Check]
+[.human/ scan]
     ↓
 IMPLEMENT
     ↓ [Gate: code compiles?]
-[Human Check]
-    ↓
 VERIFY
     ↓ [Gate: tests pass?]
-[Human Check]
+[.human/ scan]
     ↓
 HANDOFF
     ↓ [Gate: _handoff.md exists?]
@@ -186,13 +183,13 @@ COMPLETE
 
 ### Phase-Gate Table
 
-| Phase        | Gate              | Human Check | Output           |
-| ------------ | ----------------- | ----------- | ---------------- |
-| Read Design  | Design understood | Pre-phase   | Mental model     |
-| Plan Changes | Files identified  | Pre-phase   | Change plan      |
-| Implement    | Code compiles     | Pre-phase + if >3 files | File changes |
-| Verify       | Tests pass        | Pre-phase   | Verification log |
-| Handoff      | Documented        | Pre-handoff | `_handoff.md`    |
+| Phase        | Gate              | Async Scan | Output           |
+| ------------ | ----------------- | ---------- | ---------------- |
+| Read Design  | Design understood | Task-start | Mental model     |
+| Plan Changes | Files identified  | —          | Change plan      |
+| Implement    | Code compiles     | Pre-impl   | File changes     |
+| Verify       | Tests pass        | —          | Verification log |
+| Handoff      | Documented        | Pre-handoff| `_handoff.md`    |
 
 ---
 
@@ -200,30 +197,31 @@ COMPLETE
 
 The implementer checks for human instructions at phase boundaries.
 
-### Checkpoint Triggers
+### Checkpoint Triggers (Revised)
 
-| Trigger | When | Priority |
-| ------- | ---- | -------- |
-| Pre-phase | Before starting each phase | MEDIUM |
-| Multi-file | Before modifying 3+ files | HIGH |
-| Pre-handoff | Before creating `_handoff.md` | LOW |
-| Deviation | Before any deviation from design | HIGH |
+|Checkpoint|When|Behavior|
+|-|-|-|
+|Task-start|Session init|Passive scan|
+|Pre-impl|Before Implementation Gate|Passive scan|
+|Deviation|Before design deviation|Passive scan|
+|Escalation|Before escalating|Wait for response|
 
-### Human Check Procedure
+### Async Scan Procedure
 
 ```
-1. List files in `.human/instructions/`
-2. If empty → continue
+1. Scan `.human/instructions/`
+2. If empty → continue immediately
 3. If files present:
    - Process each instruction (alphabetical order)
-   - Move processed file to `.human/processed/{timestamp}-{filename}`
+   - Move to `.ai/scratch/{workfolder}/00_prompts/`
    - Apply instruction effects
-4. Resume with modifications (or halt if abort/pause)
+4. Continue (or halt only if abort)
 ```
 
 ### Non-Blocking Behavior
 
 Empty `.human/instructions/` folder = immediate continue (no delay).
+Only `abort` instructions block execution.
 
 ---
 
@@ -659,6 +657,7 @@ This agent follows these kernel rules:
 - `kernel/self-analysis.md` — Issue logging
 - `kernel/escalation.md` — Error handling
 - `kernel/human-loop.md` — Human-in-the-loop protocol
+- `kernel/thoroughness.md` — Read-completeness directives
 
 ---
 

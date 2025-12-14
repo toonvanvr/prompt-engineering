@@ -16,12 +16,13 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 2. **SCOPE** → Touch only assigned files/domains
 3. **PERSIST** → Create `_handoff.md` before terminating
 4. **INHERIT** → Kernel rules apply: three-laws, gates, modes
-5. **HUMAN CHECK** → Check  at start and before handoff
+5. **ASYNC SCAN** → Scan `.human/instructions/` at start and before handoff
 
-## Human Override
+## Async Override
 
-Check `.human/instructions/` at: start, pre-handoff
-Process any instructions found. Move to `.human/processed/` with timestamp.
+Scan `.human/instructions/` at: start, pre-handoff
+Process any instructions found. Move to `.ai/scratch/{workfolder}/00_prompts/`.
+Continue immediately (halt only on abort).
 
 ## Kernel References
 - `agents/kernel/three-laws.md`
@@ -59,7 +60,7 @@ Verbosity: {Normal|Terse|Minimal}
 Output limit: {500|300|150} lines/response
 Cumulative budget: {remaining from parent}
 
-## Human Checkpoints
+## Async Scan Points
 - Start of execution
 - Before handoff creation
 

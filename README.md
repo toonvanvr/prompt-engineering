@@ -1,77 +1,48 @@
 # Prompt Engineering
 
-A self-evolving AI agent system for prompt optimization and compilation.
+GitHub Copilot agents that coordinate complex tasks—analyze, design, implement, verify.
 
 ## Quick Start
 
-```sh
-./QUICKSTART.sh /path/to/your/workspace
-```
+1. Run: `./QUICKSTART.sh /path/to/your/project`
+2. Open VS Code → Copilot Chat → Agent mode
+3. Select **Orchestrator** → describe the task
 
-This installs:
-- **Agents** → `.github/agents/*.agent.md` (symlinks)
-- **Templates** → `.github/agents/lib/templates/` (symlink)
-- **Human Loop** → `.human/` (copied, workspace-local)
+Re-run script to update agents.
 
-Re-run to update with newer versions.
+## What It Does
 
-## Structure
+Describe a task (e.g., "add authentication"). The Orchestrator:
+- Analyzes codebase
+- Designs solution → asks approval
+- Delegates to sub-agents
+- Verifies before finishing
 
-```
-.ai/
-├── library/          # Permanent knowledge (indexed, on-demand)
-├── scratch/          # Working space (deleted after compilation)
-└── self-analysis/    # Execution logs for continuous improvement
-
-.human/
-├── templates/        # Instruction templates (copy to instructions/)
-├── instructions/     # Active instructions (AI reads)
-└── processed/        # Completed instructions (AI archives)
-
-agents/
-├── compiled/         # AI-optimized agents (deployed)
-├── source/           # Human-readable source (edit here)
-├── kernel/           # Core behavioral rules
-├── modes/            # EXPLORE/EXPLOIT specifications
-└── templates/        # Dispatch templates for sub-agents
-```
+Async `.human/` folder for override—control without interrupting.
 
 ## Agents
 
-|Agent|Purpose|
-|-|-|
-|Orchestrator|Multi-phase coordination, sub-agent delegation|
-|Implementer|Code implementation in EXPLOIT mode|
-|Compiler|Prompt compression (50-70% token reduction)|
+|Agent|Purpose|When to use|
+|-|-|-|
+|Orchestrator|Planning & coordination|Most tasks|
+|Implementer|Code changes|Auto-spawned|
+|Compiler|Token optimization|Maintainer use|
 
-## Human-in-the-Loop
+## Project Structure
 
-Inject instructions during long-running tasks:
+```
+agents/
+├── compiled/     # Deployed (don't edit)
+├── source/       # Edit here
+├── kernel/       # Core rules
+└── templates/    # Dispatch formats
+```
 
-1. Copy template from `.human/templates/` → `.human/instructions/`
-2. Edit checkboxes/values
-3. Save — agent processes at next checkpoint
+## For Maintainers
 
-Templates: `abort`, `approve`, `context`, `feedback`, `pause`, `priority`, `redirect`, `skip-phase`
-
-## Workflow
-
-1. **Edit** source in `agents/source/`
-2. **Compile** using Compiler agent
-3. **Extract** reusable knowledge to `.ai/library/`
-4. **Clean** scratch directory
-
-## Principles
-
-- **No version folders** — Git handles versioning
-- **No WIP after completion** — Only definitive files remain
-- **Library grows organically** — 1 file → folders → subfolders
-- **Scratch is ephemeral** — Knowledge extracted, then deleted
+1. Edit `agents/source/*.src.md`
+2. Run Compiler → outputs `agents/compiled/*.agent.md`
 
 ## References
 
-- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer) (Apache Software License 2.0)
-
----
-
-*Versioned with git, not folders.*
+- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer) — Human-in-the-loop inspiration

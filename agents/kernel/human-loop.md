@@ -1,12 +1,14 @@
 # Human-in-the-Loop Protocol
 
-Asynchronous human intervention for long-running tasks.
+Autonomous execution with passive human override capability.
 
 ---
 
 ## Core Principle
 
-> Check `.human/instructions/` at key checkpoints. Process if present. Continue if empty.
+> Scan `.human/instructions/` at checkpoints. Process immediately if present. Continue without waiting.
+
+**Model:** Autonomous by default, intervention by exception.
 
 ---
 
@@ -16,51 +18,39 @@ Asynchronous human intervention for long-running tasks.
 .human/
 ├── templates/       # Pre-defined instruction templates (user source)
 ├── instructions/    # Active instructions (AI reads)
-└── processed/       # Completed instructions (AI writes)
+└── processed/       # → .ai/scratch/{workfolder}/00_prompts/
 ```
 
 ---
 
-## Checkpoint Triggers
+## Checkpoint Triggers (6 Total)
 
-### Orchestrator Checkpoints
-
-|Trigger|When|Priority|
+|Checkpoint|When|Behavior|
 |-|-|-|
-|Pre-dispatch|Before spawning sub-agent|HIGH|
-|Post-gate|After gate verification passes|MEDIUM|
-|Pre-phase|Before starting new phase|MEDIUM|
-|Escalation|Before escalating to user|HIGH|
+|Task-start|Session init|Passive scan|
+|Phase-start|Before Analysis/Design/Review|Passive scan|
+|Pre-gate|Before phase gate (Analysis/Design/Review)|Passive scan|
+|Pre-impl|Before Implementation Gate|Passive scan|
+|Deviation|Before design deviation|Passive scan|
+|Escalation|Before escalating|Write to `.human/`, halt|
 
-### Implementer Checkpoints
-
-|Trigger|When|Priority|
-|-|-|-|
-|Pre-phase|Before each implementation phase|MEDIUM|
-|Multi-file|Before modifying 3+ files|HIGH|
-|Deviation|Before deviating from design|HIGH|
-
-### Sub-Agent Checkpoints
-
-|Trigger|When|Priority|
-|-|-|-|
-|Start|At sub-agent initialization|LOW|
-|Pre-handoff|Before creating handoff|LOW|
+**Passive scan:** Check → process if present → continue immediately (no wait).
+**Halt:** Only `abort` and `escalation` scenarios block execution.
 
 ---
 
 ## Check Protocol
 
 ```
-1. List `.human/instructions/` contents
-2. If empty → continue normally
+1. Scan `.human/instructions/` contents
+2. If empty → continue immediately
 3. If files present:
    a. Read all instruction files (sorted by name)
    b. Parse checkbox states and values
    c. Execute instruction actions
-   d. Move each file to `.human/processed/` with timestamp prefix
+   d. Move to `.ai/scratch/{workfolder}/00_prompts/{seq}_{name}.md`
    e. Document instruction effect in current task log
-4. Resume task (may be modified by instructions)
+4. Continue task (no wait unless abort/escalation)
 ```
 
 ---
@@ -72,8 +62,17 @@ Asynchronous human intervention for long-running tasks.
 ```
 .human/instructions/feedback.md
     ↓ processed
-.human/processed/20241201-143052-feedback.md
+.ai/scratch/{workfolder}/00_prompts/01_feedback.md
 ```
+
+### Naming Convention
+
+|Source|Target Pattern|
+|-|-|
+|User's first prompt|`00_initial_request.md`|
+|feedback.md processed|`01_feedback.md`|
+|redirect.md processed|`02_redirect.md`|
+|Custom file|`{seq}_{slug}.md`|
 
 ### Parse Rules
 
@@ -87,7 +86,7 @@ Asynchronous human intervention for long-running tasks.
 
 Multiple instructions processed in filename alphabetical order. If conflicting:
 - Later instruction overrides earlier
-- Abort/Pause take precedence over all
+- Abort takes precedence over all
 - Log conflict to self-analysis
 
 ---
@@ -98,75 +97,65 @@ Multiple instructions processed in filename alphabetical order. If conflicting:
 |-|-|
 |abort|Stop task, optionally rollback|
 |redirect|Change task scope/direction|
-|pause|Halt and wait for resume|
 |skip-phase|Skip specified phase(s)|
 |feedback|Apply adjustments, continue|
 |approve|Clear pending approval gates|
-|priority|Reorder task queue|
 |context|Inject new information|
 
 ---
 
 ## Implementation in Agents
 
-### Check Function (Pseudocode)
+### Async Scan Function (Pseudocode)
 
 ```md
-## Human Check
+## Async Scan (.human/instructions/)
 
-1. Read `.human/instructions/` directory
+1. Scan `.human/instructions/` directory
 2. IF empty:
-   - Log: "Human check: no instructions"
-   - CONTINUE
+   - CONTINUE immediately (no log needed)
 3. FOR each file:
    - Parse instruction
    - Apply action
-   - Move to processed with timestamp
-   - Log: "Human instruction processed: {action}"
-4. IF abort/pause:
+   - Move to `.ai/scratch/{workfolder}/00_prompts/`
+   - Log: "Instruction processed: {action}"
+4. IF abort:
    - HALT
 5. ELSE:
-   - CONTINUE with modifications
+   - CONTINUE immediately
 ```
 
 ### Agent Integration
 
 Add to ALWAYS list:
 ```md
-- **Check human instructions** at checkpoints — process before proceeding
-```
-
-Add to dispatch templates:
-```md
-## Human Override
-
-Check `.human/instructions/` at: start, pre-handoff
-Process any instructions before continuing.
+- **Async scan** `.human/instructions/` at checkpoints — process without waiting
 ```
 
 ---
 
 ## Inheritance
 
-Sub-agents inherit human-check protocol. Checkpoints:
-- Start of sub-agent execution
-- Before handoff creation
+Sub-agents inherit passive scan protocol. Checkpoints:
+- Task-start (session init)
+- Pre-impl (before implementation)
+- Deviation (before design deviation)
 
 ---
 
 ## Non-Blocking Behavior
 
 - Empty folder = immediate continue
-- Check is fast (directory listing)
-- Only blocks when instruction present
-- Enables async human intervention without polling
+- Check is fast (directory scan)
+- Only blocks on abort or escalation
+- Enables autonomous execution with human override capability
 
 ---
 
 ## Logging
 
-All instruction processing logged to:
-- Current scratch space: `.ai/scratch/{topic}/human_instructions.log`
+Instruction processing logged to:
+- Current scratch space: `.ai/scratch/{topic}/00_prompts/`
 - Self-analysis if issues: `.ai/self-analysis/`
 
 Log format:
@@ -182,51 +171,11 @@ Effect: {what changed}
 
 ---
 
-## Multi-Channel Awareness (Conceptual)
-
-### Current Implementation
-
-File-based communication via `.human/instructions/`.
-
-### Conceptual Channels
-
-When documenting escalation needs, specify preferred channel:
-
-|Escalation Type|Preferred Channel|Fallback|
-|-|-|-|
-|Technical blocker|Developer (Slack)|File|
-|Design approval|Stakeholder (Email)|File + Chat|
-|Urgent abort|Any available|All|
-
-### Channel Documentation
-
-In escalation templates, include:
-
-```md
-## Preferred Channel
-- Type: {Slack | Email | File | Chat}
-- Recipient: {role description}
-- Urgency: {HIGH | MEDIUM | LOW}
-```
-
-### Future Integration Path
-
-SDK integration for real-time channels:
-
-```
-Current: .human/instructions/ → AI reads → AI processes
-Future:  SDK event → Channel routing → Real-time response
-```
-
-**Note:** Runtime integration is out of scope. This documents the conceptual model for future enhancement.
-
----
-
 ## Approval Request Pattern
 
-### For High-Stakes Gates
+### For Escalation Scenarios Only
 
-When quality gate requires explicit approval:
+When escalation requires explicit approval:
 
 ```md
 ## Approval Required: {gate_name}
@@ -247,12 +196,7 @@ When quality gate requires explicit approval:
 - [ ] APPROVE: Proceed to {next_phase}
 - [ ] DENY: {reason} — return to {previous_phase}
 
-### Timeout Behavior
-If no response within {timeframe}:
-- Default: WAIT (blocking)
-- Override: Set in dispatch
-
-⚠️ Cannot proceed without explicit approval response.
+⚠️ Escalation scenario — waiting for response.
 ```
 
 ### Approval Processing

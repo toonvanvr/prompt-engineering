@@ -104,15 +104,16 @@ FULL CONSTRAINT STACK:
 
 ---
 
-## Human Checkpoints
+## Async Scan Points
 
 |Trigger|When|Action|
 |-|-|-|
-|Start|Before reading design|Check `.human/instructions/`|
-|Multi-file|Before modifying 3+ files|Check `.human/instructions/`|
-|Pre-handoff|Before creating handoff|Check `.human/instructions/`|
+|Task-start|Before reading design|Scan `.human/instructions/`|
+|Pre-impl|Before modifying files|Scan `.human/instructions/`|
+|Pre-handoff|Before creating handoff|Scan `.human/instructions/`|
 
-Process instructions if found. Move to `.human/processed/` with timestamp.
+Process instructions if found. Move to `.ai/scratch/{workfolder}/00_prompts/`.
+Continue immediately (halt only on abort).
 
 ---
 

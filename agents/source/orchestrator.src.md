@@ -17,6 +17,21 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 ---
 
+## Startup Protocol
+
+1. Get timestamp: `date +%Y-%m-%dT%H:%M:%S`
+2. Create workfolder: `.ai/scratch/{timestamp}_{topic}/`
+3. Scan `.ai/scratch/` for existing work
+4. Scan `.human/instructions/`
+
+---
+
+## Pre-Task Protocol
+
+1. Scan `.ai/self-analysis/index.md` for recent issues
+
+---
+
 ## Commands Cheat Sheet
 
 Standard orchestration workflow:
@@ -169,39 +184,46 @@ The orchestrator manages tasks through defined phases, each with specific gates:
 
 ### Phase Flow Diagram
 
+```mermaid
+flowchart TD
+    INT[INTERPRETATION] -->|clear?| ANA
+    ANA[ANALYSIS] -->|documented?| DES
+    DES[DESIGN] -->|complete?| REV
+    REV[DESIGN REVIEW] -->|approved?| GATE
+    GATE[⛔ IMPL GATE] --> IMP
+    IMP[IMPLEMENTATION] -->|tests pass?| IRV
+    IRV[IMPL REVIEW] -->|verified?| DONE[COMPLETE]
 ```
-INTERPRETATION (inline)
-    ↓ [Gate: request clear?]
-ANALYSIS (sub-agent if >10 files)
-    ↓ [Gate: patterns documented?]
-DESIGN (sub-agent if multi-component)
-    ↓ [Gate: design complete?]
-DESIGN REVIEW (sub-agent)
-    ↓ [Gate: design approved?]
 
-═══════════════════════════════════════════════════
-║  ⛔ IMPLEMENTATION ENFORCEMENT GATE (BLOCKING)  ║
-═══════════════════════════════════════════════════
-    ↓
-IMPLEMENTATION (ALWAYS sub-agent)
-    ↓ [Gate: code complete, tests pass?]
-IMPLEMENTATION REVIEW (sub-agent)
-    ↓ [Gate: verified, no blockers?]
-COMPLETE
+`.human/instructions/` scanned at: Task-start, Phase-start, Pre-gate, Pre-impl, Deviation, Escalation (see Human-in-the-Loop section).
 
-Note: [Human Check] occurs at each gate and before each sub-agent dispatch.
-```
+### Interpretation Sub-Agent (Size M/L)
+
+For Size M/L tasks, spawn SA for pre-analysis:
+- Investigate repo context
+- Identify relevant files and patterns
+- Return scope assessment
+
+Orchestrator synthesizes SA findings before proceeding.
 
 ### Phase-Gate Table
 
-| Phase          | Mode    | Sub-Agent?         | Gate                | Human Check | Output               |
-| -------------- | ------- | ------------------ | ------------------- | ----------- | -------------------- |
-| Interpretation | EXPLORE | NO                 | Request clear       | Post-gate   | `01_interpretation/` |
-| Analysis       | EXPLORE | If >10 files       | Patterns documented | Pre-dispatch, Post-gate | `02_analysis/` |
-| Design         | EXPLORE | If multi-component | Design complete     | Pre-dispatch, Post-gate | `03_design/` |
-| Design Review  | MIXED   | YES                | Design approved     | Pre-dispatch, Post-gate | Approval in chat |
-| Implementation | EXPLOIT | YES (ALWAYS)       | Tests pass          | Pre-dispatch, Post-gate | Code changes |
-| Impl Review    | EXPLOIT | YES                | No blockers         | Pre-dispatch, Post-gate | `_handoff.md` |
+| Phase          | Mode    | Sub-Agent?         | Gate                | Async Scan      | Output               |
+| -------------- | ------- | ------------------ | ------------------- | --------------- | -------------------- |
+| Interpretation | EXPLORE | If M/L             | Request clear       | Task-start      | `01_interpretation/` |
+| Analysis       | EXPLORE | If >10 files       | Patterns documented | Start, Pre-gate | `02_analysis/`       |
+| Design         | EXPLORE | If multi-component | Design complete     | Start, Pre-gate | `03_design/`         |
+| Design Review  | MIXED   | YES                | Design approved     | Start, Pre-gate | Approval in chat     |
+| Implementation | EXPLOIT | YES (ALWAYS)       | Tests pass          | Pre-impl        | Code changes         |
+| Impl Review    | EXPLOIT | YES                | No blockers         | Pre-handoff     | `_handoff.md`        |
+
+### Design Review: Lens-by-Size Rule
+
+|Size|Multi-Lens Review|
+|-|-|
+|S (Small)|Optional|
+|M (Medium)|Mandatory|
+|L (Large)|Mandatory|
 
 ---
 
@@ -256,25 +278,27 @@ Score: ({files}×10) + ({domains}×30) + ({lines}×0.5) = {score}
 
 The orchestrator checks for human instructions at key decision points.
 
-### Checkpoint Triggers
+### Checkpoint Triggers (Revised)
 
-| Trigger | When | Action |
-| ------- | ---- | ------ |
-| Pre-dispatch | Before spawning any sub-agent | Check `.human/instructions/`, process if present |
-| Post-gate | After gate verification passes | Check `.human/instructions/`, process if present |
-| Pre-escalation | Before escalating to user | Check `.human/instructions/`, may resolve escalation |
+|Checkpoint|When|Behavior|
+|-|-|-|
+|Task-start|Session init|Passive scan|
+|Phase-start|Before Analysis/Design/Review|Passive scan|
+|Pre-gate|Before phase gate (Analysis/Design/Review)|Passive scan|
+|Pre-impl|Before Implementation Gate|Passive scan|
+|Deviation|Before design deviation|Passive scan|
+|Escalation|Before escalating|Write to `.human/`, halt|
 
-### Human Check Procedure
+### Async Scan Procedure
 
 ```
-1. List files in 
-2. If empty → continue
+1. Scan `.human/instructions/`
+2. If empty → continue immediately
 3. If files present:
    - Process each instruction (alphabetical order)
-   - Move processed file to `.human/processed/{timestamp}-{filename}`
-   - Log to `.ai/scratch/YYYY-MM-DD_{topic}/human_instructions.log`
+   - Move to `.ai/scratch/{workfolder}/00_prompts/{seq}_{name}.md`
    - Apply instruction effects (abort, redirect, approve, etc.)
-4. Resume with modifications (or halt if abort/pause)
+4. Continue (or halt only if abort)
 ```
 
 ### Available Instruction Templates
@@ -535,7 +559,7 @@ Error: {message}
 
 {what help required}
 
-@human: Please advise on this specific issue.
+Write escalation to `.human/instructions/escalation.md` and halt.
 ```
 
 ---
