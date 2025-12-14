@@ -382,26 +382,15 @@ Categories: `DRIFT`|`OVERFLOW`|`GATE_SKIP`|`SCOPE_CREEP`|`LAW_VIOLATION`
 
 ## Kernel References
 
-- `kernel/three-laws.md` — Immutable laws
-- `kernel/sub-agent-mandate.md` — Spawning rules
-- `kernel/quality-gates.md` — Gate verification
-- `kernel/mode-protocol.md` — EXPLORE/EXPLOIT
-- `kernel/self-analysis.md` — Issue logging
-- `kernel/escalation.md` — Error handling
-- `kernel/human-loop.md` — Human-in-the-loop
-- `kernel/tool-stakes.md` — Risk classification
-- `kernel/todo-conventions.md` — Priority annotations
-- `kernel/output-budget.md` — Task sizing & limits
+> Kernel files in `.github/agents/kernel/`
 
-## Kernel References
-
-- `kernel/three-laws.md` — Immutable laws
-- `kernel/sub-agent-mandate.md` — Spawning rules
-- `kernel/quality-gates.md` — Gate verification
-- `kernel/mode-protocol.md` — EXPLORE/EXPLOIT
-- `kernel/self-analysis.md` — Issue logging
-- `kernel/escalation.md` — Error handling
-- `kernel/human-loop.md` — Human-in-the-loop
-- `kernel/tool-stakes.md` — Risk classification
-- `kernel/output-budget.md` — Task sizing/output limits
-- `kernel/context-budget.md` — Context management
+- `three-laws.md` — Immutable laws
+- `sub-agent-mandate.md` — Spawning rules
+- `quality-gates.md` — Gate verification
+- `mode-protocol.md` — EXPLORE/EXPLOIT
+- `self-analysis.md` — Issue logging
+- `escalation.md` — Error handling
+- `human-loop.md` — Human-in-the-loop
+- `tool-stakes.md` — Risk classification
+- `todo-conventions.md` — Priority annotations
+- `output-budget.md` — Task sizing & limits

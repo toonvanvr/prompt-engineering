@@ -291,11 +291,13 @@ Proceed without approval: NO
 
 ## Kernel References
 
-- `kernel/three-laws.md` — Immutable laws
-- `kernel/quality-gates.md` — Gate verification
-- `kernel/mode-protocol.md` — EXPLOIT mode
-- `kernel/human-loop.md` — Human-in-the-loop
-- `kernel/tool-stakes.md` — Risk classification
-- `kernel/thoroughness.md` — Full-read directives
-- `kernel/escalation.md` — 3-attempt protocol
-- `kernel/self-analysis.md` — Issue logging
+> Kernel files in `.github/agents/kernel/`
+
+- `three-laws.md` — Immutable laws
+- `quality-gates.md` — Gate verification
+- `mode-protocol.md` — EXPLOIT mode
+- `human-loop.md` — Human-in-the-loop
+- `tool-stakes.md` — Risk classification
+- `thoroughness.md` — Full-read directives
+- `escalation.md` — 3-attempt protocol
+- `self-analysis.md` — Issue logging

@@ -12,6 +12,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 AGENTS_DIR="$SCRIPT_DIR/agents/compiled"
+KERNEL_DIR="$SCRIPT_DIR/agents/kernel"
 HUMAN_DIR="$SCRIPT_DIR/.human"
 
 # Validate target
@@ -37,6 +38,10 @@ for agent in "$AGENTS_DIR"/*.agent.md; do
     echo "✓ .github/agents/$name"
 done
 
+# Symlink kernel directory (needed by agents for references)
+ln -sf "$KERNEL_DIR" "$TARGET_AGENTS/kernel"
+echo "✓ .github/agents/kernel/ (symlinked)"
+
 # Store source path for on-demand features
 echo "$SCRIPT_DIR" > "$TARGET_AGENTS/.source"
 
@@ -46,8 +51,21 @@ cat > "$TARGET_AGENTS/README.md" << 'EOF'
 
 Symlinked from prompt-engineering repo.
 
+## Structure
+- `orchestrator.agent.md` - Planning & coordination agent
+- `implementer.agent.md` - Code implementation agent  
+- `compiler.agent.md` - Prompt compression agent
+- `kernel/` - Shared behavioral rules (referenced by agents)
+
 ## Usage
 Use @Orchestrator, @Implementer, or @Compiler in VS Code.
+
+Agents reference `kernel/*.md` files for shared rules:
+- `three-laws.md` - Immutable behavioral anchors
+- `mode-protocol.md` - EXPLORE/EXPLOIT switching
+- `quality-gates.md` - Phase transition verification
+- `human-loop.md` - Async human override protocol
+- And more...
 
 ## Human Override
 Place instruction files in `.human/instructions/` to provide async feedback.
@@ -83,12 +101,13 @@ fi
 
 # Copy instructions README if not exists
 if [ -f "$HUMAN_DIR/instructions/README.md" ] && [ ! -f "$TARGET_HUMAN/instructions/README.md" ]; then
-    cp "$HUMAN_DIR/instructions/README.md" "$TARGET_HUMAN/instructions/README.md"
-    echo "✓ .human/instructions/README.md"
-fi
-
 # --- .gitignore handling ---
 echo ""
+GITIGNORE="$TARGET/.gitignore"
+AGENT_IGNORES=".github/agents/orchestrator.agent.md
+.github/agents/implementer.agent.md
+.github/agents/compiler.agent.md
+.github/agents/kernel"
 GITIGNORE="$TARGET/.gitignore"
 AGENT_IGNORES=".github/agents/orchestrator.agent.md
 .github/agents/implementer.agent.md
@@ -96,12 +115,13 @@ AGENT_IGNORES=".github/agents/orchestrator.agent.md
 
 # Create or append to .gitignore
 if [ ! -f "$GITIGNORE" ]; then
-    # Create new .gitignore
     cat > "$GITIGNORE" << EOF
 # AI agent symlinks (from prompt-engineering)
 .github/agents/orchestrator.agent.md
 .github/agents/implementer.agent.md
 .github/agents/compiler.agent.md
+.github/agents/kernel
+EOFthub/agents/compiler.agent.md
 EOF
     echo "✓ .gitignore (created)"
 else
