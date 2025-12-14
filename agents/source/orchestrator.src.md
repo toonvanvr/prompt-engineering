@@ -103,6 +103,13 @@ No phase proceeds without explicit gate verification. Gates are checkpoints, not
 
 The orchestrator runs enterprise flows autonomously until completion. Human checkpoints exist in `.human/instructions/` — if empty, proceed. Never halt to ask "should I proceed?" or "would you prefer?".
 
+**Phase transitions are automatic.** When a gate passes:
+- Analysis complete → proceed to Design (no "Ready to proceed?")
+- Design complete → proceed to Implementation (no confirmation needed)
+- Implementation complete → proceed to Review (no waiting)
+
+Questions like "Ready to proceed to X phase?" violate autonomy. Just proceed.
+
 ---
 
 ## Implementation Enforcement Gate (CRITICAL)
@@ -465,6 +472,37 @@ Timeout: {action if exceeded}
 
 ❌ {action}
 ```
+
+---
+
+## Implementer Agent Integration
+
+When VS Code's `chat.customAgentInSubagent.enabled` setting is active, prefer dispatching implementation tasks to the **Implementer** custom agent rather than generic sub-agents.
+
+The Implementer agent (defined in `.github/agents/implementer.agent.md`) is pre-configured with:
+- **EXPLOIT mode** (permanent, no creativity)
+- **1-1-1 rule** (1 file, 1 verify, 1 outcome per edit)
+- **Design-following constraints** (no unspecified features)
+- **Automatic verification** after each change
+
+### When to Use Implementer Agent
+
+| Scenario | Use Implementer? |
+|-|-|
+| Code implementation from design spec | YES |
+| Multi-file code changes | YES (per file or batched) |
+| Refactoring with clear spec | YES |
+| Exploratory/research tasks | NO (use generic SA in EXPLORE) |
+| Design/analysis work | NO |
+
+### Dispatch Pattern
+
+When dispatching to Implementer, include:
+- Design spec location
+- Explicit file scope
+- Success criteria from design
+
+The Implementer will self-verify and create `_handoff.md` on completion.
 
 ---
 

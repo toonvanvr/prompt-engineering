@@ -93,6 +93,8 @@ Phase N → [GATE] → Phase N+1
 - Soft pass (with caveats)
 - Asking human "should I proceed?" (use `.human/instructions/` instead)
 - Halting for confirmation on clear requests
+- "Ready to proceed to X phase?" (just proceed)
+- Any permission question before phase transition
 
 ### REQUIRED
 

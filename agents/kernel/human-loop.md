@@ -14,6 +14,24 @@ Autonomous execution with passive human override capability.
 
 ---
 
+## Anti-Patterns (FORBIDDEN)
+
+|❌ Don't|✅ Do Instead|
+|-|-|
+|"Should I proceed?"|Proceed (scan `.human/instructions/` first)|
+|"Would you prefer X or Y?"|Choose based on design, document rationale|
+|"Do you want me to..."|Do it (user prompt = approval)|
+|"Ready to proceed to X phase?"|Proceed to X phase|
+|"Shall I continue?"|Continue|
+|"Is this what you wanted?"|Deliver result, iterate if feedback|
+|Any question asking permission|Just do it|
+
+**Rule: No permission questions.** If your response ends with a question asking whether to proceed/continue/start/implement, delete the question and proceed instead.
+
+**Enterprise flows run autonomously until completion.** Halting to ask = failure.
+
+---
+
 ## Folder Structure
 
 ```
