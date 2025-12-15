@@ -16,6 +16,33 @@ The compiler transforms human-readable prompts into AI-optimized compressed vers
 
 ---
 
+## Definitions & Concepts
+
+### Core Terms
+
+1. **Token**: A word or word-fragment as counted by the target LLM's tokenizer. For estimation without tooling, use: `tokens ≈ words × 1.3`. When precise counts required, use `tiktoken` (GPT models) or equivalent. Whitespace and punctuation are counted.
+2. **Semantic Drift**: A change in meaning or behavior between original and compressed prompts. Measured by: an AI given identical inputs produces different outputs. Threshold: any behavioral difference = drift.
+3. **High-Risk Compression**: Any compression that may alter meaning. Specifically:
+   - Removes conditional logic
+   - Changes scope of instructions
+   - Alters emphasis or priority
+   - Modifies examples (even partially)
+   - Affects numerical values or thresholds
+4. **Behavioral Weight**: Emphasis markers (MUST, NEVER, ALWAYS, REQUIRED, FORBIDDEN) that signal non-negotiable constraints. Case-insensitive. Also includes: bold variants (**MUST**), caps in sentences.
+5. **Safe Compression**: Compression with no observed semantic impact. Reversible in meaning. Examples: filler removal, article deletion (when unambiguous).
+6. **Context Clarity**: A pronoun's referent is unambiguous within the same sentence or immediately preceding sentence. If referent requires scanning >1 sentence back, context is unclear.
+
+### System Terms
+
+7. **Frontmatter Tools** (`runSubagent`, `problems`, etc.): Standard agent tools available in the environment.
+8. **EXPLORE Mode**: Discovery/Analysis mode where creativity is allowed within guardrails.
+9. **Dispatch Templates**: Pre-defined prompts in `templates/` used to spawn sub-agents.
+10. **Inherited Rules**: Foundational rules from `agents/kernel/` that all agents must follow.
+11. **Patterns vs Findings**: Patterns are reusable logic/structures; Findings are specific discoveries/facts.
+12. **AI Context Ecosystem**: Standardized context files (e.g., `CLAUDE.md`) for different AI models.
+
+---
+
 ## The Three Laws of Compilation
 
 These laws are **immutable and non-negotiable**. They protect against destructive compression.
@@ -49,6 +76,31 @@ Required metrics:
 
 ---
 
+## Rule Priority & Conflict Resolution
+
+When rules conflict, apply in this order (highest priority first):
+
+| Priority | Rule Category | Examples |
+|-|-|-|
+| 1 | NEVER Compress list | Examples, emphasis markers, code blocks |
+| 2 | Law 1: Preserve Semantics | Meaning > token savings |
+| 3 | Law 2: Critical Anchors | Format specs, numbers |
+| 4 | Preserve Sections (user-specified) | `preserve_sections` in input |
+| 5 | Phase 3: Validation checks | Structural integrity |
+| 6 | Phase 2: Moderate compressions | Abbreviations, merges |
+| 7 | Phase 1: Safe compressions | Filler, articles |
+
+### Conflict Examples
+
+| Conflict | Resolution |
+|-|-|
+| Phase 1 says delete articles; text is in example block | Priority 1: Keep article (examples are NEVER compressed) |
+| Phase 2 says abbreviate term; term is in code block | Priority 1: Keep full term (code blocks are NEVER compressed) |
+| Phase 1 says delete "Please"; it's in emphasis marker | Priority 1: Keep "Please" (part of critical anchor) |
+| User specified `preserve_sections: ['Overview']`; Phase 1 would compress it | Priority 4: Keep verbose (user override) |
+
+---
+
 ## Input Specification
 
 The compiler accepts input in the following format:
@@ -78,6 +130,20 @@ input:
 | FULL         | Apply all safe + moderate compressions, restructure prose | 60-70%           |
 | CONSERVATIVE | Apply safe compressions only, preserve structure          | 40-50%           |
 | VALIDATE     | Analysis only, no changes, report potential compressions  | 0% (analysis)    |
+
+**Default Mode:** If caller does not specify mode, use `CONSERVATIVE`.
+
+### Target Range Handling
+
+| Result | Action |
+|-|-|
+| Within target | ✓ Success |
+| Below target (e.g., 55% in FULL mode) | Accept + WARNING: "Below target range" |
+| Above target (e.g., 75% in FULL mode) | Accept + WARNING: "Above target - review for over-compression" |
+| Below 30% reduction (any mode) | Accept + WARNING: "Minimal compression achieved" |
+| >80% reduction | FAIL: Over-compression risk. Add to warnings with HIGH severity. |
+
+Note: Targets are goals, not hard constraints. Prioritize semantic preservation over hitting targets.
 
 ---
 
@@ -172,6 +238,47 @@ OUTPUT + METRICS
 
 ---
 
+## Verification Procedures
+
+### Semantic Preservation Verification
+
+**Procedure** (performed during Phase 3):
+
+1. **Example Check:** Diff all code blocks and example sections between original and compressed. Any difference = FAIL.
+2. **Emphasis Check:** Count MUST/NEVER/ALWAYS/REQUIRED/FORBIDDEN in original vs compressed. Counts must match.
+3. **Intent Check:** For each instruction in original, verify a corresponding instruction exists in compressed:
+   - Same action verb (or equivalent)
+   - Same object/target
+   - Same conditions (if any)
+4. **Structure Check:** Section hierarchy (##, ###) preserved. No sections removed unless empty.
+
+**Pass Criteria:** All 4 checks pass.
+
+### Structural Integrity Test
+
+| Check | Pass Condition |
+|-|-|
+| Section count | Compressed has ≥ original section count (unless sections merged with clear mapping) |
+| Instruction count | No instructions removed (only reformatted) |
+| Hierarchy preserved | ## → ##, ### → ### (no promotion/demotion) |
+| Lists intact | Bullet count stable (merges documented) |
+
+### High-Risk Pattern Detection
+
+Flag as HIGH risk and add to warnings:
+
+| Pattern | Why High-Risk |
+|-|-|
+| Conditional removed | Logic change |
+| Number/threshold modified | Specification change |
+| Emphasis marker missing | Behavioral anchor lost |
+| Example altered | Interpretation anchor lost |
+| Code block changed | Syntax may break |
+| Format spec modified | Output spec changed |
+| Negation removed ("not", "don't") | Inverts meaning |
+
+---
+
 ## Compression Rules Reference
 
 ### Phase 1: Safe Compressions (Apply Always)
@@ -179,6 +286,13 @@ OUTPUT + METRICS
 These patterns have zero observed semantic drift. Apply unconditionally.
 
 #### Filler Phrase Removal
+
+Filler phrases add no semantic value. They typically:
+- Start with "I would", "Please", "What I need", "Make sure"
+- Express politeness without instruction
+- Include greetings/closings
+
+**Filler Pattern Detection:** Remove phrases that, when deleted, leave the instruction unchanged.
 
 | Original                    | Action | Result |
 | --------------------------- | ------ | ------ |
@@ -189,6 +303,12 @@ These patterns have zero observed semantic drift. Apply unconditionally.
 | "Please" (standalone)       | DELETE | ∅      |
 | "Thank you for your help"   | DELETE | ∅      |
 | "Hello!" / greetings        | DELETE | ∅      |
+| "I want you to"             | DELETE | ∅      |
+| "You should"                | DELETE | ∅      |
+| "It is important that you"  | DELETE | ∅      |
+| "Please note that"          | DELETE | ∅      |
+
+**Exception:** Keep if removing changes instruction meaning (e.g., "Please STOP" → keep both words).
 
 #### Article Removal
 
@@ -201,7 +321,16 @@ Remove articles where grammatically safe:
 | "the authentication module" | "authentication module" |
 | "an error"                  | "error"                 |
 
-**Exception:** Keep articles when they disambiguate (e.g., "the main function" vs "a function").
+**Exceptions — KEEP articles in these cases:**
+
+| Case | Example | Reason |
+|-|-|-|
+| Disambiguation | "the main function" vs "a function" | Changes meaning |
+| Proper nouns | "The Hague", "The New York Times" | Part of name |
+| Titles/headings | "A Tale of Two Cities" | Formal reference |
+| Inside quotes | `"The error message said..."` | Quoted text is verbatim |
+| Inside examples | Example blocks | NEVER compress examples |
+| Inside code | `const the_user = ...` | Syntax-sensitive |
 
 #### Verbose Construction Collapse
 
@@ -222,6 +351,8 @@ Remove articles where grammatically safe:
 | Word/Phrase          | Symbol | Context      |
 | -------------------- | ------ | ------------ |
 | therefore, thus, so  | →      | Consequence  |
+| hence, consequently  | →      | Consequence  |
+| accordingly, as a result | →  | Consequence  |
 | results in, leads to | →      | Causation    |
 | and                  | & or + | Conjunction  |
 | equals, is equal to  | =      | Comparison   |
@@ -229,6 +360,7 @@ Remove articles where grammatically safe:
 | greater than         | >      | Comparison   |
 | less than            | <      | Comparison   |
 | for example          | e.g.,  | Illustration |
+| that is, in other words | i.e., | Clarification |
 
 #### Markdown Syntax Compression
 
@@ -244,6 +376,13 @@ Use minimal syntax to save tokens:
 | Fence tag: python          | ` ```python `                     | ` ```py `      | 3 chars |
 | Flow diagram indent        | 4 spaces per level                | 0 spaces       | 4/line  |
 | Table column padding       | Spaces to align columns           | No padding     | Many    |
+
+**Fence Tag Rules:**
+- Common abbreviations: `bash`→`sh`, `dockerfile`→`docker`, `makefile`→`make`
+- No abbreviation exists: Keep original (e.g., `rust`, `go`, `html`, `css`)
+- Unknown language: Keep original, do not invent abbreviations
+
+**Flow Diagram:** ASCII diagrams using arrows (→, ↓, ↑) and boxes. Remove indentation that creates visual hierarchy — arrows already show flow direction.
 
 **Table Example:**
 
@@ -330,17 +469,25 @@ When a term appears 3+ times, define once and abbreviate:
 
 **Requirements:**
 
-- Term must appear 3+ times
-- Definition section at top of document
+- Term must appear 3+ times **in the entire document**
+- Definition section placed at top of document (after Identity, before main content)
 - Only abbreviate terms >6 characters
+- Abbreviation format: first letters of each word (e.g., "Quality Gate" → "QG") or standard industry abbreviation
+- If term has common abbreviation, use it (e.g., "API", "URL", "JSON")
+- Never abbreviate: proper nouns, emphasis markers, terms in examples
 
 #### Pronoun Elimination
 
-| Original                                              | Compressed                    |
-| ----------------------------------------------------- | ----------------------------- |
-| "When you find an error, you should log it"           | "On error: log"               |
-| "The user provides input and the system processes it" | "User input → system process" |
-| "If they don't respond, you should retry"             | "No response → retry"         |
+Delete pronouns when **context is clear** (see Definitions: Context Clarity).
+
+**Clarity Test:** Can referent be identified within same sentence or immediately prior sentence? If YES → delete. If NO → keep.
+
+| Original                                              | Compressed                    | Clarity |
+| ----------------------------------------------------- | ----------------------------- | ------- |
+| "When you find an error, you should log it"           | "On error: log"               | ✓ Clear ("it" = "error") |
+| "The user provides input and the system processes it" | "User input → system process" | ✓ Clear ("it" = "input") |
+| "If they don't respond, you should retry"             | "No response → retry"         | ✓ Clear |
+| "After the module loads, it initializes the cache. Later, it syncs." | Keep "it" in 2nd sentence | ✗ Unclear (multiple potential referents) |
 
 #### Sequential Logic Collapse
 
@@ -365,6 +512,16 @@ Write log:
 
 #### Related Bullet Merge
 
+**Relatedness Criteria:** Bullets are related if they:
+- Act on the same object (e.g., "Read config", "Parse config", "Validate config")
+- Are sequential steps of one operation
+- Share subject and verb structure
+
+**Merge Rules:**
+- Maximum 4 items per merged bullet
+- Use comma-separation for merged actions
+- Preserve order
+
 **Before:**
 
 ```markdown
@@ -378,6 +535,11 @@ Write log:
 ```markdown
 - Read, parse, validate config file
 ```
+
+**Do NOT merge if:**
+- Items have different objects
+- Items have conditional dependencies
+- Merging would exceed 80 characters
 
 ---
 
@@ -397,6 +559,21 @@ These elements must be preserved exactly. Compressing them risks semantic drift.
 | AI context files      | Guidance files        | "AGENTS.md", "CLAUDE.md"|
 | TODO annotations      | Priority markers      | "TODO(1): Fix auth"     |
 
+#### Emphasis Markers (Complete List)
+
+These words signal non-negotiable constraints. Preserve in ALL forms (case, bold, caps):
+
+| Marker | Variations to Preserve |
+|-|-|
+| MUST | must, Must, MUST, **MUST**, **must** |
+| NEVER | never, Never, NEVER, **NEVER** |
+| ALWAYS | always, Always, ALWAYS, **ALWAYS** |
+| REQUIRED | required, Required, REQUIRED |
+| FORBIDDEN | forbidden, Forbidden, FORBIDDEN |
+| DO NOT | do not, Do not, DO NOT, don't (when emphatic) |
+| MANDATORY | mandatory, Mandatory, MANDATORY |
+| PROHIBITED | prohibited, Prohibited, PROHIBITED |
+
 ---
 
 ## Register Transformation
@@ -411,6 +588,24 @@ The compiler normalizes input to Technical Documentation register:
 | Tutorial  | "Let's", "Don't worry", step explanations | Remove explanations |
 | Academic  | "It has been suggested", passive voice    | Remove hedging      |
 | Technical | Imperative mood, structured headers       | Compress only       |
+
+**Detection Procedure:**
+1. Scan first 100 words for register indicators
+2. If ≥3 casual indicators → Casual register
+3. If ≥2 tutorial indicators → Tutorial register
+4. If ≥2 academic indicators → Academic register
+5. Default: Technical (compress only, no rewrite)
+
+**Explanation:** Text explaining concepts already known to AI (e.g., "This is how loops work...")
+**Hedging:** Uncertainty markers ("It may be", "Perhaps", "It has been suggested", "One might argue")
+
+### Semantic Preservation in Rewrites
+
+When transforming registers:
+- Preserve all **actions** (verbs + objects)
+- Preserve all **constraints** (conditions, limits, requirements)
+- Remove only **style** elements (tone, explanations, hedging)
+- Never remove content that would change what the AI should DO
 
 ### Transformation Example
 
@@ -554,7 +749,7 @@ When compiling agent directories, optionally generate context files (`AGENTS.md`
 5. **Validate output structure** matches input intent — structure is meaning
 6. **Flag high-risk compressions** in warnings — visibility prevents drift
 7. **Maintain semantic equivalence** — the compressed version must behave identically
-8. **Keep source files** — compression is one-way; source enables iteration
+8. **Keep source files unmodified** — compression reads from source, writes to compiled; never modify source during compilation; source is the canonical editable version
 
 ### NEVER (Forbidden Behaviors)
 
@@ -775,6 +970,11 @@ After each compilation, log statistics:
 
 **Location:** `.ai/self-analysis/compilations/{date}-{filename}.md`
 
+**Path Format:**
+- `{date}`: ISO format `YYYY-MM-DD` (e.g., `2024-01-15`)
+- `{filename}`: Source file name without extension (e.g., `orchestrator` from `orchestrator.src.md`)
+- Example: `.ai/self-analysis/compilations/2024-01-15-orchestrator.md`
+
 ```markdown
 # Compilation: {filename}
 
@@ -798,7 +998,17 @@ After each compilation, log statistics:
 - {any unusual patterns encountered}
 ```
 
-**Categories:** `SEMANTIC_DRIFT` | `OVER_COMPRESSION` | `EXAMPLE_LOSS` | `STRUCTURE_BREAK` | `ANCHOR_RISK`
+### Category Definitions
+
+| Category | Definition | Detection Trigger |
+|-|-|-|
+| `SEMANTIC_DRIFT` | Meaning changed between original and compressed | Verification procedure failed |
+| `OVER_COMPRESSION` | Reduction >80% or lost critical content | Reduction exceeds threshold |
+| `EXAMPLE_LOSS` | Example modified or removed | Diff shows example changes |
+| `STRUCTURE_BREAK` | Section hierarchy altered unexpectedly | Section count mismatch |
+| `ANCHOR_RISK` | Emphasis marker may have lost context | Emphasis word count differs |
+
+**Logging Threshold:** Log if ANY category triggered. Do not filter by severity.
 
 ---
 
