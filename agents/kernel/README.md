@@ -14,7 +14,10 @@ Core behavior rules inherited by all v2 agents.
 | `quality-gates.md`     | Phase transition checks      | Verification        |
 | `self-analysis.md`     | Flaw documentation protocol  | Learning            |
 | `escalation.md`        | 3-attempt error protocol     | Error handling      |
-| `human-loop.md`        | Human-in-the-loop protocol   | Async intervention  |
+| `communication.md`     | Human-AI communication       | Async intervention  |
+| `human-loop.md`        | Legacy human protocol        | Deprecated          |
+| `library-system.md`    | Knowledge persistence        | Per-repo learning   |
+| `prompt-preservation.md` | Prompt audit trail         | Session tracking    |
 | `tool-stakes.md`       | Tool risk classification     | Operation approval  |
 | `todo-conventions.md`  | TODO priority system         | Code annotations    |
 

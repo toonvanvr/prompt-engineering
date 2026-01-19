@@ -45,14 +45,33 @@ Risk-based tool call handling. Inherited by all agents.
 - `read_file` (sensitive paths) — config, secrets patterns
 - Template generation — structured output
 - Analysis output — recommendations
-
-### HIGH Stakes (Require Approval)
-
 - `edit_file` / `create_file` — any file modification
 - `delete_file` — file removal
 - `run_command` — terminal execution
+|`tee file`|May bypass file watching|`create_file` or edit tools|
+|`sed -i`|Direct file modification|`replace_string_in_file`|
+|Shell redirects (`>`, `>>`, `2>`)|Same risks as in high stakes|VS Code edit tools|
+
+
+
+### HIGH Stakes (Require Approval)
+
 - External API calls — network operations
 - Multi-file changes — >3 files in single action
+
+### FORBIDDEN Operations
+
+These operations are NEVER permitted, regardless of stakes level:
+
+|Operation|Risk|Use Instead|
+|-|-|-|
+|`cat > file`|Bypasses VS Code, breaks undo, corrupts encoding|`create_file`|
+|`cat >> file`|Same risks as above|`replace_string_in_file`|
+|`echo > file`|Same risks as above|`create_file`|
+|`echo >> file`|Same risks as above|`replace_string_in_file`|
+|`printf > file`|Same risks as above|`create_file`|
+
+**Violation = immediate self-analysis log + task failure.**
 
 ---
 

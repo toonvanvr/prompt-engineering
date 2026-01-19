@@ -16,19 +16,43 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 2. **SCOPE** → Touch only assigned files/domains
 3. **PERSIST** → Create `_handoff.md` before terminating
 4. **INHERIT** → Kernel rules apply: three-laws, gates, modes
-5. **ASYNC SCAN** → Scan `.human/instructions/` at start and before handoff
+5. **COMMUNICATE** → Scan `communication/human_input.md` at checkpoints
+6. **USE VS CODE TOOLS** → NEVER `cat`, `echo >`, shell redirects for file writes
 
-## Async Override
+## FORBIDDEN Operations (Inherited)
 
-Scan `.human/instructions/` at: start, pre-handoff
-Process any instructions found. Move to `.ai/scratch/{workfolder}/00_prompts/`.
-Continue immediately (halt only on abort).
+|Operation|Risk|
+|-|-|
+|`cat > file`|Bypasses VS Code, breaks undo|
+|`echo > file`|Same|
+|Shell redirects (`>`, `>>`)|Same|
+|`sed -i`|Direct modification|
+
+**Use ONLY**: `create_file`, `replace_string_in_file`, `multi_replace_string_in_file`
+
+## Communication Protocol (MANDATORY)
+
+Sub-agent MUST:
+1. Verify `communication/` folder exists (create if missing)
+2. Initialize `ai_status.md` with current task
+3. Scan `human_input.md` at: start, pre-major-op, pre-handoff
+4. Process entries found → Move to `00_prompts/`
+5. Continue immediately (halt only on `ACTION: abort`)
+
+Communication infrastructure is NOT optional.
+
+## Library Usage
+
+Check `.ai/library/skills/` for relevant skills before starting.
+Load skill instructions if task matches description.
+Add new knowledge to library during execution.
 
 ## Kernel References
 - `agents/kernel/three-laws.md`
 - `agents/kernel/quality-gates.md`
 - `agents/kernel/mode-protocol.md`
-- `agents/kernel/human-loop.md`
+- `agents/kernel/communication.md`
+- `agents/kernel/library-system.md`
 - `agents/kernel/tool-stakes.md`
 - `agents/kernel/todo-conventions.md`
 ```

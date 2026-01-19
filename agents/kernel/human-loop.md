@@ -37,10 +37,41 @@ Autonomous execution with passive human override capability.
 ```
 .human/
 ├── templates/       # Pre-defined instruction templates (copy to instructions/)
-└── instructions/    # Active instructions (AI scans at checkpoints)
+├── instructions/    # Active instructions (AI scans at checkpoints)
+└── input/           # Human input during execution (watched between phases)
 ```
 
 Processed instructions move to `.ai/scratch/{workfolder}/00_prompts/`.
+
+---
+
+## Explicit Pause Mechanism
+
+To pause execution and wait for human input:
+
+1. Create `.human/instructions/pause.md`
+2. Agent detects at next checkpoint
+3. Agent halts and logs pause reason
+4. Human adds input to `.human/input/` or removes pause.md
+5. Agent resumes on next scan
+
+### pause.md Format
+
+```markdown
+# Pause Request
+
+**Reason**: [Why pausing]
+**Resume When**: [Condition for resumption]
+```
+
+### Human Input During Pause
+
+While paused, human can add files to `.human/input/`:
+- `feedback.md` — Adjustments to current approach
+- `context.md` — Additional information
+- `redirect.md` — Change direction
+
+Agent processes all `.human/input/` files when resuming.
 
 ---
 

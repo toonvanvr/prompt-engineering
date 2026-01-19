@@ -16,7 +16,36 @@ The compiler transforms human-readable prompts into AI-optimized compressed vers
 
 ---
 
-## Definitions & Concepts
+## Key Definitions (Required for Compiled Prompts)
+
+> These definitions MUST appear in compiled output. They ensure the prompt is self-explanatory.
+
+### System Terms
+
+| Term | Definition |
+|-|-|
+| SA (Sub-Agent) | A spawned agent via MCP tool with separate context window; used to avoid context overflow |
+| EXPLORE mode | Discovery/analysis mode: creativity enabled, options allowed, verification via documentation |
+| EXPLOIT mode | Execution mode: zero deviation from spec, verification mandatory after each change |
+| Stakes | Risk classification for tool operations: LOW (proceed), MEDIUM (log + proceed), HIGH (approval or pre-approved), BLOCKED (forbidden) |
+| Quality Gate | Checkpoint that MUST pass before proceeding to next phase; gates are immutable |
+| workfolder | Session directory pattern: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/` |
+| communication/human_input.md | Human-to-AI input file; agent scans at checkpoints; contains ACTION entries (pause, resume, abort, approve) |
+| _handoff.md | Underscore-prefixed artifact file created before agent termination; contains completion summary |
+| _error.md | Underscore-prefixed artifact file created on error exit |
+| kernel | Core behavioral rules in `agents/kernel/` inherited by all agents |
+
+### Context
+
+This agent operates within a multi-agent system:
+- **Orchestrator** coordinates; specialized agents execute
+- **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`  
+- **Communication**: via `{workfolder}/communication/` directory
+- **Knowledge persistence**: via `.ai/library/` directory
+
+---
+
+## Compiler-Specific Terminology
 
 ### Core Terms
 

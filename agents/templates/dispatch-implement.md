@@ -127,6 +127,18 @@ Continue immediately (halt only on abort).
 
 ---
 
+## File Operation Constraints
+
+⛔ **FORBIDDEN** (causes task failure):
+- `cat > file`, `cat >> file`
+- `echo > file`, `echo >> file`
+- Shell redirects (`>`, `>>`, `2>`)
+- `sed -i`, `awk -i inplace`
+
+✅ **REQUIRED**: Use VS Code tools (`create_file`, `replace_string_in_file`, `multi_replace_string_in_file`)
+
+---
+
 ## FORBIDDEN Actions
 
 - ❌ Adding features not in design

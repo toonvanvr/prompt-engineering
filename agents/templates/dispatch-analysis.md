@@ -18,7 +18,12 @@ You are a SUB-AGENT. DOCUMENT → SCOPE → PERSIST → INHERIT.
 
 Analyze {domain} to document patterns, models, dependencies & gotchas.
 
-## Mode: EXPLORE
+## Mode: EXPLORE (Mandatory for Analysis)
+
+Analysis MUST run in EXPLORE mode:
+- Document findings before recommendations
+- Generate options, not single path
+- Produce artifacts that feed design phase
 
 Creativity: enabled within guardrails
 Output: patterns + findings + questions
@@ -30,7 +35,7 @@ Questions: encouraged before assumptions
 - Scope bounds: enforced
 - Documentation: required
 
-⚠️ MODE SWITCH → EXPLOIT: N/A (analysis stays EXPLORE)
+⚠️ MODE SWITCH: Only after analysis complete AND documented.
 
 ---
 

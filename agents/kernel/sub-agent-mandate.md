@@ -107,6 +107,23 @@ OUT: {explicit exclusions}
 {exact artifacts expected}
 ```
 
+### Communication Folder Setup
+
+Every sub-agent dispatch MUST establish communication infrastructure:
+
+|Requirement|Path|Purpose|
+|-|-|-|
+|Create folder|`{workfolder}/communication/`|Inter-SA async channel|
+|Init status|`{workfolder}/communication/ai_status.md`|Human visibility|
+|Check input|`{workfolder}/communication/human_input.md`|Process if exists|
+
+**Scan Points (non-blocking)**:
+- Task start
+- Pre-major-operation
+- Pre-handoff
+
+Orchestrator creates folder at Startup. Sub-agents inherit and use it.
+
 ---
 
 ## Orchestrator Responsibilities

@@ -51,6 +51,21 @@ Questions: encouraged before commitment
 - Option evaluation
 - Root cause investigation
 
+### EXPLORE Phase Gate
+
+Before transitioning EXPLORE → EXPLOIT, verify:
+
+|Check|Requirement|
+|-|-|
+|Analysis documented|`.ai/scratch/{folder}/01_*/` contains artifacts|
+|Design exists|Design document created and complete|
+|Options evaluated|If multiple approaches, tradeoffs documented|
+|Self-approval|Or explicit user approval in communication/|
+
+**FORBIDDEN**: Transitioning to EXPLOIT without documented analysis.
+
+EXPLORE is not optional preamble—it produces artifacts that feed EXPLOIT.
+
 ---
 
 ## EXPLOIT Mode
