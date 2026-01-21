@@ -165,6 +165,27 @@ Every dispatch includes:
 
 ---
 
+## Enforcement Principle (MODEL-03)
+
+> LLMs default to helpful behavior. Prompt-only constraints are often ignored.
+
+**Use structural enforcement over prompt-only constraints:**
+
+|Weak (Prompt-Only)|Strong (Structural)|
+|-|-|
+|"Don't edit files"|Remove file tools from agent|
+|"Stay in scope"|Explicit file list in design|
+|"Follow design"|Design approval gate blocks implementation|
+|"Don't skip steps"|Phase gates verify completion|
+
+When VS Code/platform limits structural enforcement, compensate with:
+1. Repeat constraint in multiple sections (redundancy)
+2. Include constraint in SA Prime Directives preamble
+3. Add verification step that checks compliance
+4. Structural file communication (gates in files, not just prompts)
+
+---
+
 ## Summary
 
 ```

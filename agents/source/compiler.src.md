@@ -30,7 +30,7 @@ The compiler transforms human-readable prompts into AI-optimized compressed vers
 | Stakes | Risk classification for tool operations: LOW (proceed), MEDIUM (log + proceed), HIGH (approval or pre-approved), BLOCKED (forbidden) |
 | Quality Gate | Checkpoint that MUST pass before proceeding to next phase; gates are immutable |
 | workfolder | Session directory pattern: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/` |
-| communication/human_input.md | Human-to-AI input file; agent scans at checkpoints; contains ACTION entries (pause, resume, abort, approve) |
+| communication/ai_status.md | Two-way communication file; AI writes status, human adds to Human Input section with ACTION entries (pause, resume, abort, approve) |
 | _handoff.md | Underscore-prefixed artifact file created before agent termination; contains completion summary |
 | _error.md | Underscore-prefixed artifact file created on error exit |
 | kernel | Core behavioral rules in `agents/kernel/` inherited by all agents |
@@ -127,6 +127,28 @@ When rules conflict, apply in this order (highest priority first):
 | Phase 2 says abbreviate term; term is in code block | Priority 1: Keep full term (code blocks are NEVER compressed) |
 | Phase 1 says delete "Please"; it's in emphasis marker | Priority 1: Keep "Please" (part of critical anchor) |
 | User specified `preserve_sections: ['Overview']`; Phase 1 would compress it | Priority 4: Keep verbose (user override) |
+
+---
+
+## Startup Protocol
+
+Before any compilation:
+
+1. Read dispatch/request instructions completely
+2. **Check `.ai/library/` for relevant prior work**—compilation patterns, domain knowledge
+3. Verify source file exists and is readable
+4. Identify compilation mode (FULL/CONSERVATIVE/VALIDATE)
+5. Check for preserve_sections constraints
+
+### Compilation Scope
+
+The compiler inherits and applies rules from:
+
+|Source|Purpose|
+|-|-|
+|`agents/kernel/feedback-collection.md`|Feedback persistence patterns|
+|`agents/kernel/quality-gates.md`|Gate verification format|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT semantics|
 
 ---
 

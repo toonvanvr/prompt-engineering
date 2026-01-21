@@ -6,11 +6,11 @@ Simplified human-AI communication via single file interface.
 
 ## Core Principle
 
-> Human writes to `communication/human_input.md`. AI reads and processes.
-> AI writes to `communication/ai_status.md`. Human reads for progress.
-> Single folder. Simple files. Low cognitive load.
+> Human writes to `ai_status.md` "Human Input" section. AI reads and processes.
+> AI writes status updates to `ai_status.md`. Human reads for progress.
+> Single file. Lower cognitive load.
 
-**Model:** Append-only input file. AI clears processed entries.
+**Model:** Single file with sections. Human appends to designated section.
 
 ---
 
@@ -18,8 +18,7 @@ Simplified human-AI communication via single file interface.
 
 ```
 .ai/scratch/{session}/communication/
-├── human_input.md     # Human writes here
-├── ai_status.md       # AI writes status here
+├── ai_status.md       # AI status + Human Input section
 ├── findings.md        # Accumulated discoveries
 └── queue.md           # Task queue (optional)
 ```
@@ -30,10 +29,12 @@ Simplified human-AI communication via single file interface.
 
 ### Writing Input
 
-Human appends to `communication/human_input.md`:
+Human appends to the **Human Input** section of `communication/ai_status.md`:
 
 ```markdown
-## [YYYY-MM-DDTHH:MM:SS] Human Input
+## Human Input
+
+### [YYYY-MM-DDTHH:MM:SS]
 
 ACTION: {action}
 {additional fields per action type}
@@ -104,13 +105,13 @@ AI updates `communication/ai_status.md`:
 ## Processing Protocol
 
 ```
-1. Scan `communication/human_input.md` at checkpoints
+1. Scan `ai_status.md` Human Input section at checkpoints
 2. IF empty or no unprocessed entries → continue
 3. FOR each unprocessed entry (by timestamp):
    a. Parse ACTION
    b. Apply action effect
-   c. Move entry to `.ai/scratch/{session}/00_prompts/{seq}_{action}.md`
-   d. Log in ai_status.md
+   c. Archive entry to `.ai/scratch/{session}/00_prompts/{seq}_{action}.md`
+   d. Mark as processed in ai_status.md
 4. IF abort → HALT
 5. ELSE → continue
 ```
@@ -144,13 +145,13 @@ AI updates `communication/ai_status.md`:
 Add to startup:
 ```md
 1. Create `.ai/scratch/{session}/communication/` folder
-2. Initialize `ai_status.md` with session metadata
-3. Check for existing `human_input.md` entries
+2. Initialize `ai_status.md` with session metadata + empty Human Input section
+3. Check for existing Human Input entries in ai_status.md
 ```
 
 Add to ALWAYS list:
 ```md
-- Scan `communication/human_input.md` at checkpoints
+- Scan `communication/ai_status.md` Human Input section at checkpoints
 ```
 
 ---
@@ -159,8 +160,8 @@ Add to ALWAYS list:
 
 |Old|New|
 |-|-|
-|`.human/instructions/`|`communication/human_input.md`|
-|`.human/input/`|`communication/human_input.md`|
+|`.human/instructions/`|`communication/ai_status.md` Human Input section|
+|`.human/input/`|`communication/ai_status.md` Human Input section|
 |`.human/templates/`|Examples in this doc|
 |Multiple file types|Single file, ACTION field|
 
@@ -177,7 +178,7 @@ Add to ALWAYS list:
 ## Backward Compatibility
 
 Agents should check both:
-1. `communication/human_input.md` (preferred)
+1. `ai_status.md` Human Input section (preferred)
 2. `.human/instructions/` (legacy, if exists)
 
 Process legacy files and migrate to new format.

@@ -114,8 +114,8 @@ Every sub-agent dispatch MUST establish communication infrastructure:
 |Requirement|Path|Purpose|
 |-|-|-|
 |Create folder|`{workfolder}/communication/`|Inter-SA async channel|
-|Init status|`{workfolder}/communication/ai_status.md`|Human visibility|
-|Check input|`{workfolder}/communication/human_input.md`|Process if exists|
+|Init status|`{workfolder}/communication/ai_status.md`|Human visibility + Human Input section|
+|Check input|`{workfolder}/communication/ai_status.md` Human Input section|Process if entries exist|
 
 **Scan Points (non-blocking)**:
 - Task start

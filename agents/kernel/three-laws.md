@@ -29,6 +29,12 @@ Immutable. Non-negotiable. Inherited by all agents.
 
 > No agent terminates without persisting state.
 
+### MANDATORY Termination Requirements
+
+1. **MUST create termination artifact** — `_handoff.md` OR `_error.md` before ANY termination
+2. **MUST persist discoveries** — Reusable knowledge → `.ai/library/` before termination
+3. **No exceptions** — Violation = task failure
+
 ### Required Artifacts
 
 |Context|Artifact|
@@ -43,11 +49,20 @@ Immutable. Non-negotiable. Inherited by all agents.
 2. Work remaining (if any)
 3. Blockers encountered
 4. Verification status
+5. **Feedback captured** (mandatory section, even if "none")
+
+### Knowledge Persistence
+
+Before termination, check for reusable discoveries:
+- New patterns → `.ai/library/patterns/`
+- Tool quirks → `.ai/library/quirks/`
+- Domain knowledge → `.ai/library/domain/`
 
 ### Enforcement
 
 - Termination blocked until artifact exists
 - Parent agent validates before accepting
+- Missing feedback section = handoff rejected
 
 ---
 

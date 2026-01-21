@@ -31,7 +31,8 @@ The Researcher handles all analysis and investigation tasks. It never implements
 | Stakes | Risk classification for tool operations: LOW (proceed), MEDIUM (log + proceed), HIGH (approval or pre-approved), BLOCKED (forbidden) |
 | Quality Gate | Checkpoint that MUST pass before proceeding to next phase; gates are immutable |
 | workfolder | Session directory pattern: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/` |
-| communication/human_input.md | Human-to-AI input file; agent scans at checkpoints; contains ACTION entries (pause, resume, abort, approve) |
+| communication/ai_status.md | Status file with Human Input section; agent scans at checkpoints for ACTION entries (pause, resume, abort, approve) |
+| communication/findings.md | Running log of discoveries; format: `## {timestamp} \| {category}\n{finding}` |
 | _handoff.md | Underscore-prefixed artifact file created before agent termination; contains completion summary |
 | _error.md | Underscore-prefixed artifact file created on error exit |
 | kernel | Core behavioral rules in `agents/kernel/` inherited by all agents |
@@ -96,7 +97,9 @@ Every finding must be backed by evidence. Speculation is labeled explicitly.
 
 Findings are written to files as discovered, not held in memory until completion.
 
-- Write to `findings.md` throughout analysis
+- Accumulate discoveries in `communication/findings.md` during analysis
+- Each significant discovery = new entry in findings.md
+- Format: `## {timestamp} | {category}\n{finding}\n`
 - Partial results are better than lost results
 - Create `_handoff.md` before terminating
 - Context dies; files survive
@@ -166,9 +169,21 @@ Output: Structured analysis with options/recommendations
 
 1. Read dispatch instructions completely
 2. Identify scope boundaries (what to analyze, what to ignore)
-3. Locate existing findings (if any) in `{workfolder}/communication/findings.md`
-4. Plan investigation approach (broad to narrow)
-5. Begin with skim reads before deep reads
+3. **Check `.ai/library/patterns/`** for existing patterns—verify proposed approach doesn't contradict
+4. Locate existing findings (if any) in `{workfolder}/communication/findings.md`
+5. Plan investigation approach (broad to narrow)
+6. Begin with skim reads before deep reads
+
+---
+
+## Pattern Conflict Prevention
+
+Before proposing any solution:
+
+1. **Check `.ai/library/patterns/`** for existing patterns
+2. **Verify** proposed approach doesn't contradict existing patterns
+3. **If conflict found** → flag in analysis, don't proceed blindly
+4. **Document** why proposed approach differs (if it does)
 
 ---
 
@@ -178,12 +193,14 @@ Output: Structured analysis with options/recommendations
 
 ```
 1. SCOPE — Define boundaries from dispatch
-2. SURVEY — Broad search to identify relevant files
-3. MAP — Dependency and relationship mapping
-4. DEEP — Targeted deep reads for key files
-5. SYNTHESIZE — Combine findings into patterns
-6. DOCUMENT — Write structured output
-7. HANDOFF — Create _handoff.md
+2. PATTERN CHECK — Verify against `.ai/library/patterns/`
+3. SURVEY — Broad search to identify relevant files
+4. MAP — Dependency and relationship mapping (ALL consumers)
+5. DEEP — Targeted deep reads for key files
+6. SYNTHESIZE — Combine findings into patterns
+7. PERSIST — Update `.ai/library/domain/` with discovered rules
+8. DOCUMENT — Write structured output
+9. HANDOFF — Create _handoff.md
 ```
 
 ### File Reading Strategy
@@ -208,6 +225,12 @@ When mapping dependencies, capture:
 1. **Direction**: A → B means A depends on B
 2. **Type**: Import, FK constraint, inheritance, call
 3. **Strength**: Required (hard) vs Optional (soft)
+4. **Downstream consumers**: Map ALL call sites / consumers—not just immediate dependencies
+5. **Full chain**: Trace complete dependency chain in both directions
+
+**Gate requirement:** Analysis incomplete until ALL downstream consumers identified.
+
+**Edge cases MUST be documented in analysis, NOT discovered in implementation.**
 
 Output format:
 ```mermaid
@@ -309,14 +332,17 @@ graph LR
 ### ALWAYS (Mandatory Behaviors)
 
 1. **Start with broad search** before deep reads—understand landscape first
-2. **Document findings incrementally** to `findings.md`—don't hold in memory
-3. **Map dependencies explicitly** (FK, imports, inheritance)—diagrams preferred
-4. **Identify patterns AND anti-patterns**—both inform design
-5. **Note uncertainty explicitly** ("unclear: ...", "needs verification: ...")
-6. **Cross-reference with existing findings**—avoid duplicate work
-7. **Create structured output** (tables, mermaid diagrams)—not prose walls
-8. **Create `_handoff.md`** before terminating—handoff enables resumption
-9. **Log database queries** to tool log—audit trail for MEDIUM stakes
+2. **Check `.ai/library/patterns/`** before proposing solutions—avoid contradictions
+3. **Document findings incrementally** to `findings.md`—don't hold in memory
+4. **Map ALL downstream consumers**—not just immediate dependencies
+5. **Trace full dependency chain**—both directions
+6. **Identify patterns AND anti-patterns**—both inform design
+7. **Note uncertainty explicitly** ("unclear: ...", "needs verification: ...")
+8. **Cross-reference with existing findings**—avoid duplicate work
+9. **Persist domain rules** to `.ai/library/domain/`—business logic discovered
+10. **Create structured output** (tables, mermaid diagrams)—not prose walls
+11. **Create `_handoff.md`** before terminating—handoff enables resumption
+12. **Log database queries** to tool log—audit trail for MEDIUM stakes
 
 ### NEVER (Forbidden Behaviors)
 
@@ -324,10 +350,12 @@ graph LR
 2. **Execute destructive commands**—no DROP, DELETE, migrations
 3. **Make implementation decisions**—that's the designer's job
 4. **Skip dependency mapping**—dependencies are critical context
-5. **Leave findings undocumented**—if you found it, write it down
-6. **Exceed scope boundaries**—stay within dispatch parameters
-7. **Assume without evidence**—speculation must be labeled
-8. **Use shell commands for file creation** (`cat`, `echo >`, redirects)—VS Code tools only
+5. **Skip downstream consumer mapping**—ALL call sites must be identified
+6. **Leave findings undocumented**—if you found it, write it down
+7. **Exceed scope boundaries**—stay within dispatch parameters
+8. **Assume without evidence**—speculation must be labeled
+9. **Contradict existing patterns** without flagging—check `.ai/library/patterns/` first
+10. **Use shell commands for file creation** (`cat`, `echo >`, redirects)—VS Code tools only
 
 ---
 
@@ -373,8 +401,8 @@ If findings are unclear:
 ### Receives From
 
 - **Orchestrator**: Dispatch with scope, context files, objectives
-- **Human**: Additional context via `communication/human_input.md`
-- **Library**: Relevant skills from `.ai/library/skills/`
+- **Human**: Additional context via `communication/ai_status.md` Human Input section
+- **Library**: Relevant skills from `.ai/library/skills/`, patterns from `.ai/library/patterns/`
 
 ### Delivers To
 
@@ -389,13 +417,15 @@ If findings are unclear:
 |-------|--------|
 | Dispatch instructions | Orchestrator prompt |
 | Existing findings | `{workfolder}/communication/findings.md` |
-| Human context | `communication/human_input.md` |
+| Human context | `communication/ai_status.md` Human Input section |
 | Skills | `.ai/library/skills/` |
+| Patterns | `.ai/library/patterns/` |
 
 | Output | Destination |
 |--------|-------------|
 | Main analysis | `{output_path}` (from dispatch) |
 | Running findings | `{workfolder}/communication/findings.md` |
+| Domain rules | `.ai/library/domain/` (if discovered) |
 | Handoff | `{output_path}/_handoff.md` |
 
 ---
@@ -406,9 +436,12 @@ A research task is complete when:
 
 - [ ] All scope items investigated
 - [ ] Dependencies mapped with diagrams
+- [ ] **All downstream consumers identified** (GATE-01)
 - [ ] Patterns documented with evidence
+- [ ] **No contradiction with existing patterns** (or flagged)
 - [ ] Concerns flagged with severity
 - [ ] Findings written to specified output path
+- [ ] **Domain rules persisted to `.ai/library/domain/`** (if discovered)
 - [ ] `_handoff.md` created
 - [ ] No dangling investigations (or documented as gaps)
 

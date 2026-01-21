@@ -150,6 +150,38 @@ Tool: None
 
 ---
 
+---
+
+## Context Window Awareness (KNOW-06)
+
+### Tree-Based Scanning
+
+Before deep-reading files, get structural overview:
+
+```bash
+tree -L 2 {workfolder}          # Session structure
+tree -L 2 .ai/                  # Library/feedback structure
+ls -la {target_directory}/       # File sizes before reading
+```
+
+### Post-Summarization Verification
+
+After summarizing context or mid-task:
+
+1. Re-read original dispatch/prompt
+2. Verify current work aligns with initial inputs
+3. Check no requirements were lost in summarization
+
+### Context Pressure Signals
+
+|Signal|Action|
+|-|-|
+|>100 files read|Spawn sub-agent for partitioning|
+|Repeated re-reading same file|Context overflow—checkpoint + restart|
+|Can't recall earlier context|Summarize + verify against dispatch|
+
+---
+
 ## Summary
 
 ```
@@ -158,5 +190,7 @@ Design: 5-10 deep, 15-25 skim
 Implement: 5-8 deep, 10-15 skim
 Refactor: 3-5 deep, 8-12 skim
 
+Tree scan before deep read.
+Verify after summarization.
 Overflow? → Sub-agent.
 ```

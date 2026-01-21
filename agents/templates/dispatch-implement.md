@@ -37,6 +37,27 @@ Implementation sub-agents operate in **EXPLOIT mode only**.
 
 ---
 
+## Task Decomposition (MANDATORY)
+
+Before executing, explicitly decompose the task:
+
+```md
+## Decomposition
+|Step|File(s)|Change|Verify|Depends On|
+|-|-|-|-|-|
+|1|{path}|{what}|{how}|—|
+|2|{path}|{what}|{how}|Step 1|
+```
+
+**Rules:**
+- List ALL steps before starting ANY
+- Identify dependencies between steps
+- Execute in dependency order
+- Verify each step before proceeding
+- Document completion status
+
+---
+
 ````markdown
 # Sub-Agent Dispatch: Implementation — {COMPONENT}
 
@@ -74,6 +95,20 @@ FULL CONSTRAINT STACK:
 |Design|`.ai/scratch/YYYY-MM-DD_{topic}/design.md`|
 |Analysis|`.ai/scratch/YYYY-MM-DD_{topic}/analysis_*.md`|
 |Review|`.ai/scratch/YYYY-MM-DD_{topic}/review_*.md`|
+|Domain|`.ai/library/domain/`|
+
+---
+
+## Domain Verification Gate (MANDATORY)
+
+Before implementation, verify against `.ai/library/domain/`:
+
+- [ ] Check domain constraints still apply
+- [ ] Verify no conflicting patterns exist
+- [ ] Confirm terminology matches domain glossary
+- [ ] Validate assumptions against domain rules
+
+**Gate FAIL → escalate.** Do not proceed with outdated domain assumptions.
 
 ---
 
@@ -108,12 +143,20 @@ FULL CONSTRAINT STACK:
 
 |Trigger|When|Action|
 |-|-|-|
-|Task-start|Before reading design|Scan `.human/instructions/`|
-|Pre-impl|Before modifying files|Scan `.human/instructions/`|
-|Pre-handoff|Before creating handoff|Scan `.human/instructions/`|
+|Task-start|Before reading design|Check `ai_status.md` Human Input section|
+|Pre-impl|Before modifying files|Check `ai_status.md` Human Input section|
+|Pre-handoff|Before creating handoff|Check `ai_status.md` Human Input section|
 
-Process instructions if found. Move to `.ai/scratch/{workfolder}/00_prompts/`.
-Continue immediately (halt only on abort).
+Process instructions if found. Archive to `00_prompts/`.
+Continue immediately (halt only on `ACTION: abort`).
+
+### Human Input Section Format
+```md
+## Human Input
+<!-- Human can write feedback/redirects here; agent checks at checkpoints -->
+<!-- Format: [YYYY-MM-DD HH:MM] ACTION: {details} -->
+<!-- Actions: pause, resume, redirect, feedback, abort -->
+```
 
 ---
 
@@ -124,6 +167,24 @@ Continue immediately (halt only on abort).
 |Lines/file|250|Split task|
 |Files modified|8|Spawn sub-agent|
 |Design deviation|0|Document + escalate|
+
+---
+
+## Scope-Break Detection (MANDATORY)
+
+If during implementation you discover:
+- New bugs unrelated to current task
+- Refactoring opportunities outside scope
+- Missing features not in design
+- Technical debt requiring attention
+
+**DO NOT debug inline.** Instead:
+1. Document issue in `findings.md` with full context
+2. Add to handoff "Spawned Issues" section
+3. Continue with original task
+4. Recommend separate session for discovered issues
+
+Scope creep is the #1 cause of incomplete implementations.
 
 ---
 

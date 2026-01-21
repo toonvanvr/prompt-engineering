@@ -8,6 +8,24 @@
 
 Automatic feedback collection captures learnings during task execution without requiring explicit prompts. This solves the problem of "there never were proper feedbacks."
 
+**Status: MANDATORY** — Not aspirational. Failure to collect feedback = incomplete handoff.
+
+---
+
+## External Grounding (FEED-09)
+
+Feedback collection MUST be grounded in observable events, not internal model state:
+
+|Observable|Use as trigger|
+|-|-|
+|Terminal error output|Tool quirk or escalation|
+|Test failure message|Pattern failure|
+|Successful test run|Pattern success (if novel approach)|
+|Human correction in chat|Human intervention|
+|Scope expansion detected|Scope overrun|
+
+**Never fabricate feedback** — only log what actually happened.
+
 ---
 
 ## Feedback Categories

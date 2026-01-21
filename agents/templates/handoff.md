@@ -72,8 +72,16 @@ Standard template for phase transitions.
 
 ## Critical Context
 
+> **KNOW-05**: Critical context MUST be explicit in handoff—never assumed.
+> State keys, values, and dependencies that next phase needs.
+
 ### Must Remember
 - {critical fact}
+
+### State Keys
+|Key|Value|Why Critical|
+|-|-|-|
+|{state_key}|{current_value}|{impact if missing}|
 
 ### Gotchas
 - {gotcha}: {explanation}
@@ -89,6 +97,28 @@ Standard template for phase transitions.
 |Check|Status|Evidence|
 |-|-|-|
 |{check}|✓/✗|{ref}|
+
+---
+
+## Feedback Captured
+|Time|Category|Feedback|Persisted To|
+|-|-|-|-|
+|{timestamp}|{success/failure/insight/blocker}|{description}|`.ai/library/{path}` or N/A|
+
+---
+
+## Library Updates
+|Path|Type|Description|
+|-|-|-|
+|`.ai/library/{category}/{file}`|{skill/pattern/domain/quirk}|{what was persisted}|
+
+(or: No library updates this session)
+
+---
+
+## Termination Reason
+**Status:** {normal | error | blocked}
+**Details:** {completion summary | error description | blocking issue}
 
 ---
 

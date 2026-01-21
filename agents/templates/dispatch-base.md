@@ -16,7 +16,7 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 2. **SCOPE** → Touch only assigned files/domains
 3. **PERSIST** → Create `_handoff.md` before terminating
 4. **INHERIT** → Kernel rules apply: three-laws, gates, modes
-5. **COMMUNICATE** → Scan `communication/human_input.md` at checkpoints
+5. **COMMUNICATE** → Check `ai_status.md` Human Input section at checkpoints
 6. **USE VS CODE TOOLS** → NEVER `cat`, `echo >`, shell redirects for file writes
 
 ## FORBIDDEN Operations (Inherited)
@@ -30,22 +30,62 @@ You are a SUB-AGENT. Acknowledge before proceeding:
 
 **Use ONLY**: `create_file`, `replace_string_in_file`, `multi_replace_string_in_file`
 
+## Startup Gates (MANDATORY)
+
+Before ANY work, complete in order:
+
+1. **Document Initial Request**
+   - Write original prompt to `00_prompts/00_initial_request.md` FIRST
+   - Include: timestamp, requester context, full verbatim request
+
+2. **Library Scan**
+   - Check `.ai/library/` for relevant prior work
+   - Load: `skills/` (matching capabilities), `domain/` (relevant context), `patterns/` (applicable patterns)
+   - Document which library items loaded in status
+
+3. **Session Continuity Check**
+   - Check for existing `{date}_{topic}*` folders in `.ai/scratch/`
+   - If found: offer to RESUME (continue work) or ARCHIVE (rename with `-archived` suffix)
+   - Document decision in `ai_status.md`
+
 ## Communication Protocol (MANDATORY)
 
 Sub-agent MUST:
 1. Verify `communication/` folder exists (create if missing)
 2. Initialize `ai_status.md` with current task
-3. Scan `human_input.md` at: start, pre-major-op, pre-handoff
+3. Check `ai_status.md` Human Input section at checkpoints (start, pre-major-op, pre-handoff)
 4. Process entries found → Move to `00_prompts/`
 5. Continue immediately (halt only on `ACTION: abort`)
+
+### Human Input Section in ai_status.md
+
+```md
+## Human Input
+<!-- Human can write feedback/redirects here; agent checks at checkpoints -->
+<!-- Format: [YYYY-MM-DD HH:MM] ACTION: {details} -->
+<!-- Actions: pause, resume, redirect, feedback, abort -->
+```
 
 Communication infrastructure is NOT optional.
 
 ## Library Usage
 
-Check `.ai/library/skills/` for relevant skills before starting.
-Load skill instructions if task matches description.
-Add new knowledge to library during execution.
+Check `.ai/library/` for relevant knowledge before starting:
+- `skills/` — Reusable capabilities and procedures
+- `domain/` — Project-specific context and constraints
+- `patterns/` — Proven solutions and conventions
+- `quirks/` — Known edge cases and workarounds
+
+Load matching items. Add new knowledge during execution.
+
+## Context Passing (KNOW-05)
+
+When dispatching sub-agents, MUST include:
+- All state keys from parent handoff
+- Critical dependencies and their current values
+- Gotchas relevant to the sub-task
+
+Never assume sub-agent has context from parent—pass explicitly.
 
 ## Kernel References
 - `agents/kernel/three-laws.md`

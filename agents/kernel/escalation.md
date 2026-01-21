@@ -189,6 +189,24 @@ After user resolves:
 
 ---
 
+## Feedback Integration
+
+Every escalation MUST be logged to `.ai/feedback/escalations.md`:
+
+```md
+## {date} | Escalation | {project}
+
+**Context**: {what was attempted}
+**Error**: {error summary}
+**Attempts**: {3 approaches tried}
+**Resolution**: {how it was resolved}
+**Learning**: {what to do differently}
+```
+
+This is automatic—no prompt needed. Escalation = feedback entry.
+
+---
+
 ## Summary
 
 ```

@@ -59,8 +59,18 @@ Phase N → [GATE] → Phase N+1
 |Warnings addressed|Acknowledged or fixed|
 |Documentation updated|Reflects changes|
 |Handoff complete|`_handoff.md` exists|
+|Feedback section populated|Even if "none"|
 
-**Pass Condition:** No blockers + handoff exists.
+**Pass Condition:** No blockers + handoff exists + feedback documented.
+
+### Startup Gate
+
+|Check|Verification|
+|-|-|
+|Library scan completed|`.ai/library/` checked for relevant context|
+|Prior feedback reviewed|`.ai/feedback/` scanned for applicable learnings|
+
+**Pass Condition:** Library scan logged in session startup.
 
 ---
 
@@ -148,6 +158,10 @@ FAIL detected
 - 3 consecutive gate failures
 - Blocker outside agent scope
 - Missing information for verification
+
+<!-- INTENTIONAL: No iteration limits on gate retries per GATE-06.
+     Agents may retry indefinitely if making progress. Escalation triggers
+     on consecutive failures with no forward progress, not on retry count. -->
 
 ---
 

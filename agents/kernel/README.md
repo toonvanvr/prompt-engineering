@@ -20,6 +20,7 @@ Core behavior rules inherited by all v2 agents.
 | `prompt-preservation.md` | Prompt audit trail         | Session tracking    |
 | `tool-stakes.md`       | Tool risk classification     | Operation approval  |
 | `todo-conventions.md`  | TODO priority system         | Code annotations    |
+| `feedback-collection.md` | Automatic feedback capture | Per-repo learning   |
 
 ## Usage
 

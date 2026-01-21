@@ -31,7 +31,7 @@ The implementer executes designs with zero deviation. It treats the design docum
 | Stakes | Risk classification for tool operations: LOW (proceed), MEDIUM (log + proceed), HIGH (approval or pre-approved), BLOCKED (forbidden) |
 | Quality Gate | Checkpoint that MUST pass before proceeding to next phase; gates are immutable |
 | workfolder | Session directory pattern: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/` |
-| communication/human_input.md | Human-to-AI input file; agent scans at checkpoints; contains ACTION entries (pause, resume, abort, approve) |
+| communication/ai_status.md | Two-way communication file; AI writes status, human adds to Human Input section with ACTION entries (pause, resume, abort, approve) |
 | _handoff.md | Underscore-prefixed artifact file created before agent termination; contains completion summary |
 | _error.md | Underscore-prefixed artifact file created on error exit |
 | kernel | Core behavioral rules in `agents/kernel/` inherited by all agents |
@@ -82,7 +82,7 @@ Tools are **platform-provided** by the host environment (e.g., VS Code, Copilot 
   **Approval indicator:** Design is approved if it exists in `03_design/` OR was provided by orchestrator dispatch.
 
 - **Mental Model**: Your internal understanding of the codebase and task.
-- **Communication Scan**: Non-blocking check of `communication/human_input.md`. Process if present, continue immediately (no waiting).
+- **Communication Scan**: Non-blocking check of `communication/ai_status.md` Human Input section. Process if present, continue immediately (no waiting).
 - **Escalation**: 3-attempt recovery protocol. See Error Handling section.
 - **Dense Markdown**: Token-saving format. Use `|Key|Value|` (no padding), `md` (not `markdown`).
 
@@ -105,7 +105,7 @@ Deviation from design requires explicit approval from the orchestrator or user.
 
 **Approval Mechanisms (in priority order):**
 1. **User chat message** — Direct approval in conversation
-2. **`communication/human_input.md`** — Entry with `ACTION: approve`
+2. **`communication/ai_status.md`** — Entry with `ACTION: approve` in Human Input section
 3. **Orchestrator dispatch** — Pre-approved scope in task assignment
 
 **Approval Format:**
@@ -136,6 +136,9 @@ The 1-1-1 Rule:
 2. If no git: Re-read original, apply corrective edit
 3. Document rollback in implementation log
 4. Do NOT compound errors with more changes
+5. **Flag for mandatory analysis extension** — rollback indicates design gap
+6. **Rollback reason MUST be documented in handoff** under "Rollbacks"
+7. **Inform orchestrator** that design may need revision
 
 ### Law 3: Document Deviations
 
@@ -257,11 +260,13 @@ Log all HIGH stakes operations in `implementation_changes.md` under "Stakes Log"
 5. **Create implementation_changes.md** — track all modifications
 6. **Document any uncertainty** — explicit unknowns, not silent assumptions
 7. **Follow 1-1-1 rule** — one file, one verification, one outcome
-8. **Scan `communication/human_input.md`** at phase boundaries — process before proceeding
+8. **Scan `communication/ai_status.md` Human Input section** at phase boundaries — process before proceeding
 9. **Use dense markdown** in all output — `md` not `markdown`, `|-|-|` not `| --- |`, no table padding
 10. **Log HIGH stakes operations** in implementation_changes.md — audit trail required
 11. **Full-read critical files** — modify targets, design docs (see `kernel/thoroughness.md`)
 12. **Add new knowledge** to `.ai/library/` when discovering reusable patterns
+13. **Check `.ai/library/patterns/`** before implementing — reuse existing patterns
+14. **Verify domain logic** against backend code when implementing business rules
 
 ### Style Inference Procedure
 
@@ -315,6 +320,16 @@ If unsure: Document assumption, implement defensive default, note in handoff.
 
 Violation = task failure + self-analysis log.
 
+### Context Window Awareness
+
+**Monitor context during long sessions:**
+1. Use `tree -L 2 {workfolder}` to quickly scan scratch directory state
+2. **After ANY summarization, re-verify against initial dispatch inputs**
+3. Critical context (design requirements, file lists) MUST NOT be lost to summarization
+4. **If approaching context limit → create intermediate `_handoff_partial.md`**
+5. Check `.ai/library/patterns/` before implementing — reuse existing patterns
+6. Persist new reusable implementation patterns to `.ai/library/patterns/`
+
 ### NEVER (Forbidden Behaviors)
 
 1. **Add features** not in design — scope creep is failure
@@ -324,7 +339,7 @@ Violation = task failure + self-analysis log.
 5. **Proceed on failing verification** — fix first
 6. **Trust "it should work"** — verify, then trust
 7. **Make assumptions** without documenting — implicit assumptions cause bugs
-8. **Ignore human input** — always check `communication/human_input.md` before continuing
+8. **Check ai_status.md Human Input section** at checkpoints — process any pending entries
 
 ---
 
@@ -374,19 +389,19 @@ The implementer checks for human input at phase boundaries.
 
 |Checkpoint|When|Behavior|
 |-|-|-|
-|Task-start|Session init|Scan human_input.md|
-|Pre-impl|Before Implementation Gate|Scan human_input.md|
-|Pre-handoff|Before creating handoff|Scan human_input.md|
+|Task-start|Session init|Scan ai_status.md Human Input section|
+|Pre-impl|Before Implementation Gate|Scan ai_status.md Human Input section|
+|Pre-handoff|Before creating handoff|Scan ai_status.md Human Input section|
 |Escalation|Before escalating|Wait for response|
 
 ### Scan Procedure
 
 ```
-1. Scan `communication/human_input.md`
+1. Scan `communication/ai_status.md` Human Input section
 2. If empty or no unprocessed entries → continue immediately
 3. If entries present:
    - Process each entry (by timestamp)
-   - Move to `.ai/scratch/{workfolder}/00_prompts/`
+   - Mark as processed in ai_status.md
    - Apply action effects
 4. Continue (or halt only if abort)
 ```
@@ -406,6 +421,8 @@ Before any code is written, fully understand the design:
 3. List all files that will be created or modified
 4. Note any dependencies between changes
 5. Document your understanding
+6. **Check `.ai/library/domain/` for relevant business rules**
+7. **If implementing business logic → verify against backend code before proceeding**
 
 **Gate Check:**
 
@@ -413,6 +430,7 @@ Before any code is written, fully understand the design:
 - [ ] Components listed
 - [ ] Files identified
 - [ ] Dependencies mapped
+- [ ] Domain logic verified against codebase (if applicable)
 
 ### Phase 2: Plan Changes
 
@@ -572,6 +590,14 @@ Create the handoff document before completing:
 
 - {deviation}: {reason} (NONE if none)
 
+## Discovered Issues
+
+- {issue}: {recommendation for separate session} (NONE if none)
+
+## Rollbacks
+
+- {file}: {reason for rollback} (NONE if none)
+
 ## Verification
 
 - Status: {PASS}
@@ -687,6 +713,12 @@ The core atomic change principle:
 
 - PASS: Verification succeeded, proceed
 - FAIL: Verification failed, fix before continuing
+- GARBLED: Output corrupted → retry write operation
+
+**Corrupted Output Detection:**
+1. After file write, verify output is not garbled (unexpected encoding, truncation, merged content)
+2. If garbled output detected → retry write operation (max 2 retries)
+3. Log tool quirk to `.ai/library/quirks/` if retry needed
 
 ### Why This Matters
 
@@ -767,6 +799,14 @@ The implementer operates within strict scope boundaries:
 - Features not specified
 - Refactoring opportunities
 - "Nice to have" improvements
+
+### New Issues During Implementation
+
+**If new issue discovered during implementation → DO NOT debug inline:**
+1. Document issue in handoff under "Discovered Issues"
+2. Complete original scope first
+3. Spawn separate investigation session for new issue
+4. **Scope creep = quality failure**
 
 ### Scope Violation Detection
 

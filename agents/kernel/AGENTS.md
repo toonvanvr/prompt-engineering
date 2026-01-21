@@ -21,6 +21,12 @@ Kernel files define immutable or near-immutable rules that constrain agent behav
 |`context-budget.md`|Token limits|ADJUSTABLE|
 |`consistency-stack.md`|5-layer template|REFERENCE|
 |`self-analysis.md`|Logging categories|STABLE|
+|`feedback-collection.md`|Automatic feedback capture|STABLE|
+|`communication.md`|Human-AI communication|STABLE|
+|`library-system.md`|Knowledge persistence|STABLE|
+|`prompt-preservation.md`|Prompt audit trail|STABLE|
+|`output-budget.md`|Output token limits|ADJUSTABLE|
+|`thoroughness.md`|Context reading rules|STABLE|
 
 ## Editing Rules
 

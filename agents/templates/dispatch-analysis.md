@@ -62,6 +62,25 @@ Questions: encouraged before assumptions
 
 ---
 
+## Findings Accumulation (MANDATORY)
+
+All discoveries MUST be accumulated in `communication/findings.md`:
+
+```md
+# Accumulated Findings
+
+## [YYYY-MM-DD HH:MM] {Category}
+**Finding:** {description}
+**Evidence:** `{path}:{line}` or {reference}
+**Impact:** {HIGH|MEDIUM|LOW}
+**Action:** {recommendation}
+```
+
+Update findings.md as discoveries occur—don't wait for handoff.
+This file persists across sessions and feeds design phase.
+
+---
+
 ## Analysis Questions
 
 |Category|Question|
@@ -107,10 +126,15 @@ Questions: encouraged before assumptions
 ## Gotchas & Edge Cases
 - {gotcha}: {explanation}
 
-## Dependencies
-|Dependency|Usage|
-|-|-|
-|{name}|{how}|
+## Dependencies (FULL MAPPING REQUIRED)
+
+Map ALL dependencies—both upstream and downstream:
+
+|Dependency|Direction|Usage|Consumers|
+|-|-|-|-|
+|{name}|upstream/downstream|{how used}|{list ALL downstream consumers}|
+
+**Downstream Consumer Mapping:** For each component, identify ALL files/modules that depend on it. This prevents breaking changes during implementation.
 
 ## Test Coverage
 {summary}
