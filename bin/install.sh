@@ -164,6 +164,7 @@ ensure_gitignore() {
     ensure_gitignore_line "$file" "# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering"
     ensure_gitignore_line "$file" "/.gitignore"
     ensure_gitignore_line "$file" "/agents/"
+    ensure_gitignore_line "$file" "/skills/"
   elif [[ "$scope" == "ai" ]]; then
     ensure_gitignore_line "$file" "# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering"
     ensure_gitignore_line "$file" "/.gitignore"
@@ -199,9 +200,16 @@ configure_vscode() {
   if [[ -f "$settings_file" ]]; then
     if command -v jq >/dev/null 2>&1; then
       local merged
-      merged=$(jq -s '.[0] * .[1]' <(echo "$recommended") "$settings_file")
-      echo "$merged" > "$settings_file"
-      log "✓ .vscode/settings.json (merged)"
+      # Attempt to merge; if jq cannot parse the existing file (e.g., contains comments / JSONC),
+      # warn and skip merging instead of failing the installer.
+      if merged=$(jq -s '.[0] * .[1]' <(echo "$recommended") "$settings_file" 2>/dev/null); then
+        echo "$merged" > "$settings_file"
+        log "✓ .vscode/settings.json (merged)"
+      else
+        log "⚠ .vscode/settings.json could not be parsed by jq (likely contains comments / JSONC). Skipping merge."
+        log "  Recommended settings:"
+        echo "$recommended" | sed 's/^/    /'
+      fi
     else
       log "⚠ .vscode/settings.json exists — install jq to merge settings automatically"
       log "  Recommended settings:"
