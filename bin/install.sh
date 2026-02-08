@@ -7,7 +7,12 @@ REPO="toonvanvr/prompt-engineering"
 GITHUB_API="https://api.github.com/repos/$REPO/releases"
 
 TMP_DIR=""
-cleanup() { [[ -n "$TMP_DIR" ]] && rm -rf "$TMP_DIR"; }
+cleanup() { 
+  if [[ -n "$TMP_DIR" ]]; then
+    rm -rf "$TMP_DIR"
+  fi
+  return 0
+}
 trap cleanup EXIT
 
 log() { echo "  $*"; }
@@ -156,15 +161,26 @@ ensure_gitignore_line() {
 
 ensure_gitignore() {
   local scope="$1"
+  local install_context="${2:-}"
   local file="$TARGET/.$scope/.gitignore"
   mkdir -p "$(dirname "$file")"
   touch "$file"
 
   if [[ "$scope" == "github" ]]; then
     ensure_gitignore_line "$file" "# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering"
+    ensure_gitignore_line "$file" "# Agent files are compiled outputs — regenerate via bin/install.sh"
+    ensure_gitignore_line "$file" "/agents/compiler.agent.md"
+    ensure_gitignore_line "$file" "/agents/designer.agent.md"
+    ensure_gitignore_line "$file" "/agents/implementer.agent.md"
+    ensure_gitignore_line "$file" "/agents/orchestrator.agent.md"
+    ensure_gitignore_line "$file" "/agents/researcher.agent.md"
+    ensure_gitignore_line "$file" "/agents/kernel/"
+    ensure_gitignore_line "$file" "/agents/.tvv-pe"
     ensure_gitignore_line "$file" "/.gitignore"
-    ensure_gitignore_line "$file" "/agents/"
-    ensure_gitignore_line "$file" "/skills/"
+    # Only gitignore skills in external projects (they're source files in this repo)
+    if [[ "$install_context" != "self" ]]; then
+      ensure_gitignore_line "$file" "/skills/"
+    fi
   elif [[ "$scope" == "ai" ]]; then
     ensure_gitignore_line "$file" "# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering"
     ensure_gitignore_line "$file" "/.gitignore"
@@ -183,16 +199,15 @@ configure_vscode() {
 
   local recommended='{
   "chat.customAgentInSubagent.enabled": true,
-  "chat.agent.thinking.collapsedTools": true,
   "chat.tools.autoExpandFailures": true,
   "chat.useAgentSkills": true,
   "github.copilot.chat.searchSubagent.enabled": true,
   "github.copilot.chat.copilotMemory.enabled": true,
-  "github.copilot.chat.anthropic.thinking.budgetTokens": 10000,
+  "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
   "github.copilot.chat.anthropic.toolSearchTool.enabled": true,
   "github.copilot.chat.anthropic.contextEditing.enabled": true,
   "github.copilot.chat.githubMcpServer.enabled": true,
-  "chat.tools.terminal.sandbox.enabled": true,
+  "chat.tools.terminal.sandbox.enabled": false,
   "chat.tools.terminal.autoApproveWorkspaceNpmScripts": true,
   "chat.tools.terminal.preventShellHistory": true
 }'
@@ -255,20 +270,21 @@ main() {
   echo "  Version: $VERSION"
   echo ""
 
-  if [[ "$CONTEXT" != "self" ]]; then
-    install_agents
-    install_kernel
-  else
-    log "⊘ Agent/kernel copy skipped (self-install)"
-  fi
+  # Always install agents and kernel (needed for release preparation)
+  install_agents
+  install_kernel
 
   install_skills
   write_version_marker
   ensure_directories
-  ensure_gitignore "github"
+
+  ensure_gitignore "github" "$CONTEXT"
+  
   ensure_gitignore "ai"
   configure_vscode
   show_summary
+  
+  exit 0
 }
 
 main "$@"

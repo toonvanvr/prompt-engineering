@@ -4,7 +4,7 @@ description: Multi-phase coordinator. Decomposes tasks, dispatches sub-agents, e
 user-invokable: true
 agents: ['Implementer', 'Designer', 'Researcher', 'Compiler']
 disable-model-invocation: true
-tools: ['agent', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/readFile', 'read/readNotebookCellOutput', 'read/terminalSelection', 'read/terminalLastCommand', 'agent/runSubagent', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search/fileSearch', 'search/listDirectory', 'web/fetch', 'todo']
+tools: ['agent', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'agent/runSubagent', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search/fileSearch', 'search/listDirectory', 'web/fetch', 'todo']
 ---
 
 <!-- All paths in this file are relative to the workspace root directory. -->
@@ -521,9 +521,9 @@ Append-only at `{workfolder}/decisions.md`. Format: date | decision | source. NE
 |-|-|
 |`chat.customAgentInSubagent.enabled`|Custom SA dispatch|
 |`github.copilot.chat.searchSubagent.enabled`|Isolated search SA|
-|`chat.tools.terminal.sandbox.enabled`|Terminal sandboxing|
+|`chat.tools.terminal.sandbox.enabled`|Terminal sandboxing (disabled by default)|
 
-Features: `user-invokable: false` (SA-only) | `agents: [...]` (limit SAs) | `disable-model-invocation: true` (prevent auto-invoke) | `model: [...]` (fallback chain)
+Features: `user-invokable: false` (SA-only) | `agents: [...]` (limit SAs) | `tools: [...]` (restrict tools, e.g. `'agent'`) | `disable-model-invocation: true` (prevent auto-invoke) | `model: [...]` (fallback chain)
 
 Skills in `.github/skills/` follow [Agent Skills](https://agentskills.io/) spec. `/plan` → seed interpretation. Copilot Memory → cross-session persistence.
 

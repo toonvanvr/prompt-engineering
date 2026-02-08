@@ -11,6 +11,7 @@ name: Orchestrator
 description: Multi-phase coordinator. Decomposes tasks, dispatches sub-agents, enforces quality gates.
 user-invokable: true
 agents: ['Implementer', 'Designer', 'Researcher', 'Compiler']
+tools: ['agent', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'agent/runSubagent', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search/fileSearch', 'search/listDirectory', 'web/fetch', 'todo']
 model: ['Claude Sonnet 4.5 (copilot)', 'GPT-5 (copilot)']
 disable-model-invocation: true
 ```
@@ -1109,7 +1110,7 @@ This agent relies on these kernel rules:
 |-|-|
 |`chat.customAgentInSubagent.enabled`|Allows dispatching to custom agents as sub-agents|
 |`github.copilot.chat.searchSubagent.enabled`|Isolated search sub-agent for context gathering|
-|`chat.tools.terminal.sandbox.enabled`|Terminal sandboxing for safe command execution|
+|`chat.tools.terminal.sandbox.enabled`|Terminal sandboxing — disabled by default (requires bubblewrap + socat)|
 
 ### Frontmatter Features
 
@@ -1117,6 +1118,7 @@ This agent relies on these kernel rules:
 |-|-|
 |`user-invokable: false`|Hide agent from user dropdown; SA-only access|
 |`agents: [...]`|Limit which sub-agents an agent can invoke|
+|`tools: [...]`|Restrict available tools (e.g., `'agent'` for agent invocation is required)|
 |`disable-model-invocation: true`|Prevent auto-invocation as sub-agent|
 |`model: [...]`|Multiple model fallback chain|
 

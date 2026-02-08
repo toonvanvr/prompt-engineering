@@ -33,16 +33,16 @@ The installer writes recommended settings to `.vscode/settings.json`. If the fil
 | Setting | Purpose | Reference |
 |---------|---------|-----------|
 | `chat.customAgentInSubagent.enabled` | Allow agents to spawn custom subagents | [v1.106 Release Notes](https://code.visualstudio.com/updates/v1_106) |
-| `chat.agent.thinking.collapsedTools` | Collapse tool calls in thinking display | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
+| `chat.agent.thinking.collapsedTools` | Collapse tool calls in thinking display (optional, not auto-configured) | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
 | `chat.tools.autoExpandFailures` | Auto-expand details on tool failures | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
 | `github.copilot.chat.searchSubagent.enabled` | Use isolated search subagent | [v1.107 Release Notes](https://code.visualstudio.com/updates/v1_107) |
 | `github.copilot.chat.copilotMemory.enabled` | Cross-session memory persistence | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
-| `github.copilot.chat.anthropic.thinking.budgetTokens` | Extended thinking budget (rec: 10000) | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
+| `github.copilot.chat.anthropic.thinking.budgetTokens` | Extended thinking budget (32000 tokens) | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
 | `github.copilot.chat.anthropic.toolSearchTool.enabled` | Tool search for Anthropic models | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
 | `chat.useAgentSkills` | Enable Agent Skills for domain knowledge | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
 | `github.copilot.chat.anthropic.contextEditing.enabled` | Efficient context management for long sessions | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
 | `github.copilot.chat.githubMcpServer.enabled` | Built-in GitHub MCP server | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
-| `chat.tools.terminal.sandbox.enabled` | Terminal sandboxing for agent commands | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
+| `chat.tools.terminal.sandbox.enabled` | Terminal sandboxing for agent commands (disabled by default) | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
 | `chat.tools.terminal.autoApproveWorkspaceNpmScripts` | Auto-approve npm scripts from workspace | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
 | `chat.tools.terminal.preventShellHistory` | Exclude agent commands from shell history | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
 
