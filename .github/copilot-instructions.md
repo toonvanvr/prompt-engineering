@@ -4,15 +4,15 @@ Self-evolving AI agent system for prompt optimization and compilation.
 
 ## Architecture
 
-This repo defines **5 agents** that operate in VS Code via GitHub Copilot:
+This repo defines **5 agents** that operate in VS Code via GitHub Copilot. Only the **Orchestrator** is user-facing (`user-invokable: true`). All others are hidden subagents spawned automatically.
 
-| Agent | Purpose | Mode |
-|-------|---------|------|
-| Orchestrator | Multi-phase coordination, never implements directly | EXPLORE→EXPLOIT |
-| Researcher | Codebase analysis, dependency mapping | EXPLORE |
-| Designer | Architecture specs, trade-off analysis | EXPLORE |
-| Implementer | Code execution per design contract | EXPLOIT |
-| Compiler | Prompt compression (50-70% token reduction) | EXPLOIT |
+| Agent | Visibility | Purpose | Mode |
+|-------|-----------|---------|------|
+| **Orchestrator** | User-facing | Multi-phase coordination, never implements directly | EXPLORE→EXPLOIT |
+| Researcher | Hidden subagent | Codebase analysis, dependency mapping | EXPLORE |
+| Designer | Hidden subagent | Architecture specs, trade-off analysis | EXPLORE |
+| Implementer | Hidden subagent | Code execution per design contract | EXPLOIT |
+| Compiler | Hidden subagent | Prompt compression (50-70% token reduction) | EXPLOIT |
 
 ## Directory Conventions
 
@@ -21,14 +21,22 @@ This repo defines **5 agents** that operate in VS Code via GitHub Copilot:
 | `agents/source/*.src.md` | YES | Human-readable agent definitions |
 | `agents/compiled/*.agent.md` | NO | Auto-generated, token-optimized (invoke @compiler) |
 | `agents/kernel/` | CAREFULLY | Core behavioral rules inherited by all agents |
-| `.ai/library/` | YES | Persistent knowledge (skills, patterns, research, domain, quirks) |
+| `.ai/library/` | YES | Persistent knowledge (patterns, domain, quirks) |
 | `.ai/scratch/` | TEMP | Ephemeral session workspaces |
+| `.github/skills/` | YES | Agent Skills (committed, VS Code native) |
+| `bin/` | YES | Installer script (`install.sh`) |
+
+All paths in agent files are relative to the workspace root directory.
 
 ## Key Workflows
 
 **Edit an agent:** Edit `agents/source/{name}.src.md` → invoke @compiler → outputs to `agents/compiled/`
 
-**Install to project:** Run `./QUICKSTART.sh /path/to/project` (creates symlinks in `.github/agents/`)
+**Install to project:** `curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- .`
+
+**Release:** Tag with `vX.Y.Z` → GitHub Actions creates release
+
+**Manage feedback:** Feedback is collected automatically in `.ai/feedback/` (gitignored, machine-local)
 
 ## Conventions
 
@@ -36,7 +44,7 @@ This repo defines **5 agents** that operate in VS Code via GitHub Copilot:
 - **Modes:** EXPLORE (discovery, options OK) vs EXPLOIT (execution, zero deviation)
 - **Quality gates:** Every phase transition requires explicit gate verification
 - **Three Laws:** (1) Spawn sub-agents for complexity, (2) Document before terminate, (3) Quality gates immutable
-- **Skills format:** Files in `.ai/library/skills/` follow [Agent Skills](https://agentskills.io/) standard
+- **Skills format:** Files in `.github/skills/` follow [Agent Skills](https://agentskills.io/) standard
 
 ## File Communication
 
@@ -51,3 +59,4 @@ Agents communicate via files in `.ai/scratch/{session}/communication/`:
 - Skip quality gates between phases
 - Implement without design approval (for complex changes)
 - Create sub-agents without passing kernel inheritance rules
+- Edit compiled agents directly—always edit source and recompile

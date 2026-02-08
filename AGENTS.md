@@ -1,22 +1,38 @@
 # prompt-engineering
 
-Self-evolving AI agent system for prompt optimization and compilation.
+AI agent system for GitHub Copilot. Only **@orchestrator** is user-facing — all other agents are hidden subagents.
 
 ## Quick Start
 
-1. Read `.github/copilot-instructions.md` for project conventions
-2. Check `agents/README.md` for agent system overview
-3. Use `agents/kernel/` rules as behavioral foundation
+```bash
+# Install into your project
+curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- .
+```
+
+Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.md` for full documentation.
+
+## Agent Architecture
+
+| Agent | Visibility | Purpose |
+|-------|-----------|------|
+| **Orchestrator** | User-facing | Coordination, delegates to subagents |
+| Researcher | Hidden subagent | Codebase analysis, dependency mapping |
+| Designer | Hidden subagent | Architecture specs, trade-off analysis |
+| Implementer | Hidden subagent | Code execution per design contract |
+| Compiler | Hidden subagent | Prompt compression (50-70% reduction) |
 
 ## Directory Overview
 
 |Path|Purpose|Edit?|
 |-|-|-|
+|`bin/`|Installer script (`install.sh`)|YES|
 |`agents/source/`|Human-readable agent definitions|YES|
 |`agents/compiled/`|Generated, token-optimized|NO (generated)|
 |`agents/kernel/`|Inherited behavioral rules|YES (carefully)|
+|`.github/skills/`|Agent Skills (committed, VS Code native)|YES|
 |`.ai/scratch/`|Ephemeral working space|YES (temporary)|
-|`.ai/library/`|Permanent knowledge|YES|
+|`.ai/feedback/`|Auto-collected learnings (gitignored)|NO (machine-specific)|
+|`.ai/library/`|Persistent knowledge (patterns, domain, quirks)|YES|
 
 ## Key Workflows
 
@@ -24,10 +40,11 @@ Self-evolving AI agent system for prompt optimization and compilation.
 1. Edit `agents/source/{agent}.src.md`
 2. Invoke Compiler agent
 3. Output: `agents/compiled/{agent}.agent.md`
+4. Deploy: re-run `install.sh` (copies snapshot to `.github/agents/`)
 
 ### Add Knowledge
-1. Create file in `.ai/library/{topic}.md`
-2. Reference in agent dispatches as needed
+- **Skills** → `.github/skills/` (committed, [Agent Skills](https://agentskills.io/) format)
+- **Patterns/domain/quirks** → `.ai/library/{topic}.md` (local, gitignored)
 
 ## Conventions
 
@@ -36,6 +53,7 @@ Self-evolving AI agent system for prompt optimization and compilation.
 - Gates: Every phase has quality gate verification
 - Stakes: LOW/MEDIUM/HIGH for tool calls
 - Agent format: `.agent.md` with YAML frontmatter (name, description, tools)
+- Paths: All paths in agent files are relative to the workspace root directory
 
 ## Never
 

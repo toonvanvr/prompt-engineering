@@ -99,12 +99,12 @@ Feedback collection MUST be grounded in observable events, not internal model st
 
 ## Sync to prompt-engineering
 
-Feedback is automatically available via symlinks created by QUICKSTART.sh:
+Feedback is stored in `.ai/feedback/` and created by `tvv-pe init`:
 
-- `.github/feedback` → `.ai/feedback`
-- `.github/lib` → `.ai/library`
+- `.ai/feedback/` — feedback collection directory
+- `.ai/library/` — shared knowledge library
 
-No sync script needed. Feedback written to `.ai/feedback/` is immediately accessible.
+Feedback written to `.ai/feedback/` is immediately accessible.
 
 The Compiler agent processes feedback to update kernel rules.
 

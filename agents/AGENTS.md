@@ -14,11 +14,15 @@ Agent framework for orchestrated AI task execution.
 
 ## Agent Types
 
-|Agent|Purpose|Mode|
-|-|-|-|
-|Orchestrator|Multi-phase coordination|EXPLORE/EXPLOIT|
-|Implementer|Code implementation|EXPLOIT only|
-|Compiler|Prompt compression|EXPLOIT|
+Only the **Orchestrator** is user-facing. All others are hidden subagents (`user-invokable: false`).
+
+|Agent|Visibility|Purpose|Mode|
+|-|-|-|-|
+|**Orchestrator**|User-facing|Multi-phase coordination|EXPLORE/EXPLOIT|
+|Researcher|Hidden subagent|Codebase analysis, dependency mapping|EXPLORE|
+|Designer|Hidden subagent|Architecture specs, trade-offs|EXPLORE|
+|Implementer|Hidden subagent|Code implementation|EXPLOIT only|
+|Compiler|Hidden subagent|Prompt compression|EXPLOIT|
 
 ## Edit Workflow
 
@@ -26,7 +30,7 @@ Agent framework for orchestrated AI task execution.
 1. Edit: agents/source/{agent}.src.md
 2. Compile: Invoke Compiler agent
 3. Output: agents/compiled/{agent}.agent.md
-4. Deploy: Via .github/agents symlink
+4. Deploy: bin/install.sh (copies snapshot to .github/agents/)
 ```
 
 ## Kernel Inheritance

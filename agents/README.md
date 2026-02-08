@@ -1,6 +1,6 @@
 # Agents
 
-AI-optimized prompt agents for autonomous development tasks.
+AI-optimized prompt agents for autonomous development tasks. Only **@orchestrator** is user-facing — all others are hidden subagents spawned automatically.
 
 ## Structure
 
@@ -15,15 +15,31 @@ agents/
 
 ## Agents
 
-### Orchestrator
-Master coordinator. Decomposes complex tasks, delegates to sub-agents.
+### Orchestrator (user-facing)
+Master coordinator. The only agent users interact with directly. Decomposes complex tasks and delegates to hidden subagents.
 
 **Key behaviors:**
 - Never implements inline (spawns sub-agents)
 - Mandatory quality gates
 - Context-aware delegation
 
-### Implementer
+### Researcher (hidden subagent)
+Codebase analysis and dependency mapping specialist.
+
+**Key behaviors:**
+- Deep code investigation
+- Pattern finding across codebase
+- Produces findings for downstream agents
+
+### Designer (hidden subagent)
+Architecture spec and trade-off analysis specialist.
+
+**Key behaviors:**
+- Creates design contracts for implementer
+- Evaluates trade-offs
+- Produces approved specs
+
+### Implementer (hidden subagent)
 Implementation specialist operating in permanent EXPLOIT mode.
 
 **Key behaviors:**
@@ -31,7 +47,7 @@ Implementation specialist operating in permanent EXPLOIT mode.
 - Design = contract, no deviation
 - Atomic changes only
 
-### Compiler
+### Compiler (hidden subagent)
 Prompt optimization. Compresses source → compiled with 50-70% token reduction.
 
 **Key behaviors:**
@@ -44,7 +60,7 @@ Prompt optimization. Compresses source → compiled with 50-70% token reduction.
 1. Edit `source/{agent}.src.md`
 2. Invoke Compiler agent
 3. Outputs to `compiled/{agent}.agent.md`
-4. Symlink makes agents available via `.github/agents/`
+4. `bin/install.sh` copies agents to `.github/agents/`
 
 ## Kernel Rules
 

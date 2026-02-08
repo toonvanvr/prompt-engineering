@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set version from tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          echo "$TAG" > VERSION
+          echo "VERSION=$TAG" >> "$GITHUB_ENV"
+
+      - name: Create release archive
+        run: |
+          ARCHIVE="prompt-engineering-v${VERSION}.tar.gz"
+          tar czf "$ARCHIVE" \
+            --transform "s,^,prompt-engineering-${VERSION}/," \
+            VERSION \
+            README.md \
+            LICENSE \
+            bin/install.sh \
+            agents/compiled/ \
+            agents/kernel/ \
+            agents/modes/ \
+            agents/templates/ \
+            .github/skills/ \
+            lib/templates/
+          echo "ARCHIVE=$ARCHIVE" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ARCHIVE }}
+          generate_release_notes: true
+          body: |
+            ## Install
+
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/v${{ env.VERSION }}/bin/install.sh | bash -s -- /path/to/project
+            ```
+
+            Or with a specific version:
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/v${{ env.VERSION }}/bin/install.sh | bash -s -- /path/to/project --version=${{ env.VERSION }}
+            ```

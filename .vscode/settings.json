@@ -1,0 +1,60 @@
+{
+  // ============================================================
+  // AI / Copilot Agent Settings for prompt-engineering workspace
+  // ============================================================
+  // These settings enable all recommended AI/Copilot features
+  // from VS Code v1.106–v1.109. They configure:
+  //
+  //   - Agent sub-agent orchestration (custom agents in sub-agents)
+  //   - Thinking/reasoning UI (collapsed tools, terminal tools)
+  //   - Agent skills and Claude-specific skills
+  //   - Copilot Memory for cross-session knowledge
+  //   - Anthropic extended thinking budget (10k tokens)
+  //   - Anthropic tool search and context editing
+  //   - GitHub MCP server integration
+  //   - Terminal sandboxing with auto-approved npm scripts
+  //   - Organization/enterprise agent visibility
+  //   - CLI custom agents
+  //   - Auto-expand tool failures for debugging
+  //   - Clarifying questions in chat
+  // ============================================================
+
+  // --- Agent orchestration ---
+  "chat.customAgentInSubagent.enabled": true,
+  "chat.agentsControl.enabled": true,
+  "chat.useAgentSkills": true,
+  "chat.agentCustomizationSkill.enabled": true,
+
+  // --- Thinking / reasoning UI ---
+  "chat.agent.thinking.collapsedTools": true,
+  "chat.agent.thinking.terminalTools": true,
+  "chat.thinking.style": "detailed",
+
+  // --- Tool behavior ---
+  "chat.tools.autoExpandFailures": true,
+  "chat.askQuestions.enabled": true,
+
+  // --- Copilot search & memory ---
+  "github.copilot.chat.searchSubagent.enabled": true,
+  "github.copilot.chat.copilotMemory.enabled": true,
+
+  // --- Anthropic / Claude settings ---
+  "github.copilot.chat.anthropic.thinking.budgetTokens": 10000,
+  "github.copilot.chat.anthropic.toolSearchTool.enabled": true,
+  "github.copilot.chat.anthropic.contextEditing.enabled": true,
+
+  // --- Organization & enterprise ---
+  "github.copilot.chat.organizationInstructions.enabled": true,
+  "github.copilot.chat.customAgents.showOrganizationAndEnterpriseAgents": true,
+  "github.copilot.chat.cli.customAgents.enabled": true,
+
+  // --- GitHub MCP server ---
+  "github.copilot.chat.githubMcpServer.enabled": true,
+  "github.copilot.chat.githubMcpServer.toolsets": "default",
+
+  // --- Terminal sandbox ---
+  // NOTE: Requires bubblewrap (bwrap) + socat. Set to true once installed.
+  "chat.tools.terminal.sandbox.enabled": false,
+  "chat.tools.terminal.autoApproveWorkspaceNpmScripts": true,
+  "chat.tools.terminal.preventShellHistory": true
+}

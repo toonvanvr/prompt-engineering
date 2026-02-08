@@ -1,0 +1,4 @@
+# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering
+# Local AI workspace. Ephemeral and machine-specific.
+/.gitignore
+*

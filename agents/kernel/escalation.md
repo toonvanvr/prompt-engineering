@@ -71,7 +71,7 @@ Example:
 
 ```
 Error: Path issues persist
-Fix: Spawn sub-agent to analyze environment, permissions, symlinks
+Fix: Spawn sub-agent to analyze environment, permissions, file paths
 ```
 
 ---

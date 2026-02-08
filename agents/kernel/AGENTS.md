@@ -6,6 +6,10 @@ Core behavioral rules inherited by all agents.
 
 Kernel files define immutable or near-immutable rules that constrain agent behavior. Changes here affect ALL agents.
 
+## Agent Architecture
+
+Only the **Orchestrator** is user-facing (`user-invokable: true`). All other agents are hidden sub-agents (`user-invokable: false`) spawned by the orchestrator. Sub-agents never interact with the user directly — they read from files and write to files.
+
 ## File Reference
 
 |File|Purpose|Mutability|
@@ -27,6 +31,20 @@ Kernel files define immutable or near-immutable rules that constrain agent behav
 |`prompt-preservation.md`|Prompt audit trail|STABLE|
 |`output-budget.md`|Output token limits|ADJUSTABLE|
 |`thoroughness.md`|Context reading rules|STABLE|
+
+## Library Patterns
+
+Learned patterns that inform agent behavior. Stored in `.ai/library/` and referenced by orchestrator during dispatch.
+
+|Pattern|Path|Purpose|
+|-|-|-|
+|File-Mediated State|`.ai/library/patterns/file-mediated-state.md`|SA communication via files, not conversation summaries|
+|Scope Fencing|`.ai/library/patterns/scope-fencing.md`|Explicit DO/DO NOT lists to prevent scope creep|
+|Graduated Complexity|`.ai/library/patterns/graduated-complexity.md`|Sort tasks into waves by complexity before delegating|
+|Feedback Consumption|`.ai/library/patterns/feedback-consumption.md`|Mandatory feedback read/write loop around SA dispatch|
+|Context Overflow Signals|`.ai/library/quirks/context-overflow-signals.md`|Detecting and mitigating context window exhaustion|
+|Dispatch SA (Skill)|`.github/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
+|Post-SA Review (Skill)|`.github/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
 
 ## Editing Rules
 
@@ -52,6 +70,8 @@ Agents reference kernel via dispatch preamble:
 - `agents/kernel/quality-gates.md`
 - ...
 ```
+
+Note: Kernel files are copied to `.github/agents/kernel/` during `bin/install.sh`. Source of truth is `agents/kernel/` in the prompt-engineering repo.
 
 ## Never
 
