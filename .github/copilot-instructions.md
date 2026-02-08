@@ -23,6 +23,7 @@ This repo defines **5 agents** that operate in VS Code via GitHub Copilot. Only 
 | `agents/kernel/` | CAREFULLY | Core behavioral rules inherited by all agents |
 | `.ai/library/` | YES | Persistent knowledge (patterns, domain, quirks) |
 | `.ai/scratch/` | TEMP | Ephemeral session workspaces |
+| `.ai/feedback/` | NO | Auto-collected learnings (gitignored, machine-local) |
 | `.github/skills/` | YES | Agent Skills (committed, VS Code native) |
 | `bin/` | YES | Installer script (`install.sh`) |
 
@@ -36,7 +37,7 @@ All paths in agent files are relative to the workspace root directory.
 
 **Release:** Tag with `vX.Y.Z` → GitHub Actions creates release
 
-**Manage feedback:** Feedback is collected automatically in `.ai/feedback/` (gitignored, machine-local)
+**Manage feedback:** Feedback is collected automatically in `.ai/feedback/` (gitignored, machine-local). Library knowledge in `.ai/library/` is committed in the source repo.
 
 ## Conventions
 

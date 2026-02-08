@@ -44,7 +44,7 @@ Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.
 
 ### Add Knowledge
 - **Skills** → `.github/skills/` (committed, [Agent Skills](https://agentskills.io/) format)
-- **Patterns/domain/quirks** → `.ai/library/{topic}.md` (local, gitignored)
+- **Patterns/domain/quirks** → `.ai/library/{topic}.md` (gitignored in target repos, committed in source repo)
 
 ## Conventions
 
