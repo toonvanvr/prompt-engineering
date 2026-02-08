@@ -245,6 +245,19 @@ ABSORB → LIBRARY → SCOPE → DECOMPOSE → INTERFACE → TRADEOFF → SPECIF
 |PERSIST|Add reusable patterns to `.ai/library/patterns/`|Patterns saved (if any)|
 |HANDOFF|Create `_handoff.md`|Handoff artifact exists|
 
+### Automatic Feedback Collection
+
+Before handoff, write applicable feedback:
+
+|Trigger|Category|File|
+|-|-|-|
+|New architectural pattern discovered|Pattern Success|`.ai/feedback/pattern_successes.md`|
+|Design approach rejected mid-design|Pattern Failure|`.ai/feedback/pattern_failures.md`|
+|Design scope grew beyond dispatch|Scope Overrun|`.ai/feedback/scope_overruns.md`|
+|No notable events|Pattern Success|`.ai/feedback/pattern_successes.md` ("nominal design")|
+
+**Every design SA MUST write at least 1 feedback entry before handoff.**
+
 ### Component Identification
 
 For each capability needed:
@@ -372,6 +385,11 @@ Level: {HIGH/MEDIUM/LOW} | Concerns: {list}
 ## Recommendations for Implementer
 - {focus areas}
 - {potential challenges}
+
+## Feedback Captured
+|Category|File|Entry|
+|-|-|-|
+|{category}|`.ai/feedback/{file}`|{summary}|
 ```
 
 ### Completion Signal (Mandatory)
@@ -404,7 +422,8 @@ Files: {count created}, {count modified}
 11. **Create `_handoff.md`** before terminating
 12. **Persist reusable patterns** to `.ai/library/patterns/` when discovered
 13. **Scan `ai_status.md`** Human Input section at phase boundaries
-14. **Flag open questions** — unresolved items need visibility
+14. **Write feedback before handoff** — at least 1 entry to `.ai/feedback/` per SA
+15. **Flag open questions** — unresolved items need visibility
 
 ### NEVER (Forbidden Behaviors)
 

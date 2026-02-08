@@ -23,6 +23,8 @@ Simplified human-AI communication via single file interface.
 └── queue.md           # Task queue (optional)
 ```
 
+> **Single-file communication.** There is NO separate `human_input.md`. All human input goes through `ai_status.md`'s `## Human Input` section. One file = lower cognitive load.
+
 ---
 
 ## Human Input Protocol
@@ -98,6 +100,11 @@ AI updates `communication/ai_status.md`:
 
 ## Next Action
 {what AI will do next}
+
+## Human Input
+<!-- Human: append timestamped entries below. Format: -->
+<!-- ### [YYYY-MM-DDTHH:MM:SS] -->
+<!-- ACTION: pause | resume | abort | redirect | feedback | context -->
 ```
 
 ---
@@ -124,6 +131,15 @@ AI updates `communication/ai_status.md`:
 |Phase-start|Before Analysis/Design/Review/Implementation|
 |Pre-gate|Before phase gate verification|
 |Pre-handoff|Before creating handoff document|
+
+### Status Update Frequency (MANDATORY)
+
+ai_status.md MUST be updated:
+1. After initial creation (startup)
+2. After each SA completes (Post-SA Protocol Step 5)
+3. At session completion
+
+**Stale ai_status.md = invisible session.** The human has no other way to track progress. Status files stuck at "Startup" phase for an entire session is a protocol failure.
 
 ---
 

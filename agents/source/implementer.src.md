@@ -361,6 +361,21 @@ For each file in the plan:
 
 **Gate:** Verification command passes, tests pass, no regressions.
 
+### Automatic Feedback Collection (During Verification)
+
+After verification completes, BEFORE creating handoff, write applicable feedback:
+
+|Trigger|Category|File|Entry Template|
+|-|-|-|-|
+|Test failed then passed after fix|Pattern Success|`.ai/feedback/pattern_successes.md`|`- {date}: {test} fixed via {approach} → {lesson}`|
+|Tool behaved unexpectedly|Tool Quirk|`.ai/feedback/tool_quirks.md`|`- {date}: {tool} {behavior} → {workaround}`|
+|Approach abandoned for alternative|Pattern Failure|`.ai/feedback/pattern_failures.md`|`- {date}: {approach} failed because {reason} → use {alternative}`|
+|Scope grew beyond dispatch|Scope Overrun|`.ai/feedback/scope_overruns.md`|`- {date}: {original} expanded to {actual} → {cause}`|
+
+**If nothing notable:** Write to `pattern_successes.md`: `- {date}: {component} implemented nominally → standard workflow`
+
+**ZERO-feedback implementations are protocol violations.** Every SA MUST write at least 1 feedback entry.
+
 ### Phase 5: Handoff
 
 1. Create `_handoff.md` (see Handoff Format section)
@@ -559,6 +574,11 @@ Every implementation creates this file:
 - Tests: {summary}
 - Lint: {summary}
 
+## Feedback Captured
+|Category|File|Entry|
+|-|-|-|
+|{category}|`.ai/feedback/{file}`|{summary}|
+
 ## Confidence
 Level: {HIGH/MEDIUM/LOW} | Concerns: {list}
 
@@ -696,7 +716,8 @@ Violation = task failure + self-analysis log.
 12. **Full-read files before modifying** — see `.github/agents/kernel/thoroughness.md`
 13. **Use non-interactive CLI flags** — `--yes`, `--ci`, `--no-input` always
 14. **Write output to files** — file-mediated state, never conversation-mediated
-15. **Create `_handoff.md`** before terminating — handoff enables resumption
+15. **Write feedback before handoff** — at least 1 entry to `.ai/feedback/` per SA execution
+16. **Create `_handoff.md`** before terminating — handoff enables resumption
 
 ### NEVER (Forbidden Behaviors)
 

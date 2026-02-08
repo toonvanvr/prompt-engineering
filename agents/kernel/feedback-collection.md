@@ -67,6 +67,10 @@ Feedback collection MUST be grounded in observable events, not internal model st
    - Document original vs final
    - Identify expansion points
 
+6. **Nominal Completion**: When task completes without issues
+   - Write to `pattern_successes.md`: "nominal execution — standard workflow"
+   - This ensures EVERY session has at least 1 feedback entry
+
 ---
 
 ## Feedback Entry Format
@@ -138,3 +142,19 @@ Feedback collection MUST NOT:
 - Slow down critical path
 
 If in doubt, append to feedback file and continue.
+
+---
+
+## Zero-Tolerance Enforcement
+
+**Minimum feedback per SA:** 1 entry. No exceptions.
+
+**If nothing went wrong:** Write a nominal success entry. The absence of problems IS feedback — it validates the workflow.
+
+**Gate Integration:** Handoff without `## Feedback Captured` section = INCOMPLETE handoff. Orchestrator MUST reject incomplete handoffs.
+
+|Session Result|Minimum Feedback|
+|-|-|
+|SA completed normally|1 entry to `pattern_successes.md`|
+|SA encountered issue|1 entry per issue to relevant category|
+|SA failed/blocked|1 entry to `pattern_failures.md` + 1 to `escalations.md`|

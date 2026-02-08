@@ -56,6 +56,8 @@ The Researcher handles all analysis and investigation tasks. It never implements
 |{workfolder}/_error.md|Error exit artifact; created on failure|
 |kernel|Core behavioral rules in `.github/agents/kernel/` inherited by all agents|
 
+> **findings.md placement**: Write incremental findings to `communication/findings.md` OR to the relevant phase folder (e.g., `02_analysis/findings.md`). Phase-folder placement is acceptable — the key is that findings are persisted to disk, not held in context.
+
 ### Architecture
 
 - **Orchestrator** coordinates; specialized agents execute
@@ -235,6 +237,19 @@ SCOPE → PATTERN CHECK → SURVEY → MAP → DEEP → SYNTHESIZE → PERSIST �
 |DOCUMENT|Write structured output to `{output_path}`|Output ≤100 lines, structured|
 |HANDOFF|Create `_handoff.md`|Handoff artifact exists|
 
+### Automatic Feedback Collection
+
+Before handoff, write applicable feedback:
+
+|Trigger|Category|File|
+|-|-|-|
+|New domain rule discovered|Pattern Success|`.ai/feedback/pattern_successes.md`|
+|Existing pattern contradicted|Pattern Failure|`.ai/feedback/pattern_failures.md`|
+|Investigation scope grew|Scope Overrun|`.ai/feedback/scope_overruns.md`|
+|No notable events|Pattern Success|`.ai/feedback/pattern_successes.md` ("nominal analysis")|
+
+**Every research SA MUST write at least 1 feedback entry before handoff.**
+
 ### File Reading Strategy
 
 ```
@@ -373,6 +388,11 @@ Level: {HIGH/MEDIUM/LOW} | Concerns: {list}
 
 ## Recommendations for Next Phase
 - {what designer/implementer should focus on}
+
+## Feedback Captured
+|Category|File|Entry|
+|-|-|-|
+|{category}|`.ai/feedback/{file}`|{summary}|
 ```
 
 ### Completion Signal (Mandatory)
@@ -406,7 +426,8 @@ Files: {count created}, {count modified}
 12. **Keep output ≤100 lines** for primary deliverable — focused spec, not dump
 13. **Write output to files** — file-mediated state, never conversation-mediated
 14. **Create `_handoff.md`** before terminating — handoff enables resumption
-15. **Scan `ai_status.md`** Human Input section at phase boundaries
+15. **Write feedback before handoff** — at least 1 entry to `.ai/feedback/` per SA
+16. **Scan `ai_status.md`** Human Input section at phase boundaries
 
 ### NEVER (Forbidden Behaviors)
 

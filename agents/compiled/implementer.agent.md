@@ -142,6 +142,23 @@ Fallback: verify non-empty, balanced brackets, no truncation. Corrupted output�
 
 **Linter:** `package.json` lint→eslint config→pyproject ruff/flake8→Makefile lint→"manual style review".
 
+### Automatic Feedback Collection (During Verification)
+
+After verification, BEFORE handoff, write applicable feedback:
+
+|Trigger|Category|File|
+|-|-|-|
+|Test failed then passed after fix|Pattern Success|`.ai/feedback/pattern_successes.md`|
+|Tool behaved unexpectedly|Tool Quirk|`.ai/feedback/tool_quirks.md`|
+|Approach abandoned for alternative|Pattern Failure|`.ai/feedback/pattern_failures.md`|
+|Scope grew beyond dispatch|Scope Overrun|`.ai/feedback/scope_overruns.md`|
+
+Entry format: `- {date}: {description} → {lesson}`
+
+If nothing notable: `- {date}: {component} implemented nominally → standard workflow` to `pattern_successes.md`.
+
+**ZERO-feedback implementations are protocol violations.** Every SA MUST write at least 1 feedback entry.
+
 **Phase 5—Handoff:** Create `_handoff.md`+`implementation_changes.md`. Gate: all sections filled.
 
 ---
@@ -192,7 +209,7 @@ Blocker format: Error (exact msg), Context (file|change|phase), Attempts (action
 
 **implementation_changes.md** — Sections: Design Reference, Files Created (path|purpose|lines), Files Modified (path|change|+/-lines), Deviations from Design (what|why|impact|approved — NONE if none), Stakes Log (timestamp|op|stakes|status), Verification Results (check|result|command).
 
-**_handoff.md** — Sections: Summary (one-line), Status (COMPLETE|PARTIAL|BLOCKED), Files Created, Files Modified, Tests (path: what—PASS/FAIL), Deviations (NONE if none), Discovered Issues (NONE if none), Rollbacks (NONE if none), Verification (dispatch cmd+result, tests, lint), Confidence (level+concerns), Next Steps.
+**_handoff.md** — Sections: Summary (one-line), Status (COMPLETE|PARTIAL|BLOCKED), Files Created, Files Modified, Tests (path: what—PASS/FAIL), Deviations (NONE if none), Discovered Issues (NONE if none), Rollbacks (NONE if none), Verification (dispatch cmd+result, tests, lint), Feedback Captured (category|file|entry), Confidence (level+concerns), Next Steps.
 
 |Confidence|Criteria|
 |-|-|
@@ -264,7 +281,8 @@ Violation=task failure + self-analysis log.
 12. Full-read files before modifying—`.github/agents/kernel/thoroughness.md`
 13. Non-interactive CLI flags—`--yes`, `--ci`, `--no-input`
 14. Write output to files—file-mediated state
-15. Create `_handoff.md` before terminating
+15. Write feedback before handoff—at least 1 entry to `.ai/feedback/` per SA execution
+16. Create `_handoff.md` before terminating
 
 ## NEVER
 

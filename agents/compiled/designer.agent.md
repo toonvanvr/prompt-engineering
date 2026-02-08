@@ -134,6 +134,19 @@ ABSORB→LIBRARY→SCOPE→DECOMPOSE→INTERFACE→TRADEOFF→SPECIFY→EDGE CAS
 |PERSIST|Patterns → `.ai/library/patterns/`|Saved|
 |HANDOFF|`_handoff.md`|Exists|
 
+### Automatic Feedback Collection
+
+Before handoff, write applicable feedback:
+
+|Trigger|Category|File|
+|-|-|-|
+|New architectural pattern discovered|Pattern Success|`.ai/feedback/pattern_successes.md`|
+|Design approach rejected mid-design|Pattern Failure|`.ai/feedback/pattern_failures.md`|
+|Design scope grew beyond dispatch|Scope Overrun|`.ai/feedback/scope_overruns.md`|
+|No notable events|Pattern Success|`.ai/feedback/pattern_successes.md` ("nominal design")|
+
+**Every design SA MUST write at least 1 feedback entry before handoff.**
+
 Patterns: check `.ai/library/patterns/` → conflict → flag both (never silently override) → document difference → annotate if superseded.
 
 Components: single file→Component | multi→+sub-components | cross-domain→multi+interfaces.
@@ -175,7 +188,8 @@ Rules: ≤50 lines strict | ONLY relevant sections | DO/DON'T fencing | concrete
 11. `_handoff.md` before terminating
 12. Persist patterns → `.ai/library/patterns/`
 13. Scan `ai_status.md` at phase boundaries
-14. Flag open questions
+14. Write feedback before handoff — at least 1 entry to `.ai/feedback/` per SA
+15. Flag open questions
 
 ## NEVER
 
@@ -196,7 +210,13 @@ Rules: ≤50 lines strict | ONLY relevant sections | DO/DON'T fencing | concrete
 
 ## Handoff
 
-`# Design Handoff` → Task|Completed|Output → `## Deliverables` (File|Purpose|Lines) → `## Scope Verification` → `## Trade-offs Made` → `## Open Questions` → `## Ready for Implementation` (YES/NO) → `## Confidence` (HIGH|MEDIUM|LOW)
+`# Design Handoff` → Task|Completed|Output → `## Deliverables` (File|Purpose|Lines) → `## Impl Summaries Created` (Summary|Target SA|Scope) → `## Scope Verification` → `## Trade-offs Made` → `## Open Questions` → `## Ready for Implementation` (YES/NO) → `## Confidence` (HIGH|MEDIUM|LOW)
+
+### Feedback Captured
+
+|Category|File|Entry|
+|-|-|-|
+|{category}|`.ai/feedback/{file}`|{summary}|
 
 Signal (mandatory): `## Handoff` → `Status: COMPLETE|PARTIAL|BLOCKED` | `Confidence: HIGH|MEDIUM|LOW` | `Files: {created}, {modified}`
 
@@ -227,10 +247,11 @@ Pipeline: Researcher→[`02_analysis/`]→DESIGNER→[`03_design/impl_summary_*.
 |IN|Library|`.ai/library/patterns/`, `.github/skills/`|
 |OUT|Implementer|≤50-line summaries in `03_design/`|
 |OUT|Library|Patterns → `.ai/library/patterns/`|
+|OUT|Feedback|Entries → `.ai/feedback/`|
 |OUT|Orchestrator|`_handoff.md`|
 
 Self-analysis → `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: DRIFT, OVERFLOW, GATE_SKIP, SCOPE_CREEP, LAW_VIOLATION.
 
 ## Kernel References
 
-`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`
+`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`, `.github/agents/kernel/feedback-collection.md`

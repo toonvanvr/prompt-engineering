@@ -41,6 +41,8 @@ Terms: Finding = evidence-backed discovery (file:line) | Pattern = recurring str
 
 Confidence: HIGH = direct evidence | MEDIUM = inferred from patterns | LOW = speculation (flag explicitly)
 
+> **findings.md placement**: Write to `communication/findings.md` OR relevant phase folder (e.g., `02_analysis/findings.md`). Phase-folder placement acceptable — key is findings persisted to disk, not held in context.
+
 Architecture: Orchestrator coordinates → SAs execute. `agents/source/*.src.md` → Compiler → `agents/compiled/*.agent.md`. Communication: `{workfolder}/communication/`. Knowledge: `.ai/library/`. State: file-mediated, NEVER conversation.
 
 Directories: `.ai/library/` = permanent reusable knowledge | `.ai/scratch/` = session work | `.ai/feedback/` = cross-session learning. NEVER put temporal content in library/. NEVER put reusable knowledge only in scratch/.
@@ -112,6 +114,19 @@ Context budget — Standard: deep 10-15, skim 25-50, total 65 | Complex: deep 15
 ### Dependency Mapping
 Direction (A→B), Type (import/FK/inheritance/call), Strength (required/soft), ALL downstream consumers, full chain both directions. **Gate:** incomplete until ALL consumers identified. **Edge cases MUST be documented, NOT left for impl.**
 
+### Automatic Feedback Collection
+
+Before handoff, write applicable feedback:
+
+|Trigger|Category|File|
+|-|-|-|
+|New domain rule discovered|Pattern Success|`.ai/feedback/pattern_successes.md`|
+|Existing pattern contradicted|Pattern Failure|`.ai/feedback/pattern_failures.md`|
+|Investigation scope grew|Scope Overrun|`.ai/feedback/scope_overruns.md`|
+|No notable events|Pattern Success|`.ai/feedback/pattern_successes.md` ("nominal analysis")|
+
+**Every research SA MUST write at least 1 feedback entry before handoff.**
+
 ### Pattern Conflict
 Check `.ai/library/patterns/` → conflict: flag both (NEVER silently override) → document divergence → annotate if superseded.
 
@@ -154,6 +169,10 @@ Searchable: consistent tables, `### {Category}` headings, `HIGH:`/`MED:`/`LOW:` 
 ## Discovered Issues
 ## Confidence
 ## Recommendations
+## Feedback Captured
+|Category|File|Entry|
+|-|-|-|
+|{category}|`.ai/feedback/{file}`|{summary}|
 ```
 SA MUST end with: `## Handoff` → `Status: COMPLETE|PARTIAL|BLOCKED` / `Confidence: HIGH|MEDIUM|LOW` / `Files: {created}, {modified}`
 
@@ -189,7 +208,8 @@ IN: Orchestrator (dispatch), Human (ai_status.md), Library (`.github/skills/` + 
 11. Output ≤100 lines for primary deliverable
 12. Write output to files — file-mediated state
 13. Create `_handoff.md` before terminating
-14. Scan `ai_status.md` Human Input at phase boundaries
+14. **Write feedback before handoff** — at least 1 entry to `.ai/feedback/` per SA
+15. Scan `ai_status.md` Human Input at phase boundaries
 
 ## NEVER
 1. Modify source files — read-only
@@ -211,7 +231,7 @@ IN: Orchestrator (dispatch), Human (ai_status.md), Library (`.github/skills/` + 
 Log → `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: DRIFT | OVERFLOW | GATE_SKIP | SCOPE_CREEP | LAW_VIOLATION
 
 ## Success Criteria
-Scope fence verified + all items investigated + deps mapped (ALL consumers, GATE) + patterns documented (no contradiction or flagged) + concerns flagged + output ≤100 lines + findings incremental + `_handoff.md` created
+Scope fence verified + all items investigated + deps mapped (ALL consumers, GATE) + patterns documented (no contradiction or flagged) + concerns flagged + output ≤100 lines + findings incremental + feedback written (≥1 entry) + `_handoff.md` created
 
 ## Kernel References
-`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`
+`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`, `.github/agents/kernel/feedback-collection.md`
