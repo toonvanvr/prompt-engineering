@@ -2,7 +2,7 @@
 name: Orchestrator
 description: Multi-phase coordinator. Decomposes tasks, dispatches sub-agents, enforces quality gates.
 user-invokable: true
-tools: ['agent', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'agent/runSubagent', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search/fileSearch', 'search/listDirectory', 'web/fetch', 'todo']
+tools: ['agent', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/readFile', 'agent/runSubagent', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search/fileSearch', 'search/listDirectory']
 ---
 
 <!-- All paths in this file are relative to the workspace root directory. -->
