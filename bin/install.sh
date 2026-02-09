@@ -118,7 +118,6 @@ install_agents() {
 install_kernel() {
   rm -rf "$TARGET/.github/agents/kernel"
   cp -r "$SOURCE/agents/kernel" "$TARGET/.github/agents/kernel"
-  rm -f "$TARGET/.github/agents/kernel/kernel"
   log "✓ .github/agents/kernel/"
 }
 
