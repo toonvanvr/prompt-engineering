@@ -34,8 +34,7 @@ jobs:
             agents/kernel/ \
             agents/modes/ \
             agents/templates/ \
-            .github/skills/ \
-            lib/templates/
+            .github/skills/
           echo "ARCHIVE=$ARCHIVE" >> "$GITHUB_ENV"
 
       - name: Create GitHub Release

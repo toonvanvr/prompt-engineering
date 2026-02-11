@@ -109,7 +109,7 @@ Before proceeding:
 |Source|Mechanism|Priority|
 |-|-|-|
 |User in chat|Explicit message|1 (highest)|
-|`.human/instructions/approve.md`|File-based|2|
+|`ai_status.md` `ACTION: approve` entry|Human Input section|2|
 |Pre-approved in dispatch|Scope declaration|3|
 
 ---

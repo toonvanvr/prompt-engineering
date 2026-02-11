@@ -7,10 +7,10 @@ Autonomous execution with passive human override capability.
 ## Core Principle
 
 > User prompt = implicit approval for entire flow. Proceed autonomously.
-> Scan `.human/instructions/` at checkpoints. Empty → continue immediately.
-> NEVER ask "should I proceed?" or "would you prefer?" — that's what `.human/instructions/` is for.
+> Scan `ai_status.md` Human Input section at checkpoints. Empty → continue immediately.
+> NEVER ask "should I proceed?" or "would you prefer?" — use ai_status.md Human Input instead.
 
-**Model:** Autonomous execution. Human intervenes via file drops, not confirmation dialogs.
+**Model:** Autonomous execution. Human intervenes via `ai_status.md` entries, not confirmation dialogs.
 
 ---
 
@@ -18,7 +18,7 @@ Autonomous execution with passive human override capability.
 
 |❌ Don't|✅ Do Instead|
 |-|-|
-|"Should I proceed?"|Proceed (scan `.human/instructions/` first)|
+|"Should I proceed?"|Proceed (scan ai_status.md Human Input first)|
 |"Would you prefer X or Y?"|Choose based on design, document rationale|
 |"Do you want me to..."|Do it (user prompt = approval)|
 |"Ready to proceed to X phase?"|Proceed to X phase|
@@ -32,62 +32,56 @@ Autonomous execution with passive human override capability.
 
 ---
 
-## Folder Structure
+## Pause/Resume Mechanism
 
-```
-.human/
-├── templates/       # Pre-defined instruction templates (copy to instructions/)
-├── instructions/    # Active instructions (AI scans at checkpoints)
-└── input/           # Human input during execution (watched between phases)
-```
-
-Processed instructions move to `.ai/scratch/{workfolder}/00_prompts/`.
-
----
-
-## Explicit Pause Mechanism
-
-To pause execution and wait for human input:
-
-1. Create `.human/instructions/pause.md`
-2. Agent detects at next checkpoint
-3. Agent halts and logs pause reason
-4. Human adds input to `.human/input/` or removes pause.md
-5. Agent resumes on next scan
-
-### pause.md Format
+To pause execution, human appends to `ai_status.md` Human Input section:
 
 ```markdown
-# Pause Request
-
-**Reason**: [Why pausing]
-**Resume When**: [Condition for resumption]
+### [YYYY-MM-DDTHH:MM:SS]
+ACTION: pause
+REASON: [Why pausing]
 ```
 
-### Human Input During Pause
+Agent detects at next checkpoint, halts, and logs pause reason.
 
-While paused, human can add files to `.human/input/`:
-- `feedback.md` — Adjustments to current approach
-- `context.md` — Additional information
-- `redirect.md` — Change direction
+To resume, human appends:
 
-Agent processes all `.human/input/` files when resuming.
+```markdown
+### [YYYY-MM-DDTHH:MM:SS]
+ACTION: resume
+```
+
+Human can add feedback/context/redirect entries while paused. Agent processes all entries when resuming.
 
 ---
 
-## Checkpoint Triggers (6 Total)
+## Supported Actions
+
+|Action|Effect|Required Fields|
+|-|-|-|
+|`pause`|Halt at next checkpoint|REASON|
+|`resume`|Continue after pause|—|
+|`abort`|Stop task, cleanup|REASON (optional)|
+|`redirect`|Change direction|OBJECTIVE|
+|`feedback`|Apply adjustment, continue|CONTENT|
+|`context`|Add information|CONTENT|
+|`approve`|Clear pending approval gates|—|
+
+---
+
+## Checkpoint Triggers
 
 |Checkpoint|When|Behavior|
 |-|-|-|
 |Task-start|Session init|Passive scan|
 |Phase-start|Before Analysis/Design/Review|Passive scan|
-|Pre-gate|Before phase gate (Analysis/Design/Review)|Passive scan|
+|Pre-gate|Before phase gate verification|Passive scan|
 |Pre-impl|Before Implementation Gate|Passive scan|
 |Deviation|Before design deviation|Passive scan|
-|Escalation|Before escalating|Write to `.human/`, halt|
+|Escalation|Before escalating|Write status update, halt|
 
-**Passive scan:** Check → process if present → continue immediately (no wait, no questions).
-**Halt:** ONLY `abort` instruction OR escalation protocol (3 failed attempts) blocks execution.
+**Passive scan:** Check ai_status.md Human Input → process if entries exist → continue immediately (no wait, no questions).
+**Halt:** ONLY `abort` action OR escalation protocol (3 failed attempts) blocks execution.
 **Never halt to ask human for confirmation** — that defeats autonomous execution.
 
 ---
@@ -95,95 +89,30 @@ Agent processes all `.human/input/` files when resuming.
 ## Check Protocol
 
 ```
-1. Scan `.human/instructions/` contents
-2. If empty → continue immediately
-3. If files present:
-   a. Read all instruction files (sorted by name)
-   b. Parse checkbox states and values
-   c. Execute instruction actions
-   d. Move to `.ai/scratch/{workfolder}/00_prompts/{seq}_{name}.md`
-   e. Document instruction effect in current task log
+1. Scan ai_status.md Human Input section for unprocessed entries
+2. If empty or no unprocessed entries → continue immediately
+3. If entries present:
+   a. Read all entries (sorted by timestamp)
+   b. Parse ACTION and fields
+   c. Execute action effects
+   d. Archive to .ai/scratch/{session}/00_prompts/{seq}_{action}.md
+   e. Mark as processed in ai_status.md
 4. Continue task (no wait unless abort/escalation)
 ```
 
 ---
 
-## Instruction Processing
+## Action Effects
 
-### File Movement
-
-```
-.human/instructions/feedback.md
-    ↓ processed
-.ai/scratch/{workfolder}/00_prompts/01_feedback.md
-```
-
-### Naming Convention
-
-|Source|Target Pattern|
+|Action|Behavior|
 |-|-|
-|User's first prompt|`00_initial_request.md`|
-|feedback.md processed|`01_feedback.md`|
-|redirect.md processed|`02_redirect.md`|
-|Custom file|`{seq}_{slug}.md`|
-
-### Parse Rules
-
-|Checkbox|Interpretation|
-|-|-|
-|`- [x]`|Selected / true|
-|`- [ ]`|Not selected / false|
-|`___`|Fill-in field (use value after colon if present)|
-
-### Conflict Resolution
-
-Multiple instructions processed in filename alphabetical order. If conflicting:
-- Later instruction overrides earlier
-- Abort takes precedence over all
-- Log conflict to self-analysis
-
----
-
-## Instruction Actions
-
-|Template|Effect|
-|-|-|
-|abort|Stop task, optionally rollback|
-|redirect|Change task scope/direction|
-|skip-phase|Skip specified phase(s)|
-|feedback|Apply adjustments, continue|
-|approve|Clear pending approval gates|
-|context|Inject new information|
-
----
-
-## Implementation in Agents
-
-### Async Scan Function (Pseudocode)
-
-```md
-## Async Scan (.human/instructions/)
-
-1. Scan `.human/instructions/` directory
-2. IF empty:
-   - CONTINUE immediately (no log needed)
-3. FOR each file:
-   - Parse instruction
-   - Apply action
-   - Move to `.ai/scratch/{workfolder}/00_prompts/`
-   - Log: "Instruction processed: {action}"
-4. IF abort:
-   - HALT
-5. ELSE:
-   - CONTINUE immediately
-```
-
-### Agent Integration
-
-Add to ALWAYS list:
-```md
-- **Async scan** `.human/instructions/` at checkpoints — process without waiting
-```
+|`pause`|Set status=paused, halt until resume|
+|`resume`|Clear paused status, continue|
+|`abort`|Set status=aborted, cleanup, create `_abort.md`|
+|`redirect`|Update objective, restart from current phase|
+|`feedback`|Apply adjustment inline, continue|
+|`context`|Add to session context, continue|
+|`approve`|Clear pending approval gates, proceed|
 
 ---
 
@@ -192,35 +121,17 @@ Add to ALWAYS list:
 Sub-agents inherit passive scan protocol. Checkpoints:
 - Task-start (session init)
 - Pre-impl (before implementation)
+- Pre-handoff (before creating handoff)
 - Deviation (before design deviation)
 
 ---
 
 ## Non-Blocking Behavior
 
-- Empty folder = immediate continue
-- Check is fast (directory scan)
+- No unprocessed entries = immediate continue
+- Check is fast (section scan)
 - Only blocks on abort or escalation
 - Enables autonomous execution with human override capability
-
----
-
-## Logging
-
-Instruction processing logged to:
-- Current scratch space: `.ai/scratch/{topic}/00_prompts/`
-- Self-analysis if issues: `.ai/self-analysis/`
-
-Log format:
-```md
-## Human Instruction Processed
-
-Timestamp: {ISO8601}
-Checkpoint: {trigger}
-File: {filename}
-Action: {instruction_type}
-Effect: {what changed}
-```
 
 ---
 
@@ -254,7 +165,7 @@ When escalation requires explicit approval:
 
 ### Approval Processing
 
-When approval received:
+When approval received (via chat or `ACTION: approve` in ai_status.md):
 
 1. Log approval to scratch space
 2. Update gate status to PASS

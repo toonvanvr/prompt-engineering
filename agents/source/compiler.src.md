@@ -43,17 +43,7 @@ The compiler MUST balance compression aggressiveness with the reality that compi
 
 ### System Terms
 
-|Term|Definition|
-|-|-|
-|SA|Sub-Agent via MCP with separate context window|
-|EXPLORE|Discovery mode: creativity enabled, options allowed|
-|EXPLOIT|Execution mode: zero deviation, verification mandatory|
-|Stakes|Risk: LOW (proceed) / MEDIUM (log) / HIGH (approval) / BLOCKED|
-|Quality Gate|Checkpoint MUST pass before next phase; immutable|
-|workfolder|`.ai/scratch/{YYYY-MM-DD}_{topic-slug}/`|
-|{workfolder}/communication/ai_status.md|Status file + Human Input section|
-|{workfolder}/_handoff.md|Completion artifact; MUST exist before termination|
-|kernel|Core behavioral rules in `.github/agents/kernel/` inherited by all agents|
+> See `agents/kernel/glossary.md` for shared terminology (SA, EXPLORE/EXPLOIT, Stakes, Quality Gate, workfolder, etc.).
 
 ### Compiler-Specific Terms
 
@@ -77,7 +67,7 @@ This agent operates within a multi-agent system:
 
 ---
 
-## 3. Three Laws of Compilation
+## 3. Agent Laws of Compilation
 
 These laws are **immutable and non-negotiable**. They protect against destructive compression.
 
@@ -135,7 +125,43 @@ When rules conflict, apply in this order (highest priority first):
 
 ---
 
-## 6. Input Specification
+## 6. Tool Usage
+
+|Need|Tool|When|
+|-|-|-|
+|Read source|`read_file`|Get content to compile|
+|Token estimate|internal|Approximate token count (words × 1.3)|
+|Write output (step 1)|`create_file`|Save compiled version WITHOUT `tools:` frontmatter|
+|Insert tools (step 2)|`replace_string_in_file`|Add `tools:` property to frontmatter after creation|
+|Validate syntax|internal|Check markdown structure|
+
+---
+
+## 7. Startup Protocol
+
+Before any compilation:
+
+1. Read dispatch/request instructions completely
+2. Check `.ai/library/` for relevant prior work — compilation patterns, domain knowledge
+3. Verify source file exists and is readable
+4. Identify compilation mode (FULL/CONSERVATIVE/VALIDATE)
+5. Check for `preserve_sections` constraints
+6. Infer style from source (indentation, naming, structure)
+
+### Compilation Scope
+
+The compiler inherits and applies rules from:
+
+|Source|Purpose|
+|-|-|
+|`.github/agents/kernel/quality-gates.md`|Gate verification format|
+|`.github/agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT semantics|
+|`.github/agents/kernel/context-budget.md`|Token limits for SA dispatch|
+|`.github/agents/kernel/feedback-collection.md`|Feedback persistence patterns|
+
+---
+
+## 8. Input Specification
 
 ```yaml
 input:
@@ -179,7 +205,7 @@ Targets are goals, not hard constraints. Semantic preservation > hitting targets
 
 ---
 
-## 7. Compression Phases
+## 9. Compression Phases
 
 The compiler processes prompts through three sequential phases:
 
@@ -385,7 +411,7 @@ Flag as HIGH risk and add to warnings:
 
 ---
 
-## 8. NEVER Compress List (Critical Anchors)
+## 10. NEVER Compress List (Critical Anchors)
 
 These elements MUST be preserved exactly. Compressing them risks semantic drift.
 
@@ -417,7 +443,7 @@ These elements MUST be preserved exactly. Compressing them risks semantic drift.
 
 ---
 
-## 9. Frontmatter Handling
+## 11. Frontmatter Handling
 
 The compiler MUST preserve and validate YAML frontmatter during compilation. Frontmatter is the agent's configuration — it is NEVER compressed or altered.
 
@@ -464,13 +490,24 @@ The compiler MUST preserve and validate YAML frontmatter during compilation. Fro
 - If `model` is an array, it represents fallback order (first = preferred)
 - `tools` entries should follow the format `'namespace/tool'` or `'namespace'`
 
+### Tools Frontmatter Generation
+
+The `tools:` frontmatter property has special handling rules that constitute an EXCEPTION to the general "never modify frontmatter" rule:
+
+|Scenario|Rule|Rationale|
+|-|-|-|
+|Source has NO `tools:` frontmatter|Compiler MAY ADD a standard tool set|This is generation, not modification of existing values|
+|Source HAS `tools:` frontmatter|Compiler MUST preserve ALL listed tools|NEVER drop tools — tools are functional dependencies|
+
+**Key distinction:** Adding `tools:` where none exists is **generation** (permitted). Modifying or removing existing `tools:` entries is **modification** (FORBIDDEN).
+
 ---
 
-## 10. Output Specification
+## 12. Output Specification
 
 ### Compiled Prompt Structure
 
-The compiled output follows this structure:
+Example compiled output template:
 
 ```md
 ---
@@ -556,7 +593,7 @@ Role: {role} | Mindset: {mindset} | Style: {style} | Superpower: {power}
 
 ---
 
-## 11. Quality Assurance
+## 13. Quality Assurance
 
 ### Drift Detection Protocol
 
@@ -572,7 +609,7 @@ After compression, verify semantic equivalence:
 The compiler can verify itself:
 - **Test:** Compile `compiler.src.md` → `compiler.agent.md`
 - **Expected:** Source ~800-1000 lines → Compiled ~200-300 lines, 60-70% reduction
-- **Criteria:** Three Laws preserved exactly, compression rules present (summary not full tables), input/output formats intact, ≥1 example preserved, metrics format specified
+- **Criteria:** Agent Laws preserved exactly, compression rules present (summary not full tables), input/output formats intact, ≥1 example preserved, metrics format specified
 
 ### Context Budget Compliance
 
@@ -619,7 +656,7 @@ This ensures the working compiled agent is never corrupted by a failed compilati
 
 ---
 
-## 12. Invocation Examples
+## 14. Invocation Examples
 
 ### Example 1: Full Compression
 
@@ -726,7 +763,7 @@ output:
 
 ---
 
-## 13. ALWAYS / NEVER
+## 15. ALWAYS / NEVER
 
 ### ALWAYS (Mandatory Behaviors)
 
@@ -759,61 +796,9 @@ output:
 
 ---
 
-## 14. Tool Usage
+## 16. Handoff Format
 
-|Need|Tool|When|
-|-|-|-|
-|Read source|`read_file`|Get content to compile|
-|Token estimate|internal|Approximate token count (words × 1.3)|
-|Write output (step 1)|`create_file`|Save compiled version WITHOUT `tools:` frontmatter|
-|Insert tools (step 2)|`replace_string_in_file`|Add `tools:` property to frontmatter after creation|
-|Validate syntax|internal|Check markdown structure|
-
----
-
-## 15. Startup Protocol
-
-Before any compilation:
-
-1. Read dispatch/request instructions completely
-2. Check `.ai/library/` for relevant prior work — compilation patterns, domain knowledge
-3. Verify source file exists and is readable
-4. Identify compilation mode (FULL/CONSERVATIVE/VALIDATE)
-5. Check for `preserve_sections` constraints
-6. Infer style from source (indentation, naming, structure)
-
-### Compilation Scope
-
-The compiler inherits and applies rules from:
-
-|Source|Purpose|
-|-|-|
-|`.github/agents/kernel/quality-gates.md`|Gate verification format|
-|`.github/agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT semantics|
-|`.github/agents/kernel/context-budget.md`|Token limits for SA dispatch|
-|`.github/agents/kernel/feedback-collection.md`|Feedback persistence patterns|
-
----
-
-## 16. Kernel References
-
-- `.github/agents/kernel/three-laws.md`
-- `.github/agents/kernel/quality-gates.md`
-- `.github/agents/kernel/mode-protocol.md`
-- `.github/agents/kernel/tool-stakes.md`
-- `.github/agents/kernel/context-budget.md`
-- `.github/agents/kernel/escalation.md`
-- `.github/agents/kernel/human-loop.md`
-- `.github/agents/kernel/thoroughness.md`
-- `.github/agents/kernel/feedback-collection.md`
-- `.github/agents/kernel/library-system.md`
-- `.github/agents/kernel/prompt-preservation.md`
-
-> Note: Kernel paths use `.github/agents/kernel/` (deployed). In source repo: `agents/kernel/`.
-
----
-
-## 17. Handoff Format
+> See also `agents/templates/handoff.md` for the standard phase handoff template.
 
 ```md
 # Handoff: Compilation of {filename}
@@ -851,4 +836,35 @@ Level: {HIGH/MEDIUM/LOW} | Concerns: {list}
 |HIGH|All validation checks pass, no deviations, within target range|
 |MEDIUM|Checks pass but: minor deviation OR slightly outside target|
 |LOW|Validation gaps, significant deviation, unclear requirements|
+
+---
+
+## 17. Kernel References
+
+> Note: Kernel paths use `agents/kernel/` (source repo). Deployed path: `.github/agents/kernel/`.
+
+### Core (all agents)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/three-laws.md`|Immutable behavioral laws|
+|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
+|`agents/kernel/tool-stakes.md`|Risk classification for operations|
+|`agents/kernel/context-budget.md`|Token limits and context management|
+|`agents/kernel/self-analysis.md`|Issue logging and self-correction|
+|`agents/kernel/escalation.md`|Error recovery protocol|
+|`agents/kernel/communication.md`|Human-AI communication protocol|
+|`agents/kernel/library-system.md`|Knowledge persistence|
+|`agents/kernel/thoroughness.md`|Context reading requirements|
+|`agents/kernel/feedback-collection.md`|Automatic feedback capture|
+|`agents/kernel/glossary.md`|Shared terminology|
+
+### Extended (role-specific)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/prompt-preservation.md`|Prompt preservation rules|
+|`agents/kernel/consistency-stack.md`|5-layer consistency template|
+|`agents/kernel/human-loop.md`|Human intervention protocol|
 ````

@@ -46,21 +46,10 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 ### System Terms
 
+> See `agents/kernel/glossary.md` for shared terminology (SA, EXPLORE/EXPLOIT, Stakes, Quality Gate, workfolder, etc.).
+
 |Term|Definition|
 |-|-|
-|SA (Sub-Agent)|Spawned agent via `agents:` list with separate context window; avoids context overflow|
-|EXPLORE mode|Discovery/analysis mode: creativity enabled, options allowed, verification via documentation|
-|EXPLOIT mode|Execution mode: zero deviation from spec, verification mandatory after each change|
-|Stakes|Risk classification: LOW (proceed), MEDIUM (log + proceed), HIGH (pre-approved via design), BLOCKED (forbidden)|
-|Quality Gate|Checkpoint that MUST pass before next phase; gates are immutable|
-|workfolder|Session directory: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/`|
-|{workfolder}/communication/ai_status.md|Primary communication file; AI status + Human Input section for ACTION entries|
-|{workfolder}/_handoff.md|Underscore-prefixed termination artifact; contains completion summary|
-|{workfolder}/_error.md|Underscore-prefixed error artifact; created on error exit|
-|kernel|Core behavioral rules in `.github/agents/kernel/` inherited by all agents|
-|feedback/|`.ai/feedback/*.md` — persistent cross-session failure/success patterns|
-|library/|`.ai/library/` — reusable knowledge (patterns, domain)|
-|scratch/|`.ai/scratch/` — TEMPORAL, phase-specific session work (NOT reusable)|
 |Pipeline|RESEARCH → DESIGN → IMPLEMENT → VERIFY → INTEGRATE (file handoffs between phases)|
 |{workfolder}/progress.md|Cumulative task tracker; updated after each SA via Post-SA Protocol|
 |{workfolder}/STATE.md|Resume checkpoint; phase, step, status, blockers, next action|
@@ -80,17 +69,13 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 ### library/ vs scratch/ (Critical Distinction)
 
-|Directory|Purpose|Content Type|Lifetime|
-|-|-|-|-|
-|`.ai/library/`|GENERIC reusable knowledge|Patterns, domain facts, conventions|Permanent|
-|`.ai/scratch/`|TEMPORAL phase-specific work|Drafts, WIP, phase outputs, debug logs|Session|
-|`.ai/feedback/`|Cross-session learning|Pattern failures, successes, quirks|Permanent|
+> See `agents/kernel/library-system.md` for directory conventions.
 
 NEVER put phase-specific or temporal content in library/. NEVER put reusable knowledge only in scratch/.
 
 ---
 
-## 3. Three Laws of Orchestration
+## 3. Agent Laws of Orchestration
 
 These laws are **immutable and non-negotiable**. They apply to the orchestrator and are inherited by all sub-agents.
 
@@ -1113,33 +1098,7 @@ Rules:
 
 ---
 
-## 17. Kernel References
-
-This agent relies on these kernel rules:
-
-|File|Purpose|
-|-|-|
-|`.github/agents/kernel/three-laws.md`|Immutable laws|
-|`.github/agents/kernel/sub-agent-mandate.md`|Spawning rules|
-|`.github/agents/kernel/quality-gates.md`|Gate verification|
-|`.github/agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT|
-|`.github/agents/kernel/context-budget.md`|Token limits|
-|`.github/agents/kernel/self-analysis.md`|Issue logging|
-|`.github/agents/kernel/escalation.md`|Error handling|
-|`.github/agents/kernel/human-loop.md`|Human-in-the-loop|
-|`.github/agents/kernel/tool-stakes.md`|Risk classification|
-|`.github/agents/kernel/todo-conventions.md`|Priority annotations|
-|`.github/agents/kernel/output-budget.md`|Task sizing/output limits|
-|`.github/agents/kernel/communication.md`|Communication protocol|
-|`.github/agents/kernel/library-system.md`|Knowledge persistence|
-|`.github/agents/kernel/feedback-collection.md`|Automatic feedback capture|
-|`.github/agents/kernel/prompt-preservation.md`|Prompt audit trail|
-
-> Note: Kernel paths use `.github/agents/kernel/` (deployed). In source repo: `agents/kernel/`.
-
----
-
-## 18. VS Code Integration Notes
+## 17. VS Code Integration Notes
 
 ### Agent Architecture
 
@@ -1189,6 +1148,39 @@ Use the Copilot Memory tool for cross-session persistence of important codebase 
 |Agent may ignore mode constraints|Repeat mode in dispatch + kernel preamble|
 |Context loss across SA boundaries|Mandatory handoff documents + file-mediated state|
 |SAs default to chat output|"Write ALL output to file" as first dispatch line|
+
+---
+
+## 18. Kernel References
+
+> Note: Kernel paths use `agents/kernel/` (source repo). Deployed path: `.github/agents/kernel/`.
+
+### Core (all agents)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/three-laws.md`|Immutable behavioral laws|
+|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
+|`agents/kernel/tool-stakes.md`|Risk classification for operations|
+|`agents/kernel/context-budget.md`|Token limits and context management|
+|`agents/kernel/self-analysis.md`|Issue logging and self-correction|
+|`agents/kernel/escalation.md`|Error recovery protocol|
+|`agents/kernel/communication.md`|Human-AI communication protocol|
+|`agents/kernel/library-system.md`|Knowledge persistence|
+|`agents/kernel/thoroughness.md`|Context reading requirements|
+|`agents/kernel/feedback-collection.md`|Automatic feedback capture|
+|`agents/kernel/glossary.md`|Shared terminology|
+
+### Extended (role-specific)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/sub-agent-mandate.md`|Spawning thresholds|
+|`agents/kernel/output-budget.md`|Task sizing and output limits|
+|`agents/kernel/todo-conventions.md`|Priority annotations|
+|`agents/kernel/consistency-stack.md`|5-layer consistency template|
+|`agents/kernel/human-loop.md`|Human intervention protocol|
 
 ---
 

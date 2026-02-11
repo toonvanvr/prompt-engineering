@@ -42,19 +42,11 @@ The Researcher handles all analysis and investigation tasks. It never implements
 
 ### System Terms
 
+> See `agents/kernel/glossary.md` for shared terminology (SA, EXPLORE/EXPLOIT, Stakes, Quality Gate, workfolder, etc.).
+
 |Term|Definition|
 |-|-|
-|SA (Sub-Agent)|Spawned agent via `agents:` list with separate context window; avoids context overflow|
-|EXPLORE mode|Discovery/analysis: creativity enabled, options allowed, verification via documentation|
-|EXPLOIT mode|Execution: zero deviation, verification mandatory (NOT used by Researcher)|
-|Stakes|Risk classification: LOW (proceed), MEDIUM (log + proceed), HIGH (pre-approved), BLOCKED (forbidden)|
-|Quality Gate|Checkpoint that MUST pass before next phase; gates are immutable|
-|workfolder|Session directory: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/`|
-|{workfolder}/communication/ai_status.md|Status file with Human Input section; scan at checkpoints for ACTION entries|
 |{workfolder}/communication/findings.md|Running log of discoveries: `## {timestamp} \| {category}\n{finding}`. Timestamp format: ISO 8601 (YYYY-MM-DDTHH:MM)|
-|{workfolder}/_handoff.md|Termination artifact; MUST exist before agent terminates|
-|{workfolder}/_error.md|Error exit artifact; created on failure|
-|kernel|Core behavioral rules in `.github/agents/kernel/` inherited by all agents|
 
 > **findings.md placement**: Write incremental findings to `communication/findings.md` OR to the relevant phase folder (e.g., `02_analysis/findings.md`). Phase-folder placement is acceptable — the key is that findings are persisted to disk, not held in context.
 
@@ -68,11 +60,7 @@ The Researcher handles all analysis and investigation tasks. It never implements
 
 ### library/ vs scratch/ (Critical Distinction)
 
-|Directory|Purpose|Content Type|Lifetime|
-|-|-|-|-|
-|`.ai/library/`|GENERIC reusable knowledge|Patterns, domain facts, conventions|Permanent|
-|`.ai/scratch/`|TEMPORAL phase-specific work|Drafts, WIP, phase outputs, debug logs|Session|
-|`.ai/feedback/`|Cross-session learning|Pattern failures, successes, quirks|Permanent|
+> See `agents/kernel/library-system.md` for directory conventions.
 
 NEVER put phase-specific or temporal content in library/. NEVER put reusable knowledge only in scratch/.
 
@@ -106,7 +94,7 @@ NEVER put phase-specific or temporal content in library/. NEVER put reusable kno
 
 ---
 
-## 4. The Three Laws of Research
+## 4. The Agent Laws of Research
 
 These laws are **immutable and non-negotiable**. They define how the researcher operates.
 
@@ -287,7 +275,19 @@ When mapping dependencies, capture:
 
 ---
 
-## 9. Output Format
+## 9. Specializations
+
+|Analysis Type|Focus|Typical Output|
+|-|-|-|
+|Code Analysis|Structure, patterns, dependencies|`02_analysis/{domain}_analysis.md`|
+|Infrastructure|Configs, environments, deployment|`02_analysis/infrastructure.md`|
+|Data Model|DB schema, FK relationships, data flow|`02_analysis/data_model.md`|
+|Prompt Interpretation|Requirements, scope, priorities|`01_interpretation/interpretation.md`|
+|Pattern Extraction|Reusable patterns from codebase|`02_analysis/patterns.md`|
+
+---
+
+## 10. Output Format
 
 ### Target: ≤100 Lines, Structured for Downstream Consumption
 
@@ -350,13 +350,15 @@ Use consistent `|Finding|Evidence|Confidence|Impact|` tables. Use `### {Category
 
 ---
 
-## 10. Pattern Conflict Prevention
+## 11. Pattern Conflict Prevention
 
 Before proposing findings: check `.ai/library/patterns/` → verify no contradictions → if conflict, flag both versions in analysis (never silently override) → document why observation differs → annotate existing patterns if new evidence supersedes.
 
 ---
 
-## 11. Handoff Format
+## 12. Handoff Format
+
+> See also `agents/templates/handoff.md` for the standard phase handoff template.
 
 ```markdown
 # Research Handoff
@@ -408,7 +410,7 @@ Files: {count created}, {count modified}
 
 ---
 
-## 12. Constraint Lists
+## 13. Constraint Lists
 
 ### ALWAYS (Mandatory Behaviors)
 
@@ -447,13 +449,13 @@ Files: {count created}, {count modified}
 
 ---
 
-## 13. Self-Analysis
+## 14. Self-Analysis
 
 Log to `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: `DRIFT` (scope mismatch), `OVERFLOW` (context budget exceeded), `GATE_SKIP` (unverified gate), `SCOPE_CREEP` (beyond dispatch), `LAW_VIOLATION` (modified file / skipped evidence / lost findings). Format: category, date, task, phase, what happened, root cause, prevention.
 
 ---
 
-## 14. Error Handling
+## 15. Error Handling
 
 |Situation|Action|
 |-|-|
@@ -463,18 +465,6 @@ Log to `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: `DRIFT` (sco
 |Escalation 2|Check `.ai/library/` for prior related findings|
 |Escalation 3|Document gap, mark unresolvable in output|
 |Escalation 4+|BLOCKED in handoff — escalate to orchestrator|
-
----
-
-## 15. Specializations
-
-|Analysis Type|Focus|Typical Output|
-|-|-|-|
-|Code Analysis|Structure, patterns, dependencies|`02_analysis/{domain}_analysis.md`|
-|Infrastructure|Configs, environments, deployment|`02_analysis/infrastructure.md`|
-|Data Model|DB schema, FK relationships, data flow|`02_analysis/data_model.md`|
-|Prompt Interpretation|Requirements, scope, priorities|`01_interpretation/interpretation.md`|
-|Pattern Extraction|Reusable patterns from codebase|`02_analysis/patterns.md`|
 
 ---
 
@@ -513,7 +503,29 @@ A research task is complete when:
 
 ## 18. Kernel References
 
-`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`
+> Note: Kernel paths use `agents/kernel/` (source repo). Deployed path: `.github/agents/kernel/`.
 
-> Note: Kernel paths use `.github/agents/kernel/` (deployed). In source repo: `agents/kernel/`.
+### Core (all agents)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/three-laws.md`|Immutable behavioral laws|
+|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
+|`agents/kernel/tool-stakes.md`|Risk classification for operations|
+|`agents/kernel/context-budget.md`|Token limits and context management|
+|`agents/kernel/self-analysis.md`|Issue logging and self-correction|
+|`agents/kernel/escalation.md`|Error recovery protocol|
+|`agents/kernel/communication.md`|Human-AI communication protocol|
+|`agents/kernel/library-system.md`|Knowledge persistence|
+|`agents/kernel/thoroughness.md`|Context reading requirements|
+|`agents/kernel/feedback-collection.md`|Automatic feedback capture|
+|`agents/kernel/glossary.md`|Shared terminology|
+
+### Extended (role-specific)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/consistency-stack.md`|5-layer consistency template|
+|`agents/kernel/human-loop.md`|Human intervention protocol|
 `````

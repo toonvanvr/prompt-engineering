@@ -224,10 +224,10 @@ CONSTRAINT STACK (full):
 │ 3. Gate → Must pass                 │
 ├─────────────────────────────────────┤
 │ HUMAN-LOOP (inherited)              │
-│ Check `.human/instructions/` at:    │
+│ Scan ai_status.md Human Input at:   │
 │ - Sub-agent start                   │
 │ - Before handoff                    │
-│ Process → Move to processed/        │
+│ Process → Archive to 00_prompts/    │
 ├─────────────────────────────────────┤
 │ MODE (inherited)                    │
 │ Parent EXPLOIT → Child EXPLOIT      │

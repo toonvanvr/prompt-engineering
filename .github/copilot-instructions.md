@@ -50,8 +50,7 @@ All paths in agent files are relative to the workspace root directory.
 ## File Communication
 
 Agents communicate via files in `.ai/scratch/{session}/communication/`:
-- `human_input.md` — Human writes here (actions: pause, resume, abort, redirect, feedback, context)
-- `ai_status.md` — AI writes status updates
+- `ai_status.md` — AI writes status updates; human appends ACTION entries to `## Human Input` section (actions: pause, resume, abort, redirect, feedback, context, approve)
 - `findings.md` — Accumulated discoveries
 
 ## Never

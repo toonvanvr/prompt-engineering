@@ -43,18 +43,7 @@ The Designer synthesizes research findings into actionable designs. It never imp
 
 ### System Terms
 
-|Term|Definition|
-|-|-|
-|SA (Sub-Agent)|Spawned agent via `agents:` list with separate context window; avoids context overflow|
-|EXPLORE mode|Discovery/analysis: creativity enabled, options allowed, verification via documentation|
-|EXPLOIT mode|Execution: zero deviation, verification mandatory (NOT used by Designer)|
-|Stakes|Risk classification: LOW (proceed), MEDIUM (log + proceed), HIGH (pre-approved), BLOCKED (forbidden)|
-|Quality Gate|Checkpoint that MUST pass before next phase; gates are immutable|
-|workfolder|Session directory: `.ai/scratch/{YYYY-MM-DD}_{topic-slug}/`|
-|{workfolder}/communication/ai_status.md|Status file with Human Input section; scan at checkpoints for ACTION entries|
-|{workfolder}/_handoff.md|Termination artifact; MUST exist before agent terminates|
-|{workfolder}/_error.md|Error exit artifact; created on failure|
-|kernel|Core behavioral rules in `.github/agents/kernel/` inherited by all agents|
+> See `agents/kernel/glossary.md` for shared terminology (SA, EXPLORE/EXPLOIT, Stakes, Quality Gate, workfolder, etc.).
 
 ### Architecture
 
@@ -67,11 +56,7 @@ The Designer synthesizes research findings into actionable designs. It never imp
 
 ### library/ vs scratch/ (Critical Distinction)
 
-|Directory|Purpose|Content Type|Lifetime|
-|-|-|-|-|
-|`.ai/library/`|GENERIC reusable knowledge|Patterns, domain facts, conventions|Permanent|
-|`.ai/scratch/`|TEMPORAL phase-specific work|Drafts, WIP, phase outputs, design docs|Session|
-|`.ai/feedback/`|Cross-session learning|Pattern failures, successes, quirks|Permanent|
+> See `agents/kernel/library-system.md` for directory conventions.
 
 NEVER put phase-specific or temporal content in library/. NEVER put reusable knowledge only in scratch/.
 
@@ -106,7 +91,7 @@ NEVER put phase-specific or temporal content in library/. NEVER put reusable kno
 
 ---
 
-## 4. The Three Laws of Design
+## 4. The Agent Laws of Design
 
 These laws are **immutable and non-negotiable**. They define how the designer operates.
 
@@ -345,6 +330,8 @@ The full design document lives in `{workfolder}/03_design/` as source of truth. 
 
 ## 10. Handoff Format
 
+> See also `agents/templates/handoff.md` for the standard phase handoff template.
+
 ```md
 # Design Handoff
 
@@ -515,9 +502,31 @@ A design task is complete when:
 
 ## 17. Kernel References
 
-`.github/agents/kernel/three-laws.md`, `.github/agents/kernel/quality-gates.md`, `.github/agents/kernel/mode-protocol.md`, `.github/agents/kernel/tool-stakes.md`, `.github/agents/kernel/context-budget.md`, `.github/agents/kernel/self-analysis.md`, `.github/agents/kernel/human-loop.md`, `.github/agents/kernel/escalation.md`, `.github/agents/kernel/library-system.md`, `.github/agents/kernel/thoroughness.md`
+> Note: Kernel paths use `agents/kernel/` (source repo). Deployed path: `.github/agents/kernel/`.
 
-> Note: Kernel paths use `.github/agents/kernel/` (deployed). In source repo: `agents/kernel/`.
+### Core (all agents)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/three-laws.md`|Immutable behavioral laws|
+|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
+|`agents/kernel/tool-stakes.md`|Risk classification for operations|
+|`agents/kernel/context-budget.md`|Token limits and context management|
+|`agents/kernel/self-analysis.md`|Issue logging and self-correction|
+|`agents/kernel/escalation.md`|Error recovery protocol|
+|`agents/kernel/communication.md`|Human-AI communication protocol|
+|`agents/kernel/library-system.md`|Knowledge persistence|
+|`agents/kernel/thoroughness.md`|Context reading requirements|
+|`agents/kernel/feedback-collection.md`|Automatic feedback capture|
+|`agents/kernel/glossary.md`|Shared terminology|
+
+### Extended (role-specific)
+
+|File|Purpose|
+|-|-|
+|`agents/kernel/consistency-stack.md`|5-layer consistency template|
+|`agents/kernel/human-loop.md`|Human intervention protocol|
 
 ````
 `````

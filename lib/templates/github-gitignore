@@ -1,4 +1,0 @@
-# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering
-# Agent files are snapshots installed by bin/install.sh. Run per checkout.
-/.gitignore
-/agents/

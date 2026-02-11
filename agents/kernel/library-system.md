@@ -12,6 +12,18 @@ Knowledge persistence layer for per-repo learning.
 
 ---
 
+## Directory Reference
+
+|Directory|Purpose|Content Type|Lifetime|
+|-|-|-|-|
+|`.ai/library/`|GENERIC reusable knowledge|Patterns, domain facts, conventions|Permanent|
+|`.ai/scratch/`|TEMPORAL phase-specific work|Drafts, WIP, phase outputs, debug logs|Session|
+|`.ai/feedback/`|Cross-session learning|Pattern failures, successes, quirks|Permanent|
+
+NEVER put phase-specific or temporal content in library/. NEVER put reusable knowledge only in scratch/.
+
+---
+
 ## Folder Structure
 
 ```

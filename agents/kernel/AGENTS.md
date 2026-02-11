@@ -19,7 +19,7 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |`mode-protocol.md`|EXPLORE/EXPLOIT definitions|STABLE|
 |`tool-stakes.md`|Risk classification|STABLE|
 |`todo-conventions.md`|TODO priority system|STABLE|
-|`human-loop.md`|Human intervention|STABLE|
+|`human-loop.md`|Autonomous execution with human override via ai_status.md|STABLE|
 |`escalation.md`|Error recovery|STABLE|
 |`sub-agent-mandate.md`|Spawning thresholds|STABLE|
 |`context-budget.md`|Token limits|ADJUSTABLE|
@@ -31,6 +31,7 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |`prompt-preservation.md`|Prompt audit trail|STABLE|
 |`output-budget.md`|Output token limits|ADJUSTABLE|
 |`thoroughness.md`|Context reading rules|STABLE|
+|`glossary.md`|Shared terminology|STABLE|
 
 ## Library Patterns
 
