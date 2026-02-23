@@ -1,24 +1,20 @@
 # Pattern: Scope Fencing
 
-## Problem
-SAs expand scope mid-task, especially research SAs that discover "one more thing" to investigate.
+Every SA dispatch must include equally-specific DO and DO NOT lists plus a verification command that checks only in-scope deliverables. This prevents mid-task scope expansion, especially in research SAs that discover "one more thing."
 
-## Solution
-Every SA dispatch includes explicit DO NOT list with the same specificity as the DO list. The verification command acts as a scope gate.
+## When to Use
+- Every SA dispatch — DO/DO NOT/VERIFY is mandatory structure
+- Research SAs — highest scope creep risk, need explicit exclusion boundaries
+- When task boundaries are ambiguous (e.g., "save state" could mean scratch or library)
 
-## Template
+## When NOT to Use
+- Never skip this pattern — all dispatches require scope fencing
+- The specificity level may be reduced for trivial Wave 1 tasks, but DO NOT list is still required
+
+## Example
 ```
-DO: {1-3 specific deliverables with file paths}
-DO NOT: {explicit exclusions}
-VERIFY: {exact shell command checking only in-scope deliverables}
+DO: Reformat 4 pattern files in .ai/library/patterns/
+DO NOT: Create new pattern files, modify kernel files, modify feedback files
+VERIFY: grep -l "When to Use" .ai/library/patterns/{file1,file2,file3,file4}.md | wc -l  # Expected: 4
 ```
-
-## Rules
-- DO and DO NOT lists must be equally specific
-- Max 3 deliverables per SA
-- Verification only checks in-scope work
-- Out-of-scope discoveries → document in handoff, don't act
-
-## Evidence
-- Logger project: research SA stayed in scope (512 lines pure analysis, zero code changes) with explicit scope fence
-- Pattern failures: memory/scratch confusion happened because scope boundary was ambiguous ("save state" could mean either)
+Out-of-scope discoveries go in handoff under "Future Work," never acted on.

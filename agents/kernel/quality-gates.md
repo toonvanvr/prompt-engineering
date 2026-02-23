@@ -288,3 +288,6 @@ May use **self-approval with documentation**:
 
 ### Proceeding with self-approval.
 ```
+
+### Deliverable Gate
+Dispatches MUST list deliverables as checkboxes. Handoff incomplete until ALL checked. Unchecked deliverable = gate failure. No implicit deliverables — if it's not listed, it's not required.

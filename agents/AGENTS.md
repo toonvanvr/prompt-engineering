@@ -11,6 +11,9 @@ Agent framework for orchestrated AI task execution.
 |`kernel/`|Inherited behavioral rules|YES (carefully)|
 |`modes/`|EXPLORE/EXPLOIT specifications|RARELY|
 |`templates/`|Sub-agent dispatch templates|YES|
+|`shared/`|Composable text fragments for source files|YES|
+|`reference/`|Detailed tables/schemas for compilation|YES|
+|`precompiled/`|Resolved intermediary files (.pre.md)|NO (generated)|
 
 ## Agent Types
 
@@ -28,8 +31,8 @@ Only the **Orchestrator** is user-facing. All others are hidden subagents (`user
 
 ```
 1. Edit: agents/source/{agent}.src.md
-2. Compile: Invoke Compiler agent
-3. Output: agents/compiled/{agent}.agent.md
+2. Resolve: Phase 1 — @include resolution → agents/precompiled/{agent}.pre.md
+3. Compile: Phase 2 — Token compression → agents/compiled/{agent}.agent.md
 4. Deploy: bin/install.sh (copies snapshot to .github/agents/)
 ```
 
@@ -44,6 +47,6 @@ All agents inherit rules from `kernel/`:
 
 ## Never
 
-- Edit files in `compiled/` — they are generated
+- Edit files in `compiled/` or `precompiled/` — they are generated
 - Skip kernel inheritance in dispatches
 - Bypass quality gates

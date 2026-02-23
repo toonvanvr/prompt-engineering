@@ -1,23 +1,15 @@
 # Pattern: File-Mediated State Transfer
 
-## Problem
-Sub-agents lose context when tasks span multiple invocations. Conversation state doesn't persist across SA boundaries.
+SAs communicate exclusively through files — the orchestrator routes between SAs by pointing them at output files from previous SAs, never by summarizing conversation state. This preserves full context across SA boundaries without costing orchestrator tokens.
 
-## Solution
-Every SA reads input from files and writes output to files. The orchestrator routes between SAs by pointing them at output files from previous SAs, never by summarizing conversations.
+## When to Use
+- All multi-SA workflows — every SA reads input from files and writes output to files
+- When SA₁'s output feeds SA₂'s input (e.g., researcher findings → designer spec → implementer code)
+- Orchestrator decision-making — read SA handoff files to determine next action
 
-## Structure
-SA₁ → writes findings.md → Orchestrator reads → SA₂ reads findings.md → writes implementation.md
+## When NOT to Use
+- Single-SA tasks with no follow-up — file output is still required (for audit trail) but routing is unnecessary
+- Human-to-orchestrator communication — use conversation, not files
 
-## Rules
-- Orchestrator READS files to decide what to do
-- SAs READ files to know what to do  
-- Nobody relies on conversation history across boundaries
-- The orchestrator never forwards raw SA output — it reads the file, extracts key facts, points next SA at the file
-
-## Anti-Pattern
-Orchestrator summarizing SA₁'s output in SA₂'s prompt. This loses detail and costs orchestrator context.
-
-## Evidence
-- Logger project 2026-02-07: File-mediated handoffs preserved full analysis context across 4 implementation phases
-- findings.md (512 lines) transferred full context without conversation replay
+## Example
+Researcher writes `findings.md` (512 lines) → Orchestrator reads it, extracts key facts, creates Designer dispatch pointing at `findings.md` → Designer reads `findings.md`, writes `design-spec.md` → Orchestrator points Implementer at `design-spec.md`. Anti-pattern: Orchestrator summarizing findings in Designer's prompt (loses detail, wastes context).

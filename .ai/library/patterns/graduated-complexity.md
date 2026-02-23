@@ -1,20 +1,15 @@
 # Pattern: Graduated Complexity Delegation
 
-## Problem
-Orchestrators assign tasks of wildly varying complexity in the same dispatch wave, leading to uneven quality.
+Sort tasks by complexity and delegate in ascending waves — trivial batched, small individual, cross-cutting isolated, architectural researched first. Never mix complexity levels in a single SA dispatch.
 
-## Solution
-Sort tasks by complexity and delegate in waves:
-1. Wave 1: Trivial fixes (1-line changes, config tweaks) — batch 5+ per SA
-2. Wave 2: Small features (single-file changes) — 1-2 per SA
-3. Wave 3: Cross-cutting changes (multi-file) — 1 per SA
-4. Wave 4: Architectural changes — research SA first, then implementation SA
+## When to Use
+- Planning multi-SA work with tasks of varying complexity
+- Orchestrator is deciding how to batch deliverables across SAs
+- Wave 3+ tasks — always dispatch a research SA before implementation
 
-## Rules
-- Never mix wave levels in a single SA
-- Each wave completes before next starts (dependencies allowing)
-- Research SAs always precede implementation SAs for wave 3+
+## When NOT to Use
+- Single-task dispatches where complexity is uniform
+- When all tasks are the same wave level — just batch appropriately per SA limits
 
-## Evidence
-- Logger project: Phase B (3 renderer implementations) was appropriately scoped for one SA
-- Phase C (3 distinct features) was borderline — passed but risk was higher
+## Example
+Wave 1: Batch 5 config tweaks into one SA. Wave 2: One SA per single-file feature (1-2 deliverables each). Wave 3: One SA for cross-cutting multi-file change (max 3 deliverables). Wave 4: Researcher SA analyzes architecture → Designer SA produces spec → Implementer SA executes. Each wave completes before the next starts.

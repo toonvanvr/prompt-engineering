@@ -172,3 +172,16 @@ HIGH → Block until approved
 Classification by operation type.
 Approval via chat, file, or pre-scope.
 ```
+
+---
+
+## Tool Discipline
+
+### Purpose Clarity
+Every tool call must have a clear purpose before invocation. If you cannot state the purpose in one phrase, the call is premature. Purpose informs stakes classification.
+
+### 3-Call Rule
+Before making a 3rd call to the same tool with similar parameters: stop. Batch the remaining calls, restructure the approach, or spawn a sub-agent. Repetition signals a wrong strategy.
+
+### Failure Budget
+2 failures on the same approach = change approach. Don't retry with minor variations — diagnose root cause. Poor search results → fix the query strategy, not the query.

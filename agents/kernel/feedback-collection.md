@@ -149,6 +149,9 @@ If in doubt, append to feedback file and continue.
 
 **Minimum feedback per SA:** 1 entry. No exceptions.
 
+### End-of-Session Processing
+At session end, orchestrator MUST: (1) read all `.ai/feedback/*.md` entries from this session, (2) promote validated patterns to `.ai/library/patterns/`, (3) flag contradictions with existing library entries. Unprocessed feedback = incomplete session.
+
 **If nothing went wrong:** Write a nominal success entry. The absence of problems IS feedback — it validates the workflow.
 
 **Gate Integration:** Handoff without `## Feedback Captured` section = INCOMPLETE handoff. Orchestrator MUST reject incomplete handoffs.

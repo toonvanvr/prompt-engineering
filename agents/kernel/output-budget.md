@@ -177,3 +177,6 @@ Cumulative: >1500 → spawn sub-agent
 
 Write to files. Reference paths. Track load.
 ```
+
+### Concept Compression
+Phrase over sentence. Sentence over paragraph. If a concept has a standard name, use it — don't re-explain. Applies to output files, dispatches, and kernel rules themselves.

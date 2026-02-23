@@ -38,7 +38,14 @@ user-invokable: false
 
 > **findings.md placement**: `communication/findings.md` OR relevant phase folder — key is disk persistence.
 
-<!-- @include agents/shared/architecture.md -->
+<!-- @source agents/shared/architecture.md L1-L7 -->
+## Architecture
+- **Orchestrator** is the only user-facing agent — coordinates all work
+- **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
+- **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
+- **Communication**: via `{workfolder}/communication/` directory
+- **Knowledge persistence**: via `.ai/library/` directory
+- **State transfer**: file-mediated, NEVER conversation-mediated
 ---
 ## 3. Researcher-Specific Terminology + Confidence
 
@@ -93,7 +100,19 @@ Write to files as discovered — context dies, files survive. Each discovery →
 |INSERT/UPDATE/DELETE, install packages|BLOCKED|
 |Spawn sub-agents, write outside scope|BLOCKED|
 ---
-<!-- @include agents/shared/startup-protocol.md -->
+<!-- @source agents/shared/startup-protocol.md L1-L12 -->
+## Startup Protocol (Shared Steps)
+
+Execute in order. No step may be skipped.
+
+1. **Read dispatch instructions** completely — identify scope, inputs, output path
+2. **Parse scope boundaries** — extract DO and DON'T lists from dispatch
+3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
+4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
+5. **Check `.github/skills/`** for relevant skills
+6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries
+
+After shared steps, execute role-specific startup additions defined in source.
 
 ### Researcher Startup Additions
 7. **Locate existing findings** in `{workfolder}/communication/findings.md`
@@ -160,7 +179,34 @@ Use `path:line` for evidence. Prefix concerns: `HIGH:`, `MED:`, `LOW:`.
 
 > Kernel: See `agents/kernel/pattern-system.md` for pattern conflict prevention.
 ---
-<!-- @include agents/shared/handoff-format.md -->
+<!-- @source agents/shared/handoff-format.md L1-L27 -->
+## Handoff Format
+
+### Skeleton
+
+|Section|Content|
+|-|-|
+|Task|Task name from dispatch|
+|Completed|ISO timestamp|
+|Output|Path to main deliverable|
+|Summary|One-line description|
+|Deliverables|File / Purpose / Lines table|
+|Scope Verification|DO items completed + DON'T items respected|
+|Confidence|Level (HIGH/MEDIUM/LOW) + Concerns|
+|Feedback Captured|Category / File / Entry table|
+
+Role-specific sections (add in source): Unresolved items, trade-offs, deviations, test results, etc.
+
+### Completion Signal (MANDATORY)
+
+Every SA MUST end output with:
+
+```
+## Handoff
+Status: COMPLETE | PARTIAL | BLOCKED
+Confidence: HIGH | MEDIUM | LOW
+Files: {count created}, {count modified}
+```
 
 ### Researcher-Specific Handoff Fields
 |Section|Content|
@@ -172,7 +218,26 @@ Use `path:line` for evidence. Prefix concerns: `HIGH:`, `MED:`, `LOW:`.
 ---
 ## 9. Constraint Lists
 
-<!-- @include agents/shared/constraints.md -->
+<!-- @source agents/shared/constraints.md L1-L19 -->
+## Shared Constraints
+
+### ALWAYS (All Agents)
+
+1. **Verify scope fence** at startup — recite DO/DON'T
+2. **Check `.ai/library/patterns/`** before proposing approaches — avoid contradictions
+3. **Write output to files** — file-mediated state, never conversation-mediated
+4. **Create `_handoff.md`** before terminating — handoff enables resumption
+5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
+6. **Scan `ai_status.md`** Human Input section at phase boundaries
+7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
+
+### NEVER (All Agents)
+
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+2. **Return output in conversation** — write to files; downstream reads files
+3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
+4. **Combine research with implementation** — always separate SAs
+5. **Skip quality gates** — gates are checkpoints, not suggestions
 
 ### ALWAYS (Researcher-Specific)
 1. **Start broad** before deep reads — understand landscape first

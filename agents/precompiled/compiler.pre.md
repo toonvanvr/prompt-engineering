@@ -38,7 +38,14 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 |High-Risk Compression|May alter meaning: removes conditionals, changes scope/emphasis/priority|
 |Critical Anchor|Element anchoring interpretation — MUST NOT be compressed|
 
-<!-- @include agents/shared/architecture.md -->
+<!-- @source agents/shared/architecture.md L1-L7 -->
+## Architecture
+- **Orchestrator** is the only user-facing agent — coordinates all work
+- **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
+- **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
+- **Communication**: via `{workfolder}/communication/` directory
+- **Knowledge persistence**: via `.ai/library/` directory
+- **State transfer**: file-mediated, NEVER conversation-mediated
 
 ## 3. Agent Laws of Compilation
 Immutable. Protect against destructive compression.
@@ -74,7 +81,19 @@ When rules conflict, apply highest priority first:
 |Insert tools (step 2)|`replace_string_in_file`|Add `tools:` after creation|
 |Validate syntax|internal|Check markdown structure|
 
-<!-- @include agents/shared/startup-protocol.md -->
+<!-- @source agents/shared/startup-protocol.md L1-L12 -->
+## Startup Protocol (Shared Steps)
+
+Execute in order. No step may be skipped.
+
+1. **Read dispatch instructions** completely — identify scope, inputs, output path
+2. **Parse scope boundaries** — extract DO and DON'T lists from dispatch
+3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
+4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
+5. **Check `.github/skills/`** for relevant skills
+6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries
+
+After shared steps, execute role-specific startup additions defined in source.
 
 ### Compiler Startup Additions
 After shared steps: (7) Verify source exists/readable. (8) Identify mode (FULL/CONSERVATIVE/VALIDATE). (9) Check `preserve_sections`. (10) Infer style from source.
@@ -161,7 +180,26 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 **Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
 
 ## 14. Constraint Lists
-<!-- @include agents/shared/constraints.md -->
+<!-- @source agents/shared/constraints.md L1-L19 -->
+## Shared Constraints
+
+### ALWAYS (All Agents)
+
+1. **Verify scope fence** at startup — recite DO/DON'T
+2. **Check `.ai/library/patterns/`** before proposing approaches — avoid contradictions
+3. **Write output to files** — file-mediated state, never conversation-mediated
+4. **Create `_handoff.md`** before terminating — handoff enables resumption
+5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
+6. **Scan `ai_status.md`** Human Input section at phase boundaries
+7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
+
+### NEVER (All Agents)
+
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+2. **Return output in conversation** — write to files; downstream reads files
+3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
+4. **Combine research with implementation** — always separate SAs
+5. **Skip quality gates** — gates are checkpoints, not suggestions
 
 ### Compiler-Specific ALWAYS
 1. **Report token counts** before and after — metrics MANDATORY

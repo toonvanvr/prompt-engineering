@@ -15,11 +15,23 @@ cat > "$tmpdir/.vscode/settings.json" <<'JSONC'
 JSONC
 
 output=$(bash bin/install.sh "$tmpdir" 2>&1 || true)
-# Installer should exit 0 (not abort), so ensure it didn't error out fatally
-if echo "$output" | grep -q "could not be parsed by jq"; then
-  echo "OK: JSONC detected and warning emitted"
+
+# New behavior: grep-based JSONC handling adds settings without jq
+# Verify that recommended keys were added to the JSONC file
+if grep -q '"chat.useAgentSkills"' "$tmpdir/.vscode/settings.json"; then
+  echo "OK: settings added to JSONC file"
 else
-  echo "FAIL: expected JSONC warning, got:\n$output" >&2
+  echo "FAIL: expected settings to be added to JSONC file" >&2
+  echo "--- settings file ---" >&2
+  cat "$tmpdir/.vscode/settings.json" >&2
+  exit 2
+fi
+
+# Verify the existing setting is still present
+if grep -q '"existing"' "$tmpdir/.vscode/settings.json"; then
+  echo "OK: existing settings preserved"
+else
+  echo "FAIL: existing settings were lost" >&2
   exit 2
 fi
 

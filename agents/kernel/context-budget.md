@@ -194,3 +194,6 @@ Tree scan before deep read.
 Verify after summarization.
 Overflow? → Sub-agent.
 ```
+
+### 80% Ceiling (Hard Limit)
+At 80% estimated context capacity: stop loading new context. Checkpoint state to files, summarize working memory, or spawn sub-agent. This is a gate, not a guideline. Continuing past 80% degrades all subsequent output.

@@ -109,3 +109,6 @@ Add to agent ALWAYS lists:
 |Kernel files|MANDATORY|
 |Reference files|RECOMMENDED|
 |Examples|OPTIONAL|
+
+### Read-Before-Write Guard
+Before creating/modifying any output file: read existing content at that path (or confirm it doesn't exist). Writing without reading = overwrite risk. Applies to all agents, all stakes levels.

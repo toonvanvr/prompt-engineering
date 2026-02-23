@@ -32,6 +32,7 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |`output-budget.md`|Output token limits|ADJUSTABLE|
 |`thoroughness.md`|Context reading rules|STABLE|
 |`glossary.md`|Shared terminology|STABLE|
+|`pattern-system.md`|Pattern conflict prevention and naming|STABLE|
 
 ## Library Patterns
 
@@ -46,6 +47,22 @@ Learned patterns that inform agent behavior. Stored in `.ai/library/` and refere
 |Context Overflow Signals|`.ai/library/quirks/context-overflow-signals.md`|Detecting and mitigating context window exhaustion|
 |Dispatch SA (Skill)|`.github/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
 |Post-SA Review (Skill)|`.github/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
+|Include Deduplication|`.ai/library/patterns/include-deduplication.md`|Composable @include fragments for source file deduplication|
+|Two-Phase Compilation|`.ai/library/patterns/two-phase-compilation.md`|Separate resolution from compression for incremental builds|
+|Reference Extraction|`.ai/library/patterns/reference-extraction.md`|Move detail tables to reference/, keep summaries in source|
+
+### Recent Rule Additions
+
+New rules added to existing kernel files during the 2026-02-23 overhaul:
+
+|File|Rule Added|Purpose|
+|-|-|-|
+|`thoroughness.md`|Read-Before-Write Guard|Require full file read before modification|
+|`tool-stakes.md`|Tool Discipline (Purpose Clarity, 3-Call Rule, Failure Budget)|Prevent aimless tool usage|
+|`quality-gates.md`|Deliverable Gate|Verify deliverable count and scope before handoff|
+|`output-budget.md`|Concept Compression|Reduce redundant concept explanations|
+|`context-budget.md`|80% Ceiling (Hard Limit)|Hard cap on context window usage|
+|`feedback-collection.md`|End-of-Session Processing|Mandatory feedback write before termination|
 
 ## Editing Rules
 

@@ -28,6 +28,9 @@ Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.
 |`bin/`|Installer script (`install.sh`)|YES|
 |`agents/source/`|Human-readable agent definitions|YES|
 |`agents/compiled/`|Generated, token-optimized|NO (generated)|
+|`agents/precompiled/`|Resolved intermediary files (.pre.md)|NO (generated)|
+|`agents/shared/`|Composable source fragments (@include targets)|YES|
+|`agents/reference/`|Detail tables/schemas for compilation|YES|
 |`agents/kernel/`|Inherited behavioral rules|YES (carefully)|
 |`.github/skills/`|Agent Skills (committed, VS Code native)|YES|
 |`.ai/scratch/`|Ephemeral working space|YES (temporary)|

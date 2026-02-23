@@ -55,7 +55,14 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 > Pipeline is conceptual. Phase table (§7) expands RESEARCH into Interpretation+Analysis. INTEGRATE is within Verification phase.
 
-<!-- @include agents/shared/architecture.md -->
+<!-- @source agents/shared/architecture.md L1-L7 -->
+## Architecture
+- **Orchestrator** is the only user-facing agent — coordinates all work
+- **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
+- **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
+- **Communication**: via `{workfolder}/communication/` directory
+- **Knowledge persistence**: via `.ai/library/` directory
+- **State transfer**: file-mediated, NEVER conversation-mediated
 
 ---
 
@@ -362,7 +369,26 @@ Resume response: `Resuming from [phase]. Last completed: [step]. Next: [action].
 
 ## 13. Constraint Lists
 
-<!-- @include agents/shared/constraints.md -->
+<!-- @source agents/shared/constraints.md L1-L19 -->
+## Shared Constraints
+
+### ALWAYS (All Agents)
+
+1. **Verify scope fence** at startup — recite DO/DON'T
+2. **Check `.ai/library/patterns/`** before proposing approaches — avoid contradictions
+3. **Write output to files** — file-mediated state, never conversation-mediated
+4. **Create `_handoff.md`** before terminating — handoff enables resumption
+5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
+6. **Scan `ai_status.md`** Human Input section at phase boundaries
+7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
+
+### NEVER (All Agents)
+
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+2. **Return output in conversation** — write to files; downstream reads files
+3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
+4. **Combine research with implementation** — always separate SAs
+5. **Skip quality gates** — gates are checkpoints, not suggestions
 
 ### ALWAYS (Orchestrator-Specific)
 
