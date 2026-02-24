@@ -112,11 +112,13 @@ cumulative_load = (deep_reads × 40) + (skim_reads × 10) + (output_lines × 2)
 ### No Re-Read Rule
 
 Files read in prior phases MUST NOT be re-read. Use:
-- Handoff summaries
-- Extracted references
-- Cached decisions
+- SA handoff files (`_handoff.md`) — structured, ≤80 lines
+- Lightweight verification (`verification-methods.md`)
+- Cached decisions from `progress.md`
 
-Exception: File modified since last read.
+Exception: File modified since last read (verify via `git diff --stat`, not full re-read).
+
+**Clarification:** "Never assume context survives SA boundary" means use FILE HANDOFFS for state transfer. It does NOT mean re-read files processed by an SA. See `model-behavior.md`.
 
 ---
 

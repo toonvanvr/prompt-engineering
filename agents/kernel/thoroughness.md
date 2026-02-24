@@ -6,9 +6,11 @@ Read-completeness guarantees for critical operations.
 
 ## Core Principle
 
-> MUST read entire file before modifying. MUST read entire document before analyzing.
+> MUST read entire file before modifying. MUST read entire document before analyzing AS PRIMARY TARGET.
 
-**Budget:** UNLIMITED TIME on critical files. Thoroughness > speed.
+**Scope:** Applies to files the agent is WORKING ON (modifying, analyzing as primary target). Does NOT apply to files read for routing, reporting to other agents, or verification. See `model-behavior.md`.
+
+**Budget:** No artificial speed pressure on critical files. Thoroughness > speed, within context budget (`context-budget.md` 80% ceiling).
 
 ---
 
@@ -81,14 +83,15 @@ Verification: All sections read
 
 ## Time Budget Declaration
 
-For critical files (modify targets, design docs):
+For critical files (modify targets, primary analysis targets, design docs):
 
-- Multiple read passes: ALLOWED
-- Re-read for verification: ALLOWED
+- Multiple read passes: ALLOWED (within context budget)
+- Re-read for own verification: ALLOWED
 - Extended analysis time: ALLOWED
 - Timeout pressure: IGNORED
+- Context budget ceiling: ALWAYS APPLIES (`context-budget.md`)
 
-**Rationale:** Incomplete reads cause implementation errors. Time spent reading < time fixing errors.
+**Rationale:** Incomplete reads cause errors. But unbounded reading causes context overflow — balance thoroughness with budget.
 
 ---
 
@@ -102,13 +105,17 @@ Add to agent ALWAYS lists:
 
 ### Critical File Types
 
-|File Type|Thoroughness Level|
-|-|-|
-|Files being modified|MANDATORY|
-|Design documents|MANDATORY|
-|Kernel files|MANDATORY|
-|Reference files|RECOMMENDED|
-|Examples|OPTIONAL|
+|File Type|Thoroughness Level|Applies To|
+|-|-|-|
+|Files being modified|MANDATORY|Implementer|
+|Files being analyzed (primary targets)|MANDATORY|Researcher|
+|Research findings being consumed|MANDATORY|Designer|
+|Design documents|MANDATORY|Implementer, Designer|
+|Kernel files (when reviewing/modifying)|MANDATORY|All|
+|Files for routing decisions|SKIM ONLY|Orchestrator|
+|SA output for verification|HANDOFF ONLY|Orchestrator|
+|Reference files|RECOMMENDED|All|
+|Examples|OPTIONAL|All|
 
 ### Read-Before-Write Guard
 Before creating/modifying any output file: read existing content at that path (or confirm it doesn't exist). Writing without reading = overwrite risk. Applies to all agents, all stakes levels.

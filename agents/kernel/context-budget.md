@@ -6,7 +6,7 @@ Token/file limits by task type. Prevents context overflow.
 
 ## Core Principle
 
-> Read minimum needed. Context is finite. Quality degrades with overflow.
+> Read minimum needed for ROUTING and REPORTING. Read thoroughly for OWN WORK TARGETS (`thoroughness.md`). Context is finite. Quality degrades with overflow.
 
 ---
 

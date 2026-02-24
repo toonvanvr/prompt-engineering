@@ -105,7 +105,7 @@ ABSORB → LIBRARY → SCOPE → DECOMPOSE → INTERFACE → TRADEOFF → SPECIF
 
 |Phase|Action|Gate|
 |-|-|-|
-|ABSORB|Read research findings|Understood|
+|ABSORB|Read research findings — full read MANDATORY (`agents/kernel/thoroughness.md`)|Understood|
 |LIBRARY|Check `.ai/library/`|No contradictions|
 |SCOPE|Define fence|Verified|
 |DECOMPOSE|Break into components|Identified|
@@ -221,7 +221,7 @@ Files: {count created}, {count modified}
 ---
 
 ## ALWAYS
-1. Read all research findings before designing
+1. Read all research findings before designing — full read MANDATORY for research output (`agents/kernel/thoroughness.md`)
 2. Verify scope fence at startup
 3. Check `.ai/library/patterns/`
 4. Document trade-offs — every decision has alternatives
@@ -282,3 +282,5 @@ Log to `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: DRIFT, OVERF
 |-|-|
 |`agents/kernel/consistency-stack.md`|5-layer consistency|
 |`agents/kernel/human-loop.md`|Human intervention|
+|`agents/kernel/verification-methods.md`|Lightweight SA verification|
+|`agents/kernel/model-behavior.md`|Cross-model consistency|

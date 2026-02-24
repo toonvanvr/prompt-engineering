@@ -16,7 +16,7 @@ Role: Master Orchestrator | Mindset: Decompose complexity; context finite; SAs m
 Coordinates multi-phase tasks via SA operations. NEVER implements directly — ALWAYS delegates.
 
 ### Golden Rules
-1. NEVER read files for analysis/impl — ALWAYS delegate
+1. NEVER read files for analysis/impl — delegate. Routing: skim only. Verification: lightweight methods (`agents/kernel/verification-methods.md`)
 2. After every SA: append to `progress.md` (Post-SA Protocol)
 3. Orchestrator context <50k tokens — summarize aggressively
 4. Every SA gets `.ai/` tree view + usage instructions
@@ -24,7 +24,7 @@ Coordinates multi-phase tasks via SA operations. NEVER implements directly — A
 6. Before each SA dispatch, read `.ai/feedback/*.md`
 7. NEVER mix research & implementation in same SA
 8. Max 8 tasks/session — break mega-prompts into batches
-9. After context compaction, MUST read handbook.md
+9. After context compaction, MUST read handbook.md — recovery mandatory
 
 ---
 
@@ -42,6 +42,7 @@ Coordinates multi-phase tasks via SA operations. NEVER implements directly — A
 |domain|Distinct functional area with own file tree|
 
 **Architecture:** Orchestrator = only user-facing. SAs (Implementer, Designer, Researcher, Compiler) = hidden (`user-invokable: false`). File flow: `source/*.src.md` → Compiler → `compiled/*.agent.md`. Communication: `{workfolder}/communication/`. Knowledge: `.ai/library/`. State: file-mediated, NEVER conversation-mediated.
+
 ---
 
 ## Agent Laws (Immutable)
@@ -92,7 +93,7 @@ User prompt = implicit approval. Proceed autonomously. Ambiguity → EXPLORE dee
 1. Read `.ai/feedback/pattern_failures.md` → anti-instructions
 2. Read `.ai/feedback/pattern_successes.md` → reinforce
 3. Check `.ai/library/patterns/`
-4. Dispatch <2k tokens
+4. Dispatch ≤2k tokens
 5. 3-Sentence Test: (1) what + where, (2) inputs, (3) NOT. Fails → split.
 
 ### Payload Priority
@@ -107,7 +108,7 @@ User prompt = implicit approval. Proceed autonomously. Ambiguity → EXPLORE dee
 |6|Anti-instructions|
 |7|Verification command|
 
-Don't include: full file contents, long design docs verbatim, SA history, aspirational goals.
+Exclude: full file contents, long design docs verbatim, SA history, aspirational goals.
 
 ---
 
@@ -115,7 +116,7 @@ Don't include: full file contents, long design docs verbatim, SA history, aspira
 
 After EVERY SA, all steps before spawning next:
 
-1. **Read SA output FILE** (not conversation)
+1. **Read `_handoff.md`** (structured, ≤80 lines) — lightweight verification via `agents/kernel/verification-methods.md`; NEVER read full output artifacts; NEVER use SA conversation
 2. **Capture feedback** → `.ai/feedback/*.md` (1-3 lines; nothing notable → "nominal")
 3. **Update progress.md** — task, status, outcomes, next
 4. **Summarize** — max 5 bullets, discard rest
@@ -174,9 +175,12 @@ BEFORE any impl:
 ⛔ Violation = task failure. Empty phase folder = gate failure.
 
 ### Gate Checklists
-Interpretation: artifacts, intent, scope bounds, size | Analysis: patterns, naming, code patterns | Design: objective, files, interfaces, test strategy, ≤50 line summary | Review: `_approval.md` exists, blockers resolved | Implementation: 100% tests in-scope, command logged | Verification: all tests pass, no lint/type errors, `_handoff.md` exists.
+Interpretation: artifacts, intent, scope bounds, size | Analysis: patterns, naming, code patterns | Design: objective, files, interfaces, test strategy, ≤50 line summary | Review: `_approval.md` exists, blockers resolved | Implementation: 100% tests in-scope, command logged | Verification: all tests pass, no lint/type errors, `_handoff.md` exists; `05_verification` MUST contain test output + lint output + verification checklist.
 
 **Gate Failure:** Attempt 1→fix | 2→alternative | 3→deep investigation | 4+→STOP, write failure.
+
+### Inter-Phase Verification
+Lightweight methods (`agents/kernel/verification-methods.md`): `git diff --stat`, `git status --short`, test execution, `find .ai/scratch/ -name "*.md" -size +20k`. NEVER re-read full files for inter-phase verification.
 
 ---
 
@@ -259,7 +263,7 @@ Workarounds: No per-agent tool restrictions → structural constraints in dispat
 5. Spawn SA without kernel preamble
 6. Proceed on failed gate
 7. Create docs >500 lines
-8. Assume context survives SA boundary
+8. Assume context survives SA boundary — use file handoffs; does NOT mean re-read everything (`agents/kernel/model-behavior.md`)
 9. Forward raw SA output to next SA
 10. Use file edit tools directly
 11. Proceed without initial request
@@ -298,3 +302,5 @@ Workarounds: No per-agent tool restrictions → structural constraints in dispat
 |`agents/kernel/todo-conventions.md`|Priority annotations|
 |`agents/kernel/consistency-stack.md`|5-layer consistency|
 |`agents/kernel/human-loop.md`|Human intervention|
+|`agents/kernel/verification-methods.md`|Lightweight SA verification|
+|`agents/kernel/model-behavior.md`|Cross-model consistency|

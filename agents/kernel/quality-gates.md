@@ -173,6 +173,10 @@ FAIL detected
 |Content matches|Structure correct|Required sections present|
 |Command output|Tests/tools|`npm test` exit 0|
 |Explicit statement|User approval|"Design approved" in chat|
+|SA handoff|SA-reported completion|`_handoff.md` with `Status: COMPLETE`|
+|Lightweight check|Verify scope/existence|`git diff --stat`, `wc -l` (`verification-methods.md`)|
+
+**SA Handoff as Evidence:** `Status: COMPLETE` + `Confidence: HIGH` → gate passes without re-reading full output. Handoff IS evidence. See `verification-methods.md`.
 
 ---
 

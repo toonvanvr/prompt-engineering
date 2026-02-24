@@ -234,4 +234,22 @@ Frontmatter = agent configuration — NEVER compress or alter.
 
 ## Kernel References
 
-> Key: `three-laws.md`, `quality-gates.md`, `mode-protocol.md`, `tool-stakes.md`, `context-budget.md`, `prompt-preservation.md`, `consistency-stack.md` (all in `agents/kernel/`).
+### Core
+|File|Purpose|
+|-|-|
+|`agents/kernel/three-laws.md`|Immutable behavioral laws|
+|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
+|`agents/kernel/tool-stakes.md`|Risk classification|
+|`agents/kernel/context-budget.md`|Token limits|
+|`agents/kernel/self-analysis.md`|Issue logging|
+|`agents/kernel/escalation.md`|Error recovery|
+|`agents/kernel/prompt-preservation.md`|Prompt audit trail|
+|`agents/kernel/consistency-stack.md`|5-layer consistency|
+|`agents/kernel/glossary.md`|Shared terminology|
+
+### Extended
+|File|Purpose|
+|-|-|
+|`agents/kernel/verification-methods.md`|Lightweight SA verification|
+|`agents/kernel/model-behavior.md`|Cross-model consistency|

@@ -171,7 +171,7 @@ Required sections: Header (date/status/research source), Overview, Scope (in/out
 
 ### Designer-Specific ALWAYS
 
-1. **Read all research findings** before designing — absorb the problem space
+1. **Read all research findings** before designing — full read MANDATORY for research output files (`agents/kernel/thoroughness.md`); absorb completely
 2. **Document trade-offs explicitly** — every decision has alternatives with rationale
 3. **Specify concrete file paths** — no "somewhere in src"
 4. **Define interfaces precisely** — inputs, outputs, errors, constraints

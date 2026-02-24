@@ -8,6 +8,8 @@ Mandatory spawning rules. Non-bypassable.
 
 > Task exceeds capacity → Spawn sub-agent. No exceptions.
 
+**Orchestrator only.** Only the orchestrator spawns SAs (via `runSubAgent`). SAs CANNOT spawn other SAs — if an SA hits a threshold, it documents the need in `_handoff.md` and the orchestrator decides.
+
 ---
 
 ## Spawning Thresholds

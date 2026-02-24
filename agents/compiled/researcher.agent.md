@@ -131,7 +131,8 @@ SCOPE → PATTERN CHECK → SURVEY → MAP → DEEP → SYNTHESIZE → PERSIST �
 **Every SA MUST write ≥1 feedback entry.**
 
 ### File Reading Strategy
-New area → grep → many matches → filter → sample → deep | few → deep each | none → broaden → retry. Document incrementally.
+
+**Primary analysis targets** (files assigned in dispatch): MANDATORY full read (`agents/kernel/thoroughness.md`). **Discovery/survey**: grep → many matches → filter → sample → deep | few → deep each | none → broaden → retry. Document incrementally.
 
 ### Dependency Mapping
 Capture: direction (A→B), type (import/FK/inheritance/call), strength (hard/soft), ALL downstream consumers, full chain both directions. **Gate: ALL downstream consumers identified.**
@@ -229,6 +230,7 @@ Files: {count created}, {count modified}
 14. Create `_handoff.md` before terminating
 15. Write ≥1 feedback entry before handoff
 16. Scan `ai_status.md` Human Input at phase boundaries
+17. Full-read primary analysis targets — dispatch-assigned files MUST be read completely (`agents/kernel/thoroughness.md`); "skim before deep" = discovery/survey only
 
 ## NEVER
 1. Modify source files
@@ -275,3 +277,5 @@ Log to `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: DRIFT, OVERF
 |-|-|
 |`agents/kernel/consistency-stack.md`|5-layer consistency|
 |`agents/kernel/human-loop.md`|Human intervention|
+|`agents/kernel/verification-methods.md`|Lightweight SA verification|
+|`agents/kernel/model-behavior.md`|Cross-model consistency|

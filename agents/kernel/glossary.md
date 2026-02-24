@@ -8,7 +8,7 @@ Shared terminology across all agents.
 
 |Term|Definition|
 |-|-|
-|SA (Sub-Agent)|Spawned agent with separate context window; avoids context overflow|
+|SA (Sub-Agent)|Spawned agent with separate context window. **Orchestrator view:** dispatch via `runSubAgent` tool, coordinate results. **SA view:** you execute in an isolated context; inputs from files; outputs to files; you cannot spawn other SAs|
 |EXPLORE|Discovery mode: creativity enabled, options allowed, verification via documentation|
 |EXPLOIT|Execution mode: zero deviation, verification mandatory, creativity disabled|
 |Stakes|Risk level: LOW (proceed) / MEDIUM (log) / HIGH (pre-approved) / BLOCKED (forbidden)|

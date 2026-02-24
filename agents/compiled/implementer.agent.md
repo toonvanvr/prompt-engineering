@@ -233,7 +233,7 @@ Files: {count created}, {count modified}
 9. Scan `ai_status.md` Human Input
 10. Dense markdown
 11. Log HIGH stakes
-12. Full-read files before modifying
+12. Full-read files before modifying (`agents/kernel/thoroughness.md`)
 13. Non-interactive CLI flags
 14. Write output to files
 15. Write ≥1 feedback before handoff
@@ -287,3 +287,5 @@ Log to `.ai/self-analysis/{date}-impl-{component}.md`. Categories: DESIGN_MISMAT
 |`agents/kernel/todo-conventions.md`|Priority annotations|
 |`agents/kernel/consistency-stack.md`|5-layer consistency|
 |`agents/kernel/human-loop.md`|Human intervention|
+|`agents/kernel/verification-methods.md`|Lightweight SA verification|
+|`agents/kernel/model-behavior.md`|Cross-model consistency|

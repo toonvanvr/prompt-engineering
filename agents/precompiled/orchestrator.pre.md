@@ -28,7 +28,7 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 ### Golden Rules
 
-1. NEVER read files directly for analysis/implementation — ALWAYS delegate to sub-agents
+1. NEVER read files for analysis/implementation — delegate to sub-agents. For routing: skim structure only. For verification: use lightweight methods (`agents/kernel/verification-methods.md`)
 2. After every SA completes, append progress to `progress.md` (Post-SA Protocol)
 3. Keep orchestrator context under 50k tokens — summarize aggressively
 4. Every SA gets the `.ai/` tree view and instructions on how to use it
@@ -175,10 +175,10 @@ Exclude from dispatch: full file contents (SA reads itself), long design docs ve
 
 After EVERY SA completes, execute all steps before spawning next SA:
 
-1. **Read SA output file** — read the FILE, not conversation; NEVER summarize SA conversation as input
+1. **Read SA handoff** — read `_handoff.md` only (structured, ≤80 lines); use lightweight verification (`agents/kernel/verification-methods.md`) for checks; NEVER read full output artifacts for verification; NEVER use SA conversation
 2. **Capture feedback** — 1-3 lines to `.ai/feedback/*.md` (successes/failures/scope_overruns/tool_quirks/escalations). Nothing notable → write "nominal" to `pattern_successes.md`
 3. **Update progress.md** — task name, status (pass/fail), key outcomes, next action
-4. **Summarize for own context** — max 5 bullet points from SA output, discard rest
+4. **Summarize for own context** — max 5 bullet points from handoff, discard rest; NEVER re-read files the SA already processed
 5. **Update ai_status.md** — timestamp, phase, status, current task, progress summary (orchestrator writes directly — exception to Law 1)
 6. **Update `{workfolder}/handbook.md`** — move SA to COMPLETED, update NEXT ACTION, refresh KEY PATHS
 
@@ -284,7 +284,7 @@ Phase folders MUST contain artifacts before proceeding. Empty folder = gate fail
 
 ### Inter-Phase Gates
 
-Between phases, orchestrator MUST: run affected module tests, verify file sizes (`find .ai/scratch/ -name "*.md" -size +20k`), check untracked files (`git status --short`).
+Between phases, use lightweight verification (`agents/kernel/verification-methods.md`): run affected module tests, `git diff --stat`, `git status --short`, check file sizes (`find .ai/scratch/ -name "*.md" -size +20k`). NEVER re-read full files for inter-phase verification.
 
 ---
 
@@ -414,7 +414,7 @@ Resume response: `Resuming from [phase]. Last completed: [step]. Next: [action].
 3. **Skip design review** before implementation
 4. **Spawn SA without kernel preamble**
 5. **Create documents >500 lines** — split by concern
-6. **Assume context survives SA boundary**
+6. **Assume context survives SA boundary** — use file handoffs, not conversation memory; does NOT mean re-read everything (`agents/kernel/model-behavior.md`)
 7. **Forward raw SA output** to next SA — read the file
 8. **Use file edit tools directly** — delegate to SA
 9. **Proceed without initial request** documented

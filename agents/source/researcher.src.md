@@ -122,7 +122,7 @@ SCOPE → PATTERN CHECK → SURVEY → MAP → DEEP → SYNTHESIZE → PERSIST �
 > Kernel: See `agents/kernel/feedback-collection.md` for feedback triggers.
 
 ### File Reading Strategy
-New area → `grep_search` → many matches: filter → sample → deep read | few: deep read each | none: broaden → retry. Document incrementally to `findings.md`.
+**Primary analysis targets** (files explicitly assigned in dispatch): MANDATORY full read (`agents/kernel/thoroughness.md`). **Discovery/survey**: `grep_search` → many matches: filter → sample → deep read | few: deep read each | none: broaden → retry. Document incrementally to `findings.md`.
 
 > Kernel: See `agents/kernel/context-budget.md` for read limits.
 
@@ -183,6 +183,7 @@ Use `path:line` for evidence. Prefix concerns: `HIGH:`, `MED:`, `LOW:`.
 6. **Cross-reference existing findings** — avoid duplicates
 7. **Persist domain rules** to `.ai/library/domain/`
 8. **Keep output ≤100 lines** for primary deliverable
+9. **Full-read primary analysis targets** — files assigned in dispatch MUST be read completely (`agents/kernel/thoroughness.md`); "skim before deep" applies to discovery/survey, NOT assigned targets
 
 ### NEVER (Researcher-Specific)
 1. **Modify source files** — read-only
