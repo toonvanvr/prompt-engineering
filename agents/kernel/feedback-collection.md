@@ -101,16 +101,23 @@ Feedback collection MUST be grounded in observable events, not internal model st
 
 ---
 
-## Sync to prompt-engineering
+## Feedback Lifecycle
 
-Feedback is stored in `.ai/feedback/` and created by `tvv-pe init`:
+### Collection (Current)
+Raw entries appended to `.ai/feedback/{category}.md` per SA.
 
-- `.ai/feedback/` — feedback collection directory
-- `.ai/library/` — shared knowledge library
+### Compilation (Orchestrator Duty)
+At session end or when `hot/` exceeds 20 lines:
+1. Review raw entries + hot/ entries
+2. Distill still-relevant patterns → `hot/active-warnings.md` or `hot/active-wins.md`
+3. Archive resolved entries → `archive/{date}-compilation.md`
+4. Hot/ total MUST stay ≤20 lines
 
-Feedback written to `.ai/feedback/` is immediately accessible.
+### Application (Pre-Dispatch)
+Orchestrator reads `hot/` before every SA dispatch. Hot entries become anti-instructions or reinforcements in dispatch.
 
-The Compiler agent processes feedback to update kernel rules.
+### Promotion
+Validated hot/ entries with 3+ confirmations → promote to `.ai/library/patterns/`.
 
 ---
 

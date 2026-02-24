@@ -95,6 +95,18 @@ For critical files (modify targets, primary analysis targets, design docs):
 
 ---
 
+## Ellipsis Expansion
+
+When generating ANY list ending with `..`, `...`, or similar:
+1. STOP — do not emit the ellipsis
+2. Spend reasoning time: what concrete items remain unstated?
+3. Either enumerate them explicitly or state "N additional items omitted: {category}"
+4. Ellipsis in OUTPUT = specification defect
+
+Applies to: agent output, design specs, dispatch scopes, handoffs. Does NOT apply to quoting user input that contains ellipsis.
+
+---
+
 ## Integration
 
 Add to agent ALWAYS lists:

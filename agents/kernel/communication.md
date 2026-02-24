@@ -123,14 +123,26 @@ AI updates `communication/ai_status.md`:
 5. ELSE → continue
 ```
 
-### Checkpoint Triggers
+### Checkpoint Protocol
+
+#### Orchestrator Checkpoints (3 structural events)
 
 |Checkpoint|When|
 |-|-|
-|Task-start|Session initialization|
-|Phase-start|Before Analysis/Design/Review/Implementation|
-|Pre-gate|Before phase gate verification|
-|Pre-handoff|Before creating handoff document|
+|Session-start|After orchestrator startup completes|
+|Pre-SA-dispatch|Before dispatching any sub-agent|
+|Pre-handoff|Before writing final session handoff|
+
+#### SA Checkpoints (2 structural events)
+
+|Checkpoint|When|
+|-|-|
+|SA-start|During SA startup protocol (first action)|
+|SA-pre-handoff|Before SA writes handoff document (last action)|
+
+**Scaling property**: Orchestrator checks = SA_count + 2 (startup + handoff). SA count scales naturally with task complexity.
+
+**Do NOT scan** at any other time. Do NOT scan between Post-SA Protocol steps, during file operations, or on a time-based schedule. No frequency words ("regularly", "periodically", "at key points").
 
 ### Status Update Frequency (MANDATORY)
 

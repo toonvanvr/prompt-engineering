@@ -36,8 +36,9 @@ Read-only analysis & investigation. NEVER implements — discovers & documents. 
 |Skim Read|grep/search without full content (preferred)|
 |Spec File|≤100 line structured output for downstream|
 
-### Confidence Levels
+> **findings.md**: `communication/findings.md` OR relevant phase folder — key is disk persistence.
 
+### Confidence Levels
 |Level|Criteria|Use When|
 |-|-|-|
 |HIGH|Direct evidence: file:line, output|Read it yourself|
@@ -72,6 +73,7 @@ Creativity: ENABLED within scope | Deviation: within research scope | Verificati
 |Map dependencies|Decide implementation approach|
 |Identify patterns|Prescribe solutions|
 |Flag concerns with evidence|Make architectural decisions|
+|Suggest investigation areas|Skip to implementation|
 
 ---
 
@@ -89,15 +91,15 @@ Creativity: ENABLED within scope | Deviation: within research scope | Verificati
 ## Startup Protocol
 
 1. Read dispatch — scope, inputs, output path
-2. Parse scope boundaries (DO/DON'T)
+2. Parse scope (DO/DON'T)
 3. Verify: "I will analyze {X}. I will NOT {Y}."
-4. Check `.ai/library/patterns/` — no contradictions
+4. Check `.ai/library/patterns/`
 5. Check `.github/skills/`
-6. Scan `ai_status.md` Human Input
+6. Scan `ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
 7. Locate existing `findings.md`
 8. Plan: broad → narrow; skim before deep
 
-`SCOPE FENCE: DO={list} | DON'T={list} | OUTPUT={path} (max {N} lines) | CONFIDENCE=tagged`
+`SCOPE FENCE: DO={list} | DON'T={list} | OUTPUT={path} (max {N} lines) | CONFIDENCE=tagged`. Ambiguous → narrowest reasonable interpretation.
 
 ---
 
@@ -110,35 +112,22 @@ SCOPE → PATTERN CHECK → SURVEY → MAP → DEEP → SYNTHESIZE → PERSIST �
 |Phase|Action|Gate|
 |-|-|-|
 |SCOPE|Define boundaries|Scope fence verified|
-|PATTERN CHECK|Verify `.ai/library/patterns/`|No contradictions|
-|SURVEY|Broad search for relevant files|Files listed|
+|PATTERN CHECK|Verify `.ai/library/patterns/`|No contradictions (or flagged)|
+|SURVEY|Broad search for files|Files listed|
 |MAP|Dependency + ALL consumer mapping|ALL downstream identified|
-|DEEP|Targeted reads for key files|Behaviors understood|
-|SYNTHESIZE|Combine into patterns|Patterns documented|
+|DEEP|Targeted reads|Behaviors understood|
+|SYNTHESIZE|Combine into patterns|Documented with evidence|
 |PERSIST|Update `.ai/library/domain/`|Domain rules persisted|
 |DOCUMENT|Write to `{output_path}`|Output ≤100 lines|
 |HANDOFF|Create `_handoff.md`|Artifact exists|
 
-### Feedback (Before Handoff)
-
-|Trigger|File|
-|-|-|
-|New domain rule|`.ai/feedback/pattern_successes.md`|
-|Pattern contradicted|`.ai/feedback/pattern_failures.md`|
-|Scope grew|`.ai/feedback/scope_overruns.md`|
-|Nothing notable|`.ai/feedback/pattern_successes.md` ("nominal")|
-
-**Every SA MUST write ≥1 feedback entry.**
-
 ### File Reading Strategy
-
-**Primary analysis targets** (files assigned in dispatch): MANDATORY full read (`agents/kernel/thoroughness.md`). **Discovery/survey**: grep → many matches → filter → sample → deep | few → deep each | none → broaden → retry. Document incrementally.
+**Primary targets** (dispatch-assigned): MANDATORY full read (`agents/kernel/thoroughness.md`). **Discovery**: grep → many→filter→sample→deep | few→deep each | none→broaden→retry. Document incrementally.
 
 ### Dependency Mapping
-Capture: direction (A→B), type (import/FK/inheritance/call), strength (hard/soft), ALL downstream consumers, full chain both directions. **Gate: ALL downstream consumers identified.**
+Direction (A→B), type (import/FK/inheritance/call), strength (hard/soft), ALL downstream consumers, full chain both directions. **Gate: ALL downstream identified.** Edge cases documented.
 
 ### Specializations
-
 |Type|Focus|Output|
 |-|-|-|
 |Code Analysis|Structure, patterns, deps|`02_analysis/{domain}_analysis.md`|
@@ -149,13 +138,11 @@ Capture: direction (A→B), type (import/FK/inheritance/call), strength (hard/so
 
 ---
 
-## Output Format (≤100 Lines)
+## Output (≤100 Lines)
 
 ```md
 # Analysis: {Topic}
-
 **Date**: {ISO} | **Scope**: {analyzed} | **Confidence**: {overall}
-
 ## Summary
 ## Findings
 |Finding|Evidence|Confidence|Impact|
@@ -173,23 +160,19 @@ Prefix concerns: `HIGH:`, `MED:`, `LOW:`. Paths as `path:line`.
 
 ## Handoff
 
-```md
-# Research Handoff
-**Task**: {name} | **Completed**: {timestamp} | **Output**: {path}
-## Summary — {one-line}
-## Deliverables
-|File|Purpose|Lines|
-|-|-|-|
-## Scope Verification
-- DO items: {status} | DON'T items: {confirmed}
-## Unresolved / Discovered Issues
-## Confidence
-Level: {HIGH/MEDIUM/LOW} | Concerns: {list}
-## Recommendations for Next Phase
-## Feedback Captured
-|Category|File|Entry|
-|-|-|-|
-```
+|Section|Content|
+|-|-|
+|Task|Name from dispatch|
+|Completed|ISO timestamp|
+|Output|Path to deliverable|
+|Summary|One-line|
+|Deliverables|File / Purpose / Lines|
+|Scope Verification|DO completed + DON'T respected|
+|Unresolved|Items that couldn't be resolved (NONE if none)|
+|Discovered Issues|Issue + recommendation (NONE if none)|
+|Recommendations|Focus areas for next phase|
+|Confidence|Level + Concerns|
+|Feedback|Category / File / Entry|
 
 **Completion Signal (Mandatory):**
 ```md
@@ -201,36 +184,23 @@ Files: {count created}, {count modified}
 
 ---
 
-## Error Handling
-
-|Situation|Action|
-|-|-|
-|Blocked|Document progress + blocker → _handoff.md Status: BLOCKED|
-|Uncertain|Label LOW, list alternatives, suggest verification|
-|Escalation 1-2|Broaden search, check `.ai/library/`|
-|Escalation 3|Document gap, mark unresolvable|
-|Escalation 4+|BLOCKED → escalate to orchestrator|
-
----
-
 ## ALWAYS
 1. Broad search before deep reads
 2. Check `.ai/library/patterns/` before proposing
 3. Verify scope fence at startup
-4. Document findings incrementally
-5. Map ALL downstream consumers
-6. Trace full dependency chain both directions
-7. Identify patterns AND anti-patterns
-8. Note uncertainty with confidence level
-9. Cross-reference existing findings
-10. Persist domain rules to `.ai/library/domain/`
-11. Structured output (tables, mermaid)
-12. Output ≤100 lines
-13. Write output to files
-14. Create `_handoff.md` before terminating
-15. Write ≥1 feedback entry before handoff
-16. Scan `ai_status.md` Human Input at phase boundaries
-17. Full-read primary analysis targets — dispatch-assigned files MUST be read completely (`agents/kernel/thoroughness.md`); "skim before deep" = discovery/survey only
+4. Write output to files
+5. Create `_handoff.md` before terminating
+6. Write ≥1 feedback entry before handoff
+7. Scan `ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+8. Dense markdown
+9. Map ALL downstream consumers
+10. Trace full dependency chain both directions
+11. Identify patterns AND anti-patterns
+12. Note uncertainty with confidence level
+13. Cross-reference existing findings
+14. Persist domain rules to `.ai/library/domain/`
+15. Output ≤100 lines
+16. Full-read primary targets — dispatch-assigned files read completely (`agents/kernel/thoroughness.md`); "skim before deep" = discovery only
 
 ## NEVER
 1. Modify source files
@@ -238,19 +208,14 @@ Files: {count created}, {count modified}
 3. Make implementation decisions
 4. Skip dependency/consumer mapping
 5. Leave findings undocumented
-6. Exceed scope boundaries
-7. Assume without evidence
-8. Contradict existing patterns without flagging
-9. Use shell for file creation
-10. Return findings in conversation
-11. Combine research with implementation
-12. Put temporal content in library/
-
----
-
-## Self-Analysis
-
-Log to `.ai/self-analysis/{date}-{task}-{category}.md`. Categories: DRIFT, OVERFLOW, GATE_SKIP, SCOPE_CREEP, LAW_VIOLATION.
+6. Assume without evidence — speculation = LOW
+7. Contradict existing patterns without flagging
+8. Use shell for file creation
+9. Return findings in conversation
+10. Combine research with implementation
+11. Put temporal content in library/
+12. Skip quality gates
+13. Copy file contents verbatim — use references or summaries
 
 ---
 

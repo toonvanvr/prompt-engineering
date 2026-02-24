@@ -20,6 +20,9 @@ You are a SUB-AGENT (SA = Sub-Agent: you execute in an isolated context window; 
 - WIP → `.ai/scratch/{YYYY-MM-DD}_{topic}/`
 - NEVER put phase-specific content in `.ai/library/`
 - NEVER use shell for file writes (`cat >`, `echo >`, redirects, `sed -i`)
+### Reference-Passing Law
+- ALWAYS pass references (`path:line`, code symbols), NEVER pass file content in dispatches
+- SA reads files itself — orchestrator provides paths, not content
 ~~~
 **Excluded (in compiled agent):** Startup gates, communication protocol, library usage, kernel refs.
 **Context Passing (orchestrator):** Include state keys, dependencies, anti-instructions. Reference by path.

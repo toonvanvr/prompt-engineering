@@ -11,6 +11,7 @@ TMP_DIR=""
 MODE="install"
 VERBOSE=false
 DRY_RUN=false
+FORCE_LOCAL=false
 NEW_COUNT=0
 UPDATED_COUNT=0
 UNCHANGED_COUNT=0
@@ -36,6 +37,7 @@ parse_args() {
       --version=*) VERSION="${arg#--version=}" ;;
       --mode=*)    MODE="${arg#--mode=}" ;;
       --verbose)   VERBOSE=true ;;
+      --local)     FORCE_LOCAL=true ;;
       -*) echo "Error: Unknown option '$arg'" >&2; exit 1 ;;
       *) TARGET="$arg" ;;
     esac
@@ -54,6 +56,7 @@ parse_args() {
     echo "Options:" >&2
     echo "  --version=X.Y.Z    Install specific version (default: latest)" >&2
     echo "  --mode=MODE        install (default) | update | check | uninstall" >&2
+    echo "  --local            Force install from local clone (no remote fetch)" >&2
     echo "  --verbose          Show unchanged files" >&2
     echo "" >&2
     echo "Modes:" >&2
@@ -94,6 +97,12 @@ detect_context() {
         VERSION="$(cat "$SOURCE/VERSION")"
       fi
     fi
+  fi
+
+  # --local flag forces local context even when run via curl pipe
+  if [[ "$FORCE_LOCAL" == "true" && "$CONTEXT" == "remote" ]]; then
+    echo "Error: --local requires running from a local clone (not curl pipe)" >&2
+    exit 1
   fi
 
   if [[ "$CONTEXT" == "remote" ]]; then
@@ -153,6 +162,11 @@ copy_if_changed() {
 
 install_agents() {
   [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/agents"
+  # Install update script
+  if [[ -f "$SOURCE/.github/agents/update.sh" ]]; then
+    copy_if_changed "$SOURCE/.github/agents/update.sh" "$TARGET/.github/agents/update.sh" ".github/agents/update.sh"
+    [[ "$DRY_RUN" != "true" ]] && chmod +x "$TARGET/.github/agents/update.sh"
+  fi
   local count=0
   for f in "$SOURCE/agents/compiled/"*.agent.md; do
     [[ -f "$f" ]] || continue
@@ -224,7 +238,7 @@ check_staleness() {
 # ── Directory structure ──────────────────────────────────────────────────────
 
 ensure_directories() {
-  local dirs=(".ai/scratch" ".ai/feedback" ".ai/library/patterns" ".ai/library/domain" ".ai/library/quirks")
+  local dirs=(".ai/scratch" ".ai/feedback" ".ai/feedback/hot" ".ai/feedback/archive" ".ai/library/patterns" ".ai/library/domain" ".ai/library/quirks")
   for dir in "${dirs[@]}"; do
     mkdir -p "$TARGET/$dir"
   done
@@ -255,6 +269,7 @@ ensure_gitignore() {
     ensure_gitignore_line "$file" "/agents/researcher.agent.md"
     ensure_gitignore_line "$file" "/agents/kernel/"
     ensure_gitignore_line "$file" "/agents/.tvv-pe"
+    ensure_gitignore_line "$file" "/agents/update.sh"
     ensure_gitignore_line "$file" "/.gitignore"
     # Only gitignore skills in external projects (they're source files in this repo)
     if [[ "$install_context" != "self" ]]; then

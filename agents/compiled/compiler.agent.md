@@ -89,7 +89,7 @@ Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
 3. Verify: "I will compile {X}. I will NOT {Y}."
 4. Check `.ai/library/patterns/`
 5. Check `.github/skills/`
-6. Scan `ai_status.md` Human Input
+6. Scan `ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
 7. Verify source exists & is readable
 8. Identify mode (FULL/CONSERVATIVE/VALIDATE) + `preserve_sections`
 9. Infer style from source
@@ -149,38 +149,36 @@ INPUT → PHASE 1 (Safe) → PHASE 2 (Moderate) → PHASE 3 (Validation) → OUT
 
 ---
 
-## @include Directive Resolution
+## @include Resolution
 
-Before compression, resolve all `<!-- @include path -->` directives:
+Before compression, resolve `<!-- @include path -->` directives:
 
-1. Scan source for `<!-- @include {path} -->` lines
-2. For each: read target file, replace directive with contents
-3. Add source-map comment: `<!-- @source {path} L1-L{end} -->`
-4. Validate: no unresolved @include directives remain
-5. Error on missing files — never skip silently
-6. Nested @include NOT supported (shared files = leaf content)
+1. Scan for `<!-- @include {path} -->` lines
+2. Read target, replace directive with contents
+3. Add source-map: `<!-- @source {path} L1-L{end} -->`
+4. Validate: no unresolved directives
+5. Error on missing — never skip silently
+6. Nested @include NOT supported
 
 ---
 
 ## Frontmatter Handling
 
-Frontmatter = agent configuration — NEVER compress or alter.
+Frontmatter = configuration — NEVER compress or alter.
 
 **Passthrough:** Read source `## Frontmatter` → validate → emit as-is (`---` delimiters). NEVER modify, reorder, or add properties not in source. WARN on missing REQUIRED.
 
-**Tools exception:** `tools:` MAY be added where none exists (generation). Existing `tools:` MUST be preserved (NEVER drop).
+**Tools exception:** `tools:` MAY be added where none exists. Existing `tools:` MUST be preserved (NEVER drop).
 
-**Two-Step Protocol (MANDATORY):** Create file WITHOUT `tools:` → insert via `replace_string_in_file`.
-
-> Full schema: `agents/reference/frontmatter-schema.md`
+**Two-Step Protocol (MANDATORY):** Create WITHOUT `tools:` → insert via `replace_string_in_file`.
 
 ---
 
 ## Output
 
-**Structure:** YAML frontmatter (`---`) → `# Name` → Identity (pipe-delimited) → Definitions → Laws → compressed sections → ALWAYS/NEVER → Kernel References.
+**Structure:** YAML frontmatter (`---`) → `# Name` → Identity → Definitions → Laws → compressed sections → ALWAYS/NEVER → Kernel References.
 
-**Metrics (MANDATORY):** Original tokens, compressed tokens, reduction %, changes by type, warnings (LOW/MEDIUM/HIGH).
+**Metrics (MANDATORY):** Original tokens, compressed tokens, reduction %, changes by type, warnings.
 
 ---
 
@@ -206,11 +204,11 @@ Frontmatter = agent configuration — NEVER compress or alter.
 5. Flag high-risk compressions
 6. Keep source files unmodified
 7. Verify compiled fits SA context budget (<3k tokens)
-8. Use dense markdown (`|-|`, `md` not `markdown`)
+8. Dense markdown (`|-|`, `md` not `markdown`)
 9. Write output to files — file-mediated state
 10. Create `_handoff.md` before terminating
 11. Write ≥1 feedback entry before handoff
-12. Scan `ai_status.md` Human Input at phase boundaries
+12. Scan `ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 13. Check `.ai/library/patterns/` before proposing
 
 ## NEVER
@@ -229,6 +227,7 @@ Frontmatter = agent configuration — NEVER compress or alter.
 13. Put temporal content in library/
 14. Combine research with implementation
 15. Skip quality gates
+16. Copy file contents verbatim — use references or summaries
 
 ---
 

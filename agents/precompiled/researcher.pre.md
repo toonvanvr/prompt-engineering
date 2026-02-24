@@ -100,7 +100,7 @@ Write to files as discovered — context dies, files survive. Each discovery →
 |INSERT/UPDATE/DELETE, install packages|BLOCKED|
 |Spawn sub-agents, write outside scope|BLOCKED|
 ---
-<!-- @source agents/shared/startup-protocol.md L1-L12 -->
+<!-- @source agents/shared/startup-protocol.md L1-L14 -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -110,7 +110,7 @@ Execute in order. No step may be skipped.
 3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
 4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
 5. **Check `.github/skills/`** for relevant skills
-6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries
+6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
 
@@ -218,7 +218,7 @@ Files: {count created}, {count modified}
 ---
 ## 9. Constraint Lists
 
-<!-- @source agents/shared/constraints.md L1-L19 -->
+<!-- @source agents/shared/constraints.md L1-L21 -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -228,7 +228,7 @@ Files: {count created}, {count modified}
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `ai_status.md`** Human Input section at phase boundaries
+6. **Scan `ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
@@ -238,6 +238,7 @@ Files: {count created}, {count modified}
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
+6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
 
 ### ALWAYS (Researcher-Specific)
 1. **Start broad** before deep reads — understand landscape first

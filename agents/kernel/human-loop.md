@@ -71,14 +71,10 @@ Human can add feedback/context/redirect entries while paused. Agent processes al
 
 ## Checkpoint Triggers
 
-|Checkpoint|When|Behavior|
-|-|-|-|
-|Task-start|Session init|Passive scan|
-|Phase-start|Before Analysis/Design/Review|Passive scan|
-|Pre-gate|Before phase gate verification|Passive scan|
-|Pre-impl|Before Implementation Gate|Passive scan|
-|Deviation|Before design deviation|Passive scan|
-|Escalation|Before escalating|Write status update, halt|
+See `communication.md` § Checkpoint Protocol for the definitive checkpoint schedule.
+
+Orchestrator: 3 structural events (session-start, pre-SA-dispatch, pre-handoff).
+Sub-agents: 2 structural events (SA-start, SA-pre-handoff).
 
 **Passive scan:** Check ai_status.md Human Input → process if entries exist → continue immediately (no wait, no questions).
 **Halt:** ONLY `abort` action OR escalation protocol (3 failed attempts) blocks execution.
@@ -118,11 +114,9 @@ Human can add feedback/context/redirect entries while paused. Agent processes al
 
 ## Inheritance
 
-Sub-agents inherit passive scan protocol. Checkpoints:
-- Task-start (session init)
-- Pre-impl (before implementation)
-- Pre-handoff (before creating handoff)
-- Deviation (before design deviation)
+Sub-agents inherit passive scan protocol. See `communication.md` § Checkpoint Protocol for SA checkpoints:
+- SA-start (during startup protocol)
+- SA-pre-handoff (before writing handoff document)
 
 ---
 

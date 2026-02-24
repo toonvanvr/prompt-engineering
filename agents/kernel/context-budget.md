@@ -1,199 +1,99 @@
 # Context Budget
 
-Token/file limits by task type. Prevents context overflow.
+Action-based checkpoints. Replaces token counting with measurable behaviors.
 
 ---
 
 ## Core Principle
 
-> Read minimum needed for ROUTING and REPORTING. Read thoroughly for OWN WORK TARGETS (`thoroughness.md`). Context is finite. Quality degrades with overflow.
+> LLMs cannot count their own tokens. Measure ACTIONS (files read, tools called, lines written), not tokens. Checkpoint after actions, not at token thresholds.
 
 ---
 
-## Limits by Task Type
+## Checkpoint Protocol
 
-### Analysis Tasks
+### Soft Checkpoint (self-assessment, ~0 cost)
 
-|Metric|Deep Read|Skim Read|Total Files|
-|-|-|-|-|
-|Standard|10-15|25-50|60-65|
-|Complex|15-20|50-75|90 max|
+Trigger after:
+- Every 10 deep file reads
+- Every 30 tool calls
+- Every 200 lines of output written
 
-**Deep Read:** Full file content, understand implementation
-**Skim Read:** Structure only, identify patterns
+Action: Ask "Can I answer/complete now?"
+- YES → synthesize and proceed
+- NO, specific gap → read ≤5 targeted files, then re-assess
+- NO, broad gap → delegate to sub-agent
 
-### Design Tasks
+### Hard Checkpoint (mandatory action)
 
-|Metric|Deep Read|Skim Read|Total Files|
-|-|-|-|-|
-|Standard|5-10|15-25|30-35|
-|Complex|10-15|25-40|50 max|
+Trigger after:
+- 25 deep reads total in one SA
+- 50 tool calls total in one SA
+- Cumulative output exceeding target by 2×
 
-Focus: Architecture, interfaces, patterns (not implementation details)
-
-### Implementation Tasks
-
-|Metric|Deep Read|Skim Read|Total Files|
-|-|-|-|-|
-|Standard|5-8|10-15|20-23|
-|Complex|8-12|15-25|35 max|
-
-Focus: Files to modify + direct dependencies only
-
-### Refactor Tasks
-
-|Metric|Deep Read|Skim Read|Total Files|
-|-|-|-|-|
-|Standard|3-5|8-12|15-17|
-|Complex|5-8|12-20|25 max|
-
-Focus: Refactor target + immediate callers
+Action: MUST either synthesize, delegate, or checkpoint state to files. Continuing without action = violation.
 
 ---
 
-## Token Estimates
+## Read Strategy
 
-|Content Type|Tokens/Line|Typical File|
+|Need|Method|Cost|
 |-|-|-|
-|Code (dense)|4-6|200-600 tokens|
-|Code (sparse)|2-3|100-300 tokens|
-|Markdown|3-4|150-400 tokens|
-|JSON/Config|2-3|50-200 tokens|
+|File being modified|Full read (mandatory)|High|
+|Primary analysis target|Full read (mandatory)|High|
+|Finding patterns|`grep_search`|Low|
+|Understanding structure|`list_dir`, `tree`|Very Low|
+|Concept discovery|`semantic_search`|Medium|
+|Already processed by SA|Read handoff only|Low|
 
-### Budget Allocation
+### Tree-Before-Deep Pattern
 
-|Task Phase|Budget Share|
-|-|-|
-|Context loading|30-40%|
-|Working memory|40-50%|
-|Output generation|20-30%|
-
----
-
-## Read Strategies
-
-### Deep Read
-
-```md
-Use when:
-- File will be modified
-- Understanding logic flow
-- Debugging specific behavior
-
-Method: Full file content
-Tool: read_file
+Before deep-reading any directory, get structural overview first:
+```
+list_dir → identify candidates → prioritize → deep-read critical files only
 ```
 
-### Skim Read
-
-```md
-Use when:
-- Finding patterns
-- Understanding structure
-- Identifying dependencies
-
-Method: Symbol overview, grep patterns
-Tool: grep_search, semantic_search
-```
-
-### Skip Read
-
-```md
-Use when:
-- File outside scope
-- Already analyzed in prior phase
-- Test files (unless testing task)
-
-Method: Don't read
-Tool: None
-```
+If >20 candidate files identified, prioritize before deep reading.
 
 ---
 
 ## Overflow Detection
 
-### Warning Signs
-
 |Signal|Action|
 |-|-|
-|Response truncating|Stop, spawn sub-agent|
-|Forgetting early context|Checkpoint, restart focused|
-|Repetitive patterns|Context saturated|
-|Missing obvious info|Overflow confirmed|
-
-### Recovery
-
-1. Stop current approach
-2. Checkpoint progress
-3. Spawn focused sub-agent
-4. Resume with fresh context
+|Response truncating|Stop, checkpoint to file, spawn sub-agent|
+|Forgetting early context|Checkpoint, summarize working memory to file|
+|Repetitive re-reading|Context saturated — delegate to fresh SA|
+|>100 files touched|Spawn sub-agent for partitioning|
 
 ---
 
-## Tool Selection Guide
+## Quality Constraints (Absolute — Do NOT Scale)
 
-|Need|Tool|Context Cost|
+These are focus/readability limits, not capacity limits:
+
+|Constraint|Value|Purpose|
 |-|-|-|
-|Full file|`read_file`|High|
-|Pattern search|`grep_search`|Low|
-|Concept search|`semantic_search`|Medium|
-|Structure only|`list_dir`|Very Low|
-|Symbol overview|IDE features|Low|
-
-### Cost-Effective Patterns
-
-```
-1. list_dir → understand structure
-2. grep_search → find patterns
-3. read_file (targeted) → deep on needed files only
-```
+|Researcher output|≤100 lines|Focus|
+|Designer summary|≤50 lines|Specificity|
+|Handoff|≤80 lines|Communication clarity|
+|Implementer deliverables|≤3 per SA|Scope discipline|
+|SA dispatch|≤2k tokens|Dispatch clarity|
+|Compiled agent|<3k tokens|Deployment size|
 
 ---
 
----
+## Post-Summarization Verification
 
-## Context Window Awareness (KNOW-06)
-
-### Tree-Based Scanning
-
-Before deep-reading files, get structural overview:
-
-```bash
-tree -L 2 {workfolder}          # Session structure
-tree -L 2 .ai/                  # Library/feedback structure
-ls -la {target_directory}/       # File sizes before reading
-```
-
-### Post-Summarization Verification
-
-After summarizing context or mid-task:
-
+After summarizing context or checkpointing:
 1. Re-read original dispatch/prompt
 2. Verify current work aligns with initial inputs
-3. Check no requirements were lost in summarization
-
-### Context Pressure Signals
-
-|Signal|Action|
-|-|-|
-|>100 files read|Spawn sub-agent for partitioning|
-|Repeated re-reading same file|Context overflow—checkpoint + restart|
-|Can't recall earlier context|Summarize + verify against dispatch|
+3. Check no requirements were lost
 
 ---
 
-## Summary
+## Integration
 
-```
-Analysis: 10-15 deep, 25-50 skim
-Design: 5-10 deep, 15-25 skim
-Implement: 5-8 deep, 10-15 skim
-Refactor: 3-5 deep, 8-12 skim
+Agents embed checkpoints in their workflow phases — no standalone "context management" section needed. Each phase self-regulates via the checkpoint protocol above.
 
-Tree scan before deep read.
-Verify after summarization.
-Overflow? → Sub-agent.
-```
-
-### 80% Ceiling (Hard Limit)
-At 80% estimated context capacity: stop loading new context. Checkpoint state to files, summarize working memory, or spawn sub-agent. This is a gate, not a guideline. Continuing past 80% degrades all subsequent output.
+Referenced by: `orchestrator.src.md`, `output-budget.md`, `thoroughness.md`

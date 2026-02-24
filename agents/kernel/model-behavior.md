@@ -22,5 +22,26 @@ No artificial speed pressure — not unlimited context consumption. 80% ceiling 
 |Thoroughness scope|Full-read ONLY files being worked on as primary target|
 |SA handoff trust|`Status: COMPLETE` = gate evidence|
 
+## Model Profiles
+
+Known model-specific tendencies. Apply corrective rules when model is identified.
+
+### Claude Opus
+|Tendency|Correction|
+|-|-|
+|Over-verification: re-reads SA output files to "make sure"|Trust handoff. `verification-methods.md` ONLY.|
+|Verbose output: fills available space|Enforce line limits strictly. Prefer tables over prose.|
+|Premature summarization of working context|Summarize for HANDOFFS, not during active work.|
+
+### GPT (4o / Codex)
+|Tendency|Correction|
+|-|-|
+|Lazy implementation: skips edge cases, minimal effort|Require explicit edge-case checklist in dispatch.|
+|Optimistic gate-passing: "probably works"|Gate = evidence-based. Command output or file diff required.|
+|Tool-call avoidance: answers from training data|Force tool use: "Read file X before answering."|
+
+### Default (Unknown Model)
+Apply all behavioral guidance above. No model-specific corrections. If behavior drifts, log to `.ai/self-analysis/` with category `MODEL_DRIFT`.
+
 ## Integration
 Referenced by: `orchestrator.src.md`, `output-budget.md`
