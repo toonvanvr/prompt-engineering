@@ -19,7 +19,7 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |`mode-protocol.md`|EXPLORE/EXPLOIT definitions|STABLE|
 |`tool-stakes.md`|Risk classification|STABLE|
 |`todo-conventions.md`|TODO priority system|STABLE|
-|`human-loop.md`|Autonomous execution with human override via ai_status.md|STABLE|
+|`human-loop.md`|Autonomous execution with human override via communication/ai_status.md|STABLE|
 |`escalation.md`|Error recovery|STABLE|
 |`sub-agent-mandate.md`|Spawning thresholds|STABLE|
 |`context-budget.md`|Token limits|ADJUSTABLE|
@@ -44,12 +44,12 @@ Learned patterns that inform agent behavior. Stored in `.ai/library/` and refere
 |Scope Fencing|`.ai/library/patterns/scope-fencing.md`|Explicit DO/DO NOT lists to prevent scope creep|
 |Graduated Complexity|`.ai/library/patterns/graduated-complexity.md`|Sort tasks into waves by complexity before delegating|
 |Feedback Consumption|`.ai/library/patterns/feedback-consumption.md`|Mandatory feedback read/write loop around SA dispatch|
-|Context Overflow Signals|`.ai/library/quirks/context-overflow-signals.md`|Detecting and mitigating context window exhaustion|
 |Dispatch SA (Skill)|`.github/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
 |Post-SA Review (Skill)|`.github/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
 |Include Deduplication|`.ai/library/patterns/include-deduplication.md`|Composable @include fragments for source file deduplication|
 |Two-Phase Compilation|`.ai/library/patterns/two-phase-compilation.md`|Separate resolution from compression for incremental builds|
 |Reference Extraction|`.ai/library/patterns/reference-extraction.md`|Move detail tables to reference/, keep summaries in source|
+|Reference Integrity|`.github/skills/reference-integrity/SKILL.md`|Post-compilation and pre-session reference integrity verification|
 
 ### Recent Rule Additions
 

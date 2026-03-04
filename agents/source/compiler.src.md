@@ -124,6 +124,8 @@ MUST preserve exactly — compressing risks semantic drift:
 |AI context files|"AGENTS.md", "CLAUDE.md"|
 |TODO annotations|Priority markers|
 |YAML frontmatter values|Agent configuration|
+|File paths containing `/`|Directory prefixes are semantic; stripping changes resolution|
+|Kernel References section entries|Agent-kernel binding; dropping breaks inheritance|
 
 ## 10. @include Directive Resolution
 Before compression, resolve all `<!-- @include path -->` directives:
@@ -159,6 +161,8 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 **Code Block Guard:** Compiled `.agent.md` MUST NOT have wrapping fences — only YAML `---`. `read_file` chatagent block = DISPLAY ARTIFACT.
 
 **Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
+
+**Path Integrity**: All file paths containing `/` in source must retain their directory prefix in compiled output. Bare filename where source had directory path = FAIL.
 
 ## 14. Constraint Lists
 <!-- @include agents/shared/constraints.md -->

@@ -89,7 +89,7 @@ Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
 3. Verify: "I will compile {X}. I will NOT {Y}."
 4. Check `.ai/library/patterns/`
 5. Check `.github/skills/`
-6. Scan `ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
+6. Scan `communication/ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
 7. Verify source exists & is readable
 8. Identify mode (FULL/CONSERVATIVE/VALIDATE) + `preserve_sections`
 9. Infer style from source
@@ -146,6 +146,8 @@ INPUT → PHASE 1 (Safe) → PHASE 2 (Moderate) → PHASE 3 (Validation) → OUT
 |AI context files|AGENTS.md, CLAUDE.md|
 |TODO annotations|Priority markers|
 |YAML frontmatter values|Agent configuration|
+|File paths containing `/`|Directory prefixes semantic; stripping changes resolution|
+|Kernel References section entries|Agent-kernel binding; dropping breaks inheritance|
 
 ---
 
@@ -189,6 +191,7 @@ Frontmatter = configuration — NEVER compress or alter.
 3. **Weight Preservation** — Emphasis count: original MUST equal compressed
 4. **Structural Fidelity** — Hierarchy maintained, no information loss
 5. **Context Budget** — Compiled <3k tokens recommended; >3k → WARNING
+6. **Path Integrity** — File paths with `/` in source MUST retain directory prefix in compiled. Bare filename where source had directory path = FAIL.
 
 **Code Block Guard:** Compiled `.agent.md` MUST NOT have wrapping fences — only YAML `---`. `read_file` chatagent block = DISPLAY ARTIFACT.
 
@@ -208,7 +211,7 @@ Frontmatter = configuration — NEVER compress or alter.
 9. Write output to files — file-mediated state
 10. Create `_handoff.md` before terminating
 11. Write ≥1 feedback entry before handoff
-12. Scan `ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+12. Scan `communication/ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 13. Check `.ai/library/patterns/` before proposing
 
 ## NEVER

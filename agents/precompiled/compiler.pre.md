@@ -38,7 +38,7 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 |High-Risk Compression|May alter meaning: removes conditionals, changes scope/emphasis/priority|
 |Critical Anchor|Element anchoring interpretation — MUST NOT be compressed|
 
-<!-- @source agents/shared/architecture.md L1-L7 -->
+<!-- BEGIN @include agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -46,6 +46,7 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 - **Communication**: via `{workfolder}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
+<!-- END @include agents/shared/architecture.md -->
 
 ## 3. Agent Laws of Compilation
 Immutable. Protect against destructive compression.
@@ -81,7 +82,7 @@ When rules conflict, apply highest priority first:
 |Insert tools (step 2)|`replace_string_in_file`|Add `tools:` after creation|
 |Validate syntax|internal|Check markdown structure|
 
-<!-- @source agents/shared/startup-protocol.md L1-L14 -->
+<!-- BEGIN @include agents/shared/startup-protocol.md -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -94,6 +95,7 @@ Execute in order. No step may be skipped.
 6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
+<!-- END @include agents/shared/startup-protocol.md -->
 
 ### Compiler Startup Additions
 After shared steps: (7) Verify source exists/readable. (8) Identify mode (FULL/CONSERVATIVE/VALIDATE). (9) Check `preserve_sections`. (10) Infer style from source.
@@ -143,6 +145,8 @@ MUST preserve exactly — compressing risks semantic drift:
 |AI context files|"AGENTS.md", "CLAUDE.md"|
 |TODO annotations|Priority markers|
 |YAML frontmatter values|Agent configuration|
+|File paths containing `/`|Directory prefixes are semantic; stripping changes resolution|
+|Kernel References section entries|Agent-kernel binding; dropping breaks inheritance|
 
 ## 10. @include Directive Resolution
 Before compression, resolve all `<!-- @include path -->` directives:
@@ -179,8 +183,10 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 
 **Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
 
+**Path Integrity**: All file paths containing `/` in source must retain their directory prefix in compiled output. Bare filename where source had directory path = FAIL.
+
 ## 14. Constraint Lists
-<!-- @source agents/shared/constraints.md L1-L21 -->
+<!-- BEGIN @include agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -190,7 +196,7 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
@@ -201,6 +207,7 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
+<!-- END @include agents/shared/constraints.md -->
 
 ### Compiler-Specific ALWAYS
 1. **Report token counts** before and after — metrics MANDATORY

@@ -7,10 +7,10 @@ Autonomous execution with passive human override capability.
 ## Core Principle
 
 > User prompt = implicit approval for entire flow. Proceed autonomously.
-> Scan `ai_status.md` Human Input section at checkpoints. Empty → continue immediately.
-> NEVER ask "should I proceed?" or "would you prefer?" — use ai_status.md Human Input instead.
+> Scan `communication/ai_status.md` Human Input section at checkpoints. Empty → continue immediately.
+> NEVER ask "should I proceed?" or "would you prefer?" — use communication/ai_status.md Human Input instead.
 
-**Model:** Autonomous execution. Human intervenes via `ai_status.md` entries, not confirmation dialogs.
+**Model:** Autonomous execution. Human intervenes via `communication/ai_status.md` entries, not confirmation dialogs.
 
 ---
 
@@ -18,7 +18,7 @@ Autonomous execution with passive human override capability.
 
 |❌ Don't|✅ Do Instead|
 |-|-|
-|"Should I proceed?"|Proceed (scan ai_status.md Human Input first)|
+|"Should I proceed?"|Proceed (scan communication/ai_status.md Human Input first)|
 |"Would you prefer X or Y?"|Choose based on design, document rationale|
 |"Do you want me to..."|Do it (user prompt = approval)|
 |"Ready to proceed to X phase?"|Proceed to X phase|
@@ -34,7 +34,7 @@ Autonomous execution with passive human override capability.
 
 ## Pause/Resume Mechanism
 
-To pause execution, human appends to `ai_status.md` Human Input section:
+To pause execution, human appends to `communication/ai_status.md` Human Input section:
 
 ```markdown
 ### [YYYY-MM-DDTHH:MM:SS]
@@ -76,7 +76,7 @@ See `communication.md` § Checkpoint Protocol for the definitive checkpoint sche
 Orchestrator: 3 structural events (session-start, pre-SA-dispatch, pre-handoff).
 Sub-agents: 2 structural events (SA-start, SA-pre-handoff).
 
-**Passive scan:** Check ai_status.md Human Input → process if entries exist → continue immediately (no wait, no questions).
+**Passive scan:** Check communication/ai_status.md Human Input → process if entries exist → continue immediately (no wait, no questions).
 **Halt:** ONLY `abort` action OR escalation protocol (3 failed attempts) blocks execution.
 **Never halt to ask human for confirmation** — that defeats autonomous execution.
 
@@ -85,14 +85,14 @@ Sub-agents: 2 structural events (SA-start, SA-pre-handoff).
 ## Check Protocol
 
 ```
-1. Scan ai_status.md Human Input section for unprocessed entries
+1. Scan communication/ai_status.md Human Input section for unprocessed entries
 2. If empty or no unprocessed entries → continue immediately
 3. If entries present:
    a. Read all entries (sorted by timestamp)
    b. Parse ACTION and fields
    c. Execute action effects
    d. Archive to .ai/scratch/{session}/00_prompts/{seq}_{action}.md
-   e. Mark as processed in ai_status.md
+   e. Mark as processed in communication/ai_status.md
 4. Continue task (no wait unless abort/escalation)
 ```
 
@@ -159,7 +159,7 @@ When escalation requires explicit approval:
 
 ### Approval Processing
 
-When approval received (via chat or `ACTION: approve` in ai_status.md):
+When approval received (via chat or `ACTION: approve` in communication/ai_status.md):
 
 1. Log approval to scratch space
 2. Update gate status to PASS

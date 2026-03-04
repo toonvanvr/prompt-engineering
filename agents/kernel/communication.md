@@ -6,8 +6,8 @@ Simplified human-AI communication via single file interface.
 
 ## Core Principle
 
-> Human writes to `ai_status.md` "Human Input" section. AI reads and processes.
-> AI writes status updates to `ai_status.md`. Human reads for progress.
+> Human writes to `communication/ai_status.md` "Human Input" section. AI reads and processes.
+> AI writes status updates to `communication/ai_status.md`. Human reads for progress.
 > Single file. Lower cognitive load.
 
 **Model:** Single file with sections. Human appends to designated section.
@@ -23,7 +23,7 @@ Simplified human-AI communication via single file interface.
 └── queue.md           # Task queue (optional)
 ```
 
-> **Single-file communication.** There is NO separate `human_input.md`. All human input goes through `ai_status.md`'s `## Human Input` section. One file = lower cognitive load.
+> **Single-file communication.** There is NO separate `human_input.md`. All human input goes through `communication/ai_status.md`'s `## Human Input` section. One file = lower cognitive load.
 
 ---
 
@@ -112,13 +112,13 @@ AI updates `communication/ai_status.md`:
 ## Processing Protocol
 
 ```
-1. Scan `ai_status.md` Human Input section at checkpoints
+1. Scan `communication/ai_status.md` Human Input section at checkpoints
 2. IF empty or no unprocessed entries → continue
 3. FOR each unprocessed entry (by timestamp):
    a. Parse ACTION
    b. Apply action effect
    c. Archive entry to `.ai/scratch/{session}/00_prompts/{seq}_{action}.md`
-   d. Mark as processed in ai_status.md
+   d. Mark as processed in communication/ai_status.md
 4. IF abort → HALT
 5. ELSE → continue
 ```
@@ -146,12 +146,12 @@ AI updates `communication/ai_status.md`:
 
 ### Status Update Frequency (MANDATORY)
 
-ai_status.md MUST be updated:
+communication/ai_status.md MUST be updated:
 1. After initial creation (startup)
 2. After each SA completes (Post-SA Protocol Step 5)
 3. At session completion
 
-**Stale ai_status.md = invisible session.** The human has no other way to track progress. Status files stuck at "Startup" phase for an entire session is a protocol failure.
+**Stale communication/ai_status.md = invisible session.** The human has no other way to track progress. Status files stuck at "Startup" phase for an entire session is a protocol failure.
 
 ---
 
@@ -173,8 +173,8 @@ ai_status.md MUST be updated:
 Add to startup:
 ```md
 1. Create `.ai/scratch/{session}/communication/` folder
-2. Initialize `ai_status.md` with session metadata + empty Human Input section
-3. Check for existing Human Input entries in ai_status.md
+2. Initialize `communication/ai_status.md` with session metadata + empty Human Input section
+3. Check for existing Human Input entries in communication/ai_status.md
 ```
 
 Add to ALWAYS list:

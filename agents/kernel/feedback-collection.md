@@ -39,6 +39,8 @@ Feedback collection MUST be grounded in observable events, not internal model st
 | Escalations | `.ai/feedback/escalations.md` | 3+ attempt failures requiring help |
 | Human Interventions | `.ai/feedback/human_interventions.md` | User injected instructions mid-task |
 
+> **Tolerant Read**: Agents reading feedback files MUST tolerate absence (file may not yet exist). Create with header on first write if missing.
+
 ---
 
 ## Collection Triggers

@@ -43,7 +43,7 @@ All agents inherit rules from `kernel/`:
 - `quality-gates.md` — Phase transition verification
 - `mode-protocol.md` — EXPLORE↔EXPLOIT switching
 - `tool-stakes.md` — Risk classification
-- `human-loop.md` — Autonomous execution with human override via ai_status.md
+- `human-loop.md` — Autonomous execution with human override via communication/ai_status.md
 
 ## Never
 

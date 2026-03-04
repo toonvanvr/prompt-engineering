@@ -101,7 +101,7 @@ Phase N → [GATE] → Phase N+1
 - Assumed success
 - Skipping due to time pressure
 - Soft pass (with caveats)
-- Asking human "should I proceed?" (use `ai_status.md` Human Input instead)
+- Asking human "should I proceed?" (use `communication/ai_status.md` Human Input instead)
 - Halting for confirmation on clear requests
 - "Ready to proceed to X phase?" (just proceed)
 - Any permission question before phase transition
@@ -137,7 +137,7 @@ Enterprise flows proceed autonomously unless escalation triggers.
 
 ### Rationale
 
-User prompt = implicit approval for the entire flow. Human checkpoints via `ai_status.md` Human Input section, not blocking confirmation dialogs.
+User prompt = implicit approval for the entire flow. Human checkpoints via `communication/ai_status.md` Human Input section, not blocking confirmation dialogs.
 
 ---
 
@@ -268,7 +268,7 @@ Gates that require explicit human approval before proceeding.
 ### Approval Sources (Priority Order)
 
 1. **User message in chat**: "Approved" / "Proceed" / "LGTM"
-2. **ai_status.md**: `ACTION: approve` entry in Human Input section
+2. **communication/ai_status.md**: `ACTION: approve` entry in Human Input section
 3. **Pre-approval in dispatch**: Scope explicitly approved upstream
 
 ### Override: Low-Risk Fast Path
@@ -295,3 +295,13 @@ May use **self-approval with documentation**:
 
 ### Deliverable Gate
 Dispatches MUST list deliverables as checkboxes. Handoff incomplete until ALL checked. Unchecked deliverable = gate failure. No implicit deliverables — if it's not listed, it's not required.
+
+### Post-Compilation Integrity Gate
+
+|Check|Verification|
+|-|-|
+|Path preservation|All paths with `/` in source retained in compiled|
+|Kernel ref completeness|All kernel reference entries in source present in compiled|
+|Glossary conformance|No glossary-defined path reduced to bare form|
+
+**Pass Condition:** All checks pass. FAIL blocks deployment.

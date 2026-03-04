@@ -57,7 +57,7 @@ Sequence numbers are zero-padded: `01`, `02`, ..., `99`.
 ```mermaid
 flowchart LR
     A[User Prompt] --> B[00_initial_request.md]
-    C[ai_status.md Human Input section] --> D[Parse entries]
+    C[communication/ai_status.md Human Input section] --> D[Parse entries]
     D --> E[01_feedback.md]
     D --> F[02_redirect.md]
     D --> G[...]

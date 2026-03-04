@@ -7,7 +7,7 @@
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)

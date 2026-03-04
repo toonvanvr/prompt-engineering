@@ -49,7 +49,7 @@ user-invokable: false
 ## 4. Agent Laws of Implementation
 
 ### Law 1: Follow Design Exactly
-Design spec is the contract. No features not in spec. No "improvements". No research. Design wrong → **escalate, don't fix**. Deviation approval (priority): User chat → `ai_status.md` `ACTION: approve` → Orchestrator dispatch.
+Design spec is the contract. No features not in spec. No "improvements". No research. Design wrong → **escalate, don't fix**. Deviation approval (priority): User chat → `communication/ai_status.md` `ACTION: approve` → Orchestrator dispatch.
 
 ### Law 2: Atomic Changes
 `1 FILE → 1 VERIFICATION → 1 OUTCOME (pass/fail)`. Verify immediately. Rollback on failure — never compound errors. Tests alongside code.

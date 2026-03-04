@@ -32,7 +32,7 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 2. After every SA completes, append progress to `progress.md` (Post-SA Protocol)
 3. Summarize YOUR OWN tracking context aggressively (progress.md, handbook.md) — NEVER summarize SA work products or force SAs to pre-summarize their findings
 4. Every SA gets the `.ai/` tree view and instructions on how to use it
-5. Use `ai_status.md` for human checkpoints
+5. Use `communication/ai_status.md` for human checkpoints
 6. Before each SA dispatch, read relevant `.ai/feedback/*.md` files
 7. NEVER mix research and implementation in the same SA
 8. Max 8 tasks per orchestrator session — break mega-prompts into batches
@@ -119,7 +119,7 @@ User prompt = implicit approval. Proceed through all phases autonomously. Ambigu
 |-|-|-|
 |Self (default)|Design Review SA passes gate|Document in `_approval.md`|
 |User (interactive)|User says "approved"/"lgtm"/👍|Record in `_approval.md`|
-|File-based|`ai_status.md` has `ACTION: approve`|Record in `_approval.md`|
+|File-based|`communication/ai_status.md` has `ACTION: approve`|Record in `_approval.md`|
 
 Format: `status: approved | approved_by: self|user|file | timestamp: {ISO}`
 
@@ -172,7 +172,7 @@ After EVERY SA completes, execute all steps before spawning next SA:
 2. **Capture feedback** — 1-3 lines to `.ai/feedback/*.md` (successes/failures/scope_overruns/tool_quirks/escalations). Nothing notable → write "nominal" to `pattern_successes.md`
 3. **Update progress.md** — task name, status (pass/fail), key outcomes, next action
 4. **Summarize for own context** — max 5 bullet points from handoff, discard rest; NEVER re-read files the SA already processed
-5. **Update ai_status.md** — timestamp, phase, status, current task, progress summary (orchestrator writes directly — exception to Law 1)
+5. **Update communication/ai_status.md** — timestamp, phase, status, current task, progress summary (orchestrator writes directly — exception to Law 1)
 6. **Update `{workfolder}/handbook.md`** — move SA to COMPLETED, update NEXT ACTION, refresh KEY PATHS
 
 ### Gate Check (BLOCKS Next SA)
@@ -206,17 +206,17 @@ Key decisions: append-only to `{workfolder}/decisions.md` (`|date|decision|sourc
    mkdir -p .ai/scratch/{YYYY-MM-DD}_{topic}/{00_prompts,01_interpretation,02_analysis,03_design,04_implementation,05_verification,communication}
    ```
    Format: `YYYY-MM-DD_{sanitized_topic}` (lowercase, hyphens, max 30 chars). Collision: append `_01`.
-6. **Spawn Startup SA** (@Implementer) — copy prompt to `00_prompts/00_initial_request.md` ← GATE, create `ai_status.md`, `progress.md`, `handbook.md`
+6. **Spawn Startup SA** (@Implementer) — copy prompt to `00_prompts/00_initial_request.md` ← GATE, create `communication/ai_status.md`, `progress.md`, `handbook.md`
 7. Scan `.github/skills/` for available skills
 8. Scan `.ai/feedback/pattern_failures.md` for warnings
-9. Scan `ai_status.md` Human Input section
+9. Scan `communication/ai_status.md` Human Input section
 10. **Spawn Interpreter SA** (@Researcher, EXPLORE) — clarify scope, identify ambiguity. Output: `01_interpretation/`. Gate: interpretation complete before ANY other SA.
 
 ### Micro-Task Protocol (≤2 files, single domain, score <30)
 
 1. Skip phase folder creation — work in workfolder root
 2. Still REQUIRED: `_handoff.md`, feedback entry, prompt preservation
-3. `ai_status.md`: create + update on completion
+3. `communication/ai_status.md`: create + update on completion
 4. Interpretation: inline (no SA)
 5. Design: skip if obvious
 6. Max overhead: 1 SA (implementer)
@@ -240,7 +240,7 @@ Key decisions: append-only to `{workfolder}/decisions.md` (`|date|decision|sourc
 |Implementation|EXPLOIT|@Implementer|Tests pass|`04_implementation/`|
 |Verification|EXPLOIT|@Implementer|No blockers|`05_verification/`|
 
-`ai_status.md` scanned per `communication.md` § Checkpoint Protocol: (1) after session startup, (2) before each SA dispatch, (3) before final session handoff.
+`communication/ai_status.md` scanned per `communication.md` § Checkpoint Protocol: (1) after session startup, (2) before each SA dispatch, (3) before final session handoff.
 
 ### Implementation Enforcement Gate (CRITICAL)
 
@@ -325,7 +325,7 @@ NEVER forward raw SA output — read the file. Reference by path, not content. C
 
 > Full protocol: `agents/kernel/communication.md`
 
-Scan `ai_status.md` Human Input at structural checkpoints per `communication.md` § Checkpoint Protocol:
+Scan `communication/ai_status.md` Human Input at structural checkpoints per `communication.md` § Checkpoint Protocol:
 1. After session startup completes
 2. Before dispatching any sub-agent
 3. Before writing final session handoff

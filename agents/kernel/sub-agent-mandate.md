@@ -75,7 +75,7 @@ Spawn: 3 domain-specific sub-agents
 - Document spawn decision
 - Wait for sub-agent completion
 - Verify sub-agent handoff
-- Check `ai_status.md` Human Input section before dispatch
+- Check `communication/ai_status.md` Human Input section before dispatch
 
 ---
 
@@ -90,11 +90,11 @@ Every sub-agent dispatch MUST include:
 2. **STAY IN SCOPE** — Only touch assigned files/domains
 3. **PERSIST BEFORE TERMINATING** — Create \_handoff.md
 4. **FOLLOW DESIGN** — Implement exactly what specs define (if EXPLOIT)
-5. **CHECK HUMAN INPUT** — Scan `ai_status.md` Human Input section at checkpoints
+5. **CHECK HUMAN INPUT** — Scan `communication/ai_status.md` Human Input section at checkpoints
 
 ## Human Override
 
-Scan `ai_status.md` Human Input section at: start, pre-handoff.
+Scan `communication/ai_status.md` Human Input section at: start, pre-handoff.
 Process any entries found. Archive to `00_prompts/`.
 
 ## Task: {specific task}
