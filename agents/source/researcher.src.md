@@ -158,7 +158,7 @@ Target: ≤100 lines, structured for Designer/Implementer. Scannable (tables/bul
 ```
 Use `path:line` for evidence. Prefix concerns: `HIGH:`, `MED:`, `LOW:`.
 
-> Kernel: See `agents/kernel/pattern-system.md` for pattern conflict prevention.
+> Kernel: See `agents/kernel/library-system.md` for pattern conflict prevention.
 ---
 <!-- @include agents/shared/handoff-format.md -->
 

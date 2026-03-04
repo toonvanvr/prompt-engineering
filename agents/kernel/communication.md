@@ -1,46 +1,32 @@
-# Communication Protocol
+# Human-AI Communication & Override Protocol
 
-Simplified human-AI communication via single file interface.
+Autonomous execution with passive human override via single file interface.
 
----
+## Core Principles
 
-## Core Principle
-
-> Human writes to `communication/ai_status.md` "Human Input" section. AI reads and processes.
-> AI writes status updates to `communication/ai_status.md`. Human reads for progress.
-> Single file. Lower cognitive load.
-
-**Model:** Single file with sections. Human appends to designated section.
-
----
+> User prompt = implicit approval for entire flow. Proceed autonomously.
+> Human writes to `{workfolder}/communication/ai_status.md` — AI reads at checkpoints.
+> AI writes status updates. Human reads for progress. Single file = lower cognitive load.
+> NEVER ask "should I proceed?" — use `{workfolder}/communication/ai_status.md` Human Input instead.
 
 ## Folder Structure
 
-```
-.ai/scratch/{session}/communication/
-├── ai_status.md       # AI status + Human Input section
-├── findings.md        # Accumulated discoveries
-└── queue.md           # Task queue (optional)
-```
+`{workfolder}/communication/`: `ai_status.md` (status + Human Input), `findings.md` (discoveries), `queue.md` (optional).
 
-> **Single-file communication.** There is NO separate `human_input.md`. All human input goes through `communication/ai_status.md`'s `## Human Input` section. One file = lower cognitive load.
+## Anti-Patterns (FORBIDDEN)
 
----
+|❌ Don't|✅ Do Instead|
+|-|-|
+|"Should I proceed?"|Proceed (scan `{workfolder}/communication/ai_status.md` first)|
+|"Would you prefer X or Y?"|Choose based on design, document rationale|
+|"Do you want me to..."|Do it (user prompt = approval)|
+|Any permission question|Just do it|
+
+**Rule:** If response ends with a permission question, delete it and proceed. Enterprise flows run autonomously until completion.
 
 ## Human Input Protocol
 
-### Writing Input
-
-Human appends to the **Human Input** section of `communication/ai_status.md`:
-
-```markdown
-## Human Input
-
-### [YYYY-MM-DDTHH:MM:SS]
-
-ACTION: {action}
-{additional fields per action type}
-```
+Human appends timestamped entries (`### [YYYY-MM-DDTHH:MM:SS] ACTION: {action}`) to `## Human Input` section of `{workfolder}/communication/ai_status.md`.
 
 ### Supported Actions
 
@@ -52,132 +38,49 @@ ACTION: {action}
 |`redirect`|Change direction|OBJECTIVE|
 |`feedback`|Apply adjustment, continue|CONTENT|
 |`context`|Add information|CONTENT|
-
-### Examples
-
-```markdown
-## [2026-01-19T14:30:00] Human Input
-
-ACTION: pause
-REASON: Need to review design before proceeding
-
----
-
-## [2026-01-19T15:00:00] Human Input
-
-ACTION: feedback
-CONTENT: Also consider error handling in the auth flow
-
----
-
-## [2026-01-19T15:30:00] Human Input
-
-ACTION: resume
-```
-
----
+|`approve`|Clear pending approval gates|—|
 
 ## AI Status Protocol
 
-AI updates `communication/ai_status.md`:
+AI updates `{workfolder}/communication/ai_status.md` with: Updated (ISO8601), Phase, Status (running|paused|blocked|complete), Current Task, Progress checklist, Blockers, Next Action, empty Human Input section.
 
-```markdown
-# Session Status
+**Update frequency (MANDATORY):** After creation (startup), after each SA completes, at session completion. Stale status = invisible session = protocol failure.
 
-**Updated**: {ISO8601}
-**Phase**: {current_phase}
-**Status**: {running|paused|blocked|complete}
+## Checkpoint Protocol
 
-## Current Task
-{task_description}
+### Orchestrator (3 structural events)
 
-## Progress
-- [x] Completed step
-- [ ] Pending step
+|Checkpoint|When|
+|-|-|
+|Session-start|After startup completes|
+|Pre-SA-dispatch|Before dispatching any sub-agent|
+|Pre-handoff|Before writing final handoff|
 
-## Blockers
-{none OR description}
+### Sub-Agent (2 structural events)
 
-## Next Action
-{what AI will do next}
+|Checkpoint|When|
+|-|-|
+|SA-start|During startup protocol|
+|SA-pre-handoff|Before writing handoff|
 
-## Human Input
-<!-- Human: append timestamped entries below. Format: -->
-<!-- ### [YYYY-MM-DDTHH:MM:SS] -->
-<!-- ACTION: pause | resume | abort | redirect | feedback | context -->
-```
-
----
+**Scaling:** Orchestrator checks = SA_count + 2. Do NOT scan at any other time. No frequency words ("regularly", "periodically").
 
 ## Processing Protocol
 
 ```
-1. Scan `communication/ai_status.md` Human Input section at checkpoints
-2. IF empty or no unprocessed entries → continue
-3. FOR each unprocessed entry (by timestamp):
-   a. Parse ACTION
-   b. Apply action effect
-   c. Archive entry to `.ai/scratch/{session}/00_prompts/{seq}_{action}.md`
-   d. Mark as processed in communication/ai_status.md
-4. IF abort → HALT
-5. ELSE → continue
+1. Scan Human Input section at checkpoints
+2. Empty or no unprocessed entries → continue immediately
+3. For each unprocessed entry (by timestamp):
+   a. Parse ACTION → apply effect → archive to 00_prompts/ → mark processed
+4. abort → HALT | else → continue (no wait unless abort/escalation)
 ```
 
-### Checkpoint Protocol
+## Approval Request (Escalation Only)
 
-#### Orchestrator Checkpoints (3 structural events)
-
-|Checkpoint|When|
-|-|-|
-|Session-start|After orchestrator startup completes|
-|Pre-SA-dispatch|Before dispatching any sub-agent|
-|Pre-handoff|Before writing final session handoff|
-
-#### SA Checkpoints (2 structural events)
-
-|Checkpoint|When|
-|-|-|
-|SA-start|During SA startup protocol (first action)|
-|SA-pre-handoff|Before SA writes handoff document (last action)|
-
-**Scaling property**: Orchestrator checks = SA_count + 2 (startup + handoff). SA count scales naturally with task complexity.
-
-**Do NOT scan** at any other time. Do NOT scan between Post-SA Protocol steps, during file operations, or on a time-based schedule. No frequency words ("regularly", "periodically", "at key points").
-
-### Status Update Frequency (MANDATORY)
-
-communication/ai_status.md MUST be updated:
-1. After initial creation (startup)
-2. After each SA completes (Post-SA Protocol Step 5)
-3. At session completion
-
-**Stale communication/ai_status.md = invisible session.** The human has no other way to track progress. Status files stuck at "Startup" phase for an entire session is a protocol failure.
-
----
-
-## Action Effects
-
-|Action|Behavior|
-|-|-|
-|`pause`|Set status=paused, halt until resume|
-|`resume`|Clear paused status, continue|
-|`abort`|Set status=aborted, cleanup, create `_abort.md`|
-|`redirect`|Update objective, restart from current phase|
-|`feedback`|Apply adjustment inline, continue|
-|`context`|Add to session context, continue|
-
----
+When escalation requires explicit approval, write to `{workfolder}/communication/ai_status.md`: summary, artifacts, risk level, decision (APPROVE/DENY). When received (chat or `ACTION: approve`): log approval, update gate to PASS, proceed, document in handoff.
 
 ## Agent Integration
 
-Add to startup:
-```md
-1. Create `.ai/scratch/{session}/communication/` folder
-2. Initialize `communication/ai_status.md` with session metadata + empty Human Input section
-3. Check for existing Human Input entries in communication/ai_status.md
-```
+Startup: Create `{workfolder}/communication/`, init `ai_status.md` with session metadata + empty Human Input section, check for existing entries.
 
-Add to ALWAYS list:
-```md
-- Scan `communication/ai_status.md` Human Input section at checkpoints
-```
+ALWAYS: Scan `{workfolder}/communication/ai_status.md` Human Input at checkpoints.

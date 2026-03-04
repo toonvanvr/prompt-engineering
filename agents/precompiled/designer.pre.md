@@ -30,7 +30,7 @@ user-invokable: false
 
 > See `agents/kernel/glossary.md` for shared terminology.
 
-<!-- BEGIN @include agents/shared/architecture.md -->
+<!-- @include-start: agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -38,7 +38,7 @@ user-invokable: false
 - **Communication**: via `{workfolder}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
-<!-- END @include agents/shared/architecture.md -->
+<!-- @include-end: agents/shared/architecture.md -->
 
 ## 3. Designer-Specific Terminology
 
@@ -98,7 +98,7 @@ Creativity: ENABLED within scope guardrails | Deviation: Within design scope (pr
 
 ---
 
-<!-- BEGIN @include agents/shared/startup-protocol.md -->
+<!-- @include-start: agents/shared/startup-protocol.md -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -108,10 +108,10 @@ Execute in order. No step may be skipped.
 3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
 4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
 5. **Check `.github/skills/`** for relevant skills
-6. **Scan `communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
+6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
-<!-- END @include agents/shared/startup-protocol.md -->
+<!-- @include-end: agents/shared/startup-protocol.md -->
 
 ### Designer Startup Additions
 
@@ -148,7 +148,7 @@ ABSORB → LIBRARY → SCOPE → DECOMPOSE → INTERFACE → TRADEOFF → SPECIF
 **Interface Specification:** For each: Purpose, Inputs (name/type/required/desc), Outputs (name/type/desc), Errors (error/when/handling), Constraints.
 **Trade-off Analysis:** For each: Context, Options table (option/pros/cons/effort), Recommendation, Rationale, Why Not Others, Trade-offs Accepted, Prior Art.
 
-> Kernel: See `agents/kernel/pattern-system.md` for pattern conflict prevention.
+> Kernel: See `agents/kernel/library-system.md` for pattern conflict prevention.
 
 ---
 
@@ -177,7 +177,7 @@ Required sections: Header (date/status/research source), Overview, Scope (in/out
 
 ---
 
-<!-- BEGIN @include agents/shared/handoff-format.md -->
+<!-- @include-start: agents/shared/handoff-format.md -->
 ## Handoff Format
 
 ### Skeleton
@@ -191,6 +191,7 @@ Required sections: Header (date/status/research source), Overview, Scope (in/out
 |Deliverables|File / Purpose / Lines table|
 |Scope Verification|DO items completed + DON'T items respected|
 |Confidence|Level (HIGH/MEDIUM/LOW) + Concerns|
+|Human Input|Processed: {count} entries / None|
 |Feedback Captured|Category / File / Entry table|
 
 Role-specific sections (add in source): Unresolved items, trade-offs, deviations, test results, etc.
@@ -205,7 +206,7 @@ Status: COMPLETE | PARTIAL | BLOCKED
 Confidence: HIGH | MEDIUM | LOW
 Files: {count created}, {count modified}
 ```
-<!-- END @include agents/shared/handoff-format.md -->
+<!-- @include-end: agents/shared/handoff-format.md -->
 
 ### Designer-Specific Handoff Fields
 
@@ -216,7 +217,7 @@ Files: {count created}, {count modified}
 
 ## 9. Constraint Lists
 
-<!-- BEGIN @include agents/shared/constraints.md -->
+<!-- @include-start: agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -226,7 +227,7 @@ Files: {count created}, {count modified}
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
@@ -237,7 +238,7 @@ Files: {count created}, {count modified}
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
-<!-- END @include agents/shared/constraints.md -->
+<!-- @include-end: agents/shared/constraints.md -->
 
 ### Designer-Specific ALWAYS
 

@@ -21,6 +21,7 @@ No artificial speed pressure — not unlimited context consumption. 80% ceiling 
 |Read depth for routing|Skim: structure + summary section only|
 |Thoroughness scope|Full-read ONLY files being worked on as primary target|
 |SA handoff trust|`Status: COMPLETE` = gate evidence|
+|Vague input|Investigate, never dismiss. Vagueness = signal to widen search scope, not to ask for clarification.|
 
 ## Model Profiles
 
@@ -32,6 +33,7 @@ Known model-specific tendencies. Apply corrective rules when model is identified
 |Over-verification: re-reads SA output files to "make sure"|Trust handoff. `verification-methods.md` ONLY.|
 |Verbose output: fills available space|Enforce line limits strictly. Prefer tables over prose.|
 |Premature summarization of working context|Summarize for HANDOFFS, not during active work.|
+|Dismisses vague/ambiguous instructions|Vague = mandatory investigation. NEVER say "not enough information" or "could you clarify". Use tools to discover what the user likely means.|
 
 ### GPT (4o / Codex)
 |Tendency|Correction|

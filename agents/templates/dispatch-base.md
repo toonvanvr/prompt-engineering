@@ -55,8 +55,8 @@ Output limit: {500|300|150} lines/response
 Cumulative budget: {remaining from parent}
 
 ## Async Scan Points
-- Start of execution
-- Before handoff creation
+- Start of execution: read `{workfolder}/communication/ai_status.md` Human Input
+- Before handoff creation: read `{workfolder}/communication/ai_status.md` Human Input
 
 ## Scope
 |IN|OUT|
@@ -171,6 +171,12 @@ CONSTRAINT STACK (full):
 │ Size: S/M/L → Verbosity tier        │
 │ Limits: 500/300/150 lines           │
 │ Cumulative >1500 → spawn sub-agent  │
+├─────────────────────────────────────┤
+│ DELEGATION (structural)             │
+│ Orchestrator has NO edit tools.     │
+│ All file changes = sub-agent.       │
+│ You were dispatched because the     │
+│ orchestrator cannot do this itself.  │
 └─────────────────────────────────────┘
 ```
 ````

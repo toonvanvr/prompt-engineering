@@ -2,7 +2,6 @@
 name: Compiler
 description: Prompt compiler achieving 50-70% token reduction without semantic drift. Compresses source .src.md into token-optimized .agent.md files.
 user-invokable: false
-tools: ['execute/getTerminalOutput', 'execute/awaitTerminal', 'execute/killTerminal', 'execute/runInTerminal', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search', 'web', 'memory']
 ---
 
 <!-- All paths in this file are relative to the workspace root directory. -->
@@ -89,7 +88,7 @@ Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
 3. Verify: "I will compile {X}. I will NOT {Y}."
 4. Check `.ai/library/patterns/`
 5. Check `.github/skills/`
-6. Scan `communication/ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
+6. Scan `{workfolder}/communication/ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
 7. Verify source exists & is readable
 8. Identify mode (FULL/CONSERVATIVE/VALIDATE) + `preserve_sections`
 9. Infer style from source
@@ -157,7 +156,7 @@ Before compression, resolve `<!-- @include path -->` directives:
 
 1. Scan for `<!-- @include {path} -->` lines
 2. Read target, replace directive with contents
-3. Add source-map: `<!-- @source {path} L1-L{end} -->`
+3. Add source-map: `<!-- @include-start: {path} -->` ... `<!-- @include-end: {path} -->`
 4. Validate: no unresolved directives
 5. Error on missing — never skip silently
 6. Nested @include NOT supported
@@ -211,7 +210,7 @@ Frontmatter = configuration — NEVER compress or alter.
 9. Write output to files — file-mediated state
 10. Create `_handoff.md` before terminating
 11. Write ≥1 feedback entry before handoff
-12. Scan `communication/ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+12. Scan `{workfolder}/communication/ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 13. Check `.ai/library/patterns/` before proposing
 
 ## NEVER
@@ -240,14 +239,13 @@ Frontmatter = configuration — NEVER compress or alter.
 |File|Purpose|
 |-|-|
 |`agents/kernel/three-laws.md`|Immutable behavioral laws|
-|`agents/kernel/quality-gates.md`|Phase transition verification|
+|`agents/kernel/quality-gates.md`|Phase transition + error recovery|
 |`agents/kernel/mode-protocol.md`|EXPLORE/EXPLOIT definitions|
 |`agents/kernel/tool-stakes.md`|Risk classification|
 |`agents/kernel/context-budget.md`|Token limits|
 |`agents/kernel/self-analysis.md`|Issue logging|
-|`agents/kernel/escalation.md`|Error recovery|
+|`agents/kernel/communication.md`|Human-AI communication + override|
 |`agents/kernel/prompt-preservation.md`|Prompt audit trail|
-|`agents/kernel/consistency-stack.md`|5-layer consistency|
 |`agents/kernel/glossary.md`|Shared terminology|
 
 ### Extended
@@ -255,3 +253,4 @@ Frontmatter = configuration — NEVER compress or alter.
 |-|-|
 |`agents/kernel/verification-methods.md`|Lightweight SA verification|
 |`agents/kernel/model-behavior.md`|Cross-model consistency|
+|`agents/reference/consistency-stack.md`|5-layer consistency|

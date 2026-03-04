@@ -189,4 +189,4 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 10. **Skip Phase 3 validation** — MANDATORY for ALL modes
 
 ## Kernel References
-> Kernel: See `agents/kernel/` — all inherited. Key: `three-laws.md`, `quality-gates.md`, `mode-protocol.md`, `tool-stakes.md`, `context-budget.md`, `prompt-preservation.md`, `consistency-stack.md`.
+> Kernel: See `agents/kernel/` — all inherited. Key: `three-laws.md`, `quality-gates.md`, `mode-protocol.md`, `tool-stakes.md`, `context-budget.md`, `prompt-preservation.md`. Reference: `agents/reference/consistency-stack.md`.

@@ -127,7 +127,7 @@ ABSORB → LIBRARY → SCOPE → DECOMPOSE → INTERFACE → TRADEOFF → SPECIF
 **Interface Specification:** For each: Purpose, Inputs (name/type/required/desc), Outputs (name/type/desc), Errors (error/when/handling), Constraints.
 **Trade-off Analysis:** For each: Context, Options table (option/pros/cons/effort), Recommendation, Rationale, Why Not Others, Trade-offs Accepted, Prior Art.
 
-> Kernel: See `agents/kernel/pattern-system.md` for pattern conflict prevention.
+> Kernel: See `agents/kernel/library-system.md` for pattern conflict prevention.
 
 ---
 

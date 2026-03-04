@@ -17,6 +17,10 @@ Immutable. Non-negotiable. Inherited by all agents.
 |>15 files to analyze|Partition + parallelize|
 |Uncertainty high|EXPLORE sub-agent first|
 
+### Structural Delegation
+
+**Delegation is structural, not optional.** The orchestrator has NO file-editing tools (`edit/createFile`, `edit/editFiles` removed from frontmatter). It cannot create or edit files even if it wanted to. Implementation = sub-agent, always.
+
 ### Enforcement
 
 - Orchestrator: MUST spawn, ❌ bypass

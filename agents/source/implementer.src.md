@@ -155,7 +155,7 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 |2nd|Alternative approach|
 |3rd|ESCALATE — design may be wrong|
 
-> Kernel: See `agents/kernel/escalation.md` for STOP-READ-DIAGNOSE-FIX-VERIFY protocol. Blocked after 3 → write `Status: BLOCKED` to `_handoff.md` → terminate.
+> Kernel: See `agents/kernel/quality-gates.md` § Error Recovery for STOP-READ-DIAGNOSE-FIX-VERIFY protocol. Blocked after 3 → write `Status: BLOCKED` to `_handoff.md` → terminate.
 
 ---
 

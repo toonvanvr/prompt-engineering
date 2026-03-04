@@ -15,24 +15,25 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |File|Purpose|Mutability|
 |-|-|-|
 |`three-laws.md`|Fundamental laws|IMMUTABLE|
-|`quality-gates.md`|Phase transition rules|STABLE|
+|`quality-gates.md`|Phase transition + error recovery + checkpoints|STABLE|
 |`mode-protocol.md`|EXPLORE/EXPLOIT definitions|STABLE|
 |`tool-stakes.md`|Risk classification|STABLE|
 |`todo-conventions.md`|TODO priority system|STABLE|
-|`human-loop.md`|Autonomous execution with human override via communication/ai_status.md|STABLE|
-|`escalation.md`|Error recovery|STABLE|
-|`sub-agent-mandate.md`|Spawning thresholds|STABLE|
-|`context-budget.md`|Token limits|ADJUSTABLE|
-|`consistency-stack.md`|5-layer template|REFERENCE|
+|`communication.md`|Human-AI communication & override protocol (merged human-loop.md)|STABLE|
+|`context-budget.md`|Read strategy & quality constraints (simplified, checkpoints → quality-gates)|ADJUSTABLE|
 |`self-analysis.md`|Logging categories|STABLE|
 |`feedback-collection.md`|Automatic feedback capture|STABLE|
-|`communication.md`|Human-AI communication|STABLE|
-|`library-system.md`|Knowledge persistence|STABLE|
+|`library-system.md`|Knowledge persistence (merged pattern-system.md)|STABLE|
 |`prompt-preservation.md`|Prompt audit trail|STABLE|
 |`output-budget.md`|Output token limits|ADJUSTABLE|
 |`thoroughness.md`|Context reading rules|STABLE|
 |`glossary.md`|Shared terminology|STABLE|
-|`pattern-system.md`|Pattern conflict prevention and naming|STABLE|
+|`model-behavior.md`|Cross-model consistency|STABLE|
+|`human-loop.md`|→ Merged into communication.md|REDIRECT|
+|`escalation.md`|→ Merged into quality-gates.md § Error Recovery|REDIRECT|
+|`pattern-system.md`|→ Merged into library-system.md|REDIRECT|
+|`sub-agent-mandate.md`|→ Core triggers inlined in orchestrator source|REDIRECT|
+|`consistency-stack.md`|→ Moved to agents/reference/consistency-stack.md|REDIRECT|
 
 ## Library Patterns
 

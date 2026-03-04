@@ -10,8 +10,6 @@ Knowledge persistence layer for per-repo learning.
 > Skills live at `.github/skills/` (VS Code native format).
 > Library grows organically; index.md files generated automatically.
 
----
-
 ## Directory Reference
 
 |Directory|Purpose|Content Type|Lifetime|
@@ -20,9 +18,7 @@ Knowledge persistence layer for per-repo learning.
 |`.ai/scratch/`|TEMPORAL phase-specific work|Drafts, WIP, phase outputs, debug logs|Session|
 |`.ai/feedback/`|Cross-session learning|Pattern failures, successes, quirks|Permanent|
 
-NEVER put phase-specific or temporal content in library/. NEVER put reusable knowledge only in scratch/.
-
----
+NEVER put temporal content in library/. NEVER put reusable knowledge only in scratch/.
 
 ## Folder Structure
 
@@ -34,21 +30,23 @@ NEVER put phase-specific or temporal content in library/. NEVER put reusable kno
 └── index.md          # Auto-generated directory
 ```
 
-Skills are stored separately at `.github/skills/` using the VS Code native skills format.
-
-### Category Definitions
-
 |Folder|Content|Examples|
 |-|-|-|
 |`patterns/`|Reusable solutions, templates|"Builder pattern for test data"|
 |`domain/`|Business/technical concepts|"FIBO transfer lifecycle"|
 |`quirks/`|Tool oddities, workarounds|"exec zsh for terminal capture"|
 
----
+## Pattern Management (from pattern-system.md)
+
+**Conflict Prevention:** Before adding a pattern, check existing patterns for contradictions. If found, document the conflict in the new pattern file with resolution rationale.
+
+**Naming:** Use descriptive names: `{what-it-solves}.md`. No abbreviations, no version numbers in filenames.
+
+**Format:** Each pattern file: 1-paragraph description → when to use → when NOT to use → example (≤5 lines).
 
 ## Skills (VS Code Native)
 
-Skills follow the [Agent Skills](https://agentskills.io/) open standard and are stored at `.github/skills/` — the VS Code native location discovered via `chat.agentSkillsLocations`.
+Skills follow the [Agent Skills](https://agentskills.io/) open standard at `.github/skills/` — the VS Code native location via `chat.agentSkillsLocations`.
 
 ```
 .github/skills/{skill-name}/
@@ -57,133 +55,22 @@ Skills follow the [Agent Skills](https://agentskills.io/) open standard and are 
 └── resources/         # Scripts, templates
 ```
 
-Skills are NOT stored in `.ai/library/`. They are a separate concern managed at the repository root level.
-
----
-
-## Library Content Format
-
-Library folders (patterns/, domain/, quirks/) use plain markdown:
-
-```markdown
-# {Title}
-
-**Category**: patterns | domain | quirks
-**Created**: {ISO8601}
-**Updated**: {ISO8601}
-
----
-
-## Summary
-{Brief description}
-
-## Content
-{Main content}
-
-## Related
-- [{link}]({path})
-```
-
----
+Skills are NOT stored in `.ai/library/`. Separate concern at repo root level.
 
 ## Growth Protocol
 
-### Adding Knowledge
-
-During execution, when discovering reusable knowledge:
-
-1. **Identify category**: HOW/WHAT works/WHY/WHAT means/WHAT breaks
+1. **Identify category**: HOW/WHAT works → patterns/ | WHAT means → domain/ | WHAT breaks → quirks/
 2. **Check existing**: Search `.ai/library/{category}/` for duplicates
-3. **Create or update**: 
-   - New topic → create file/folder
-   - Existing topic → append/update
+3. **Create or update**: New topic → create file. Existing → append/update.
 4. **Update index**: Add entry to `{category}/index.md`
 
-### Folder Hierarchy
-
-Start flat, add depth when needed:
-
-```
-# Initial
-.ai/library/patterns/
-├── builder-pattern.md
-└── factory-pattern.md
-
-# After growth
-.ai/library/patterns/
-├── testing/
-│   ├── builder-pattern.md
-│   └── factory-pattern.md
-├── api/
-│   └── versioning.md
-└── index.md
-```
-
----
+Start flat, add depth when needed (e.g., `patterns/testing/builder-pattern.md`).
 
 ## Agent Integration
 
-### Startup
+**Startup:** Scan `.github/skills/` for available skills (YAML frontmatter). Scan `.ai/library/` for patterns, domain knowledge, quirks.
 
-```md
-1. Scan `.github/skills/` for available skills
-2. Load skill descriptions (YAML frontmatter only)
-3. Scan `.ai/library/` for patterns, domain knowledge, quirks
-```
-
-### During Execution
-
-```md
-- When task matches skill description → load skill from `.github/skills/`
-- When discovering new knowledge → write to `.ai/library/`
-- Before termination → update index.md files
-```
-
-### Skill Matching
-
-Compare task description against skill descriptions:
-
-```
-Task: "Write integration tests for the API"
-Matched: .github/skills/testing/SKILL.md (description mentions "integration tests")
-Action: Load skill instructions
-```
-
----
-
-## Index Generation
-
-Each category has `index.md`:
-
-```markdown
-# {Category} Index
-
-Auto-generated. Last updated: {ISO8601}
-
-## Contents
-
-|Name|Path|Description|
-|-|-|-|
-|{name}|{path}|{summary}|
-```
-
-Update when:
-- New content added
-- Existing content modified
-- Periodic maintenance
-
----
-
-## Maintenance
-
-Maintenance includes:
-- Validating patterns still apply
-- Verifying quirks still exist
-- Updating domain knowledge
-- Regenerating indexes
-- Checking `.github/skills/` for outdated skills
-
----
+**During Execution:** Task matches skill description → load from `.github/skills/`. New knowledge discovered → write to `.ai/library/`. Before termination → update index.md.
 
 ## Cross-Tool Compatibility
 
@@ -192,25 +79,12 @@ Maintenance includes:
 |VS Code Copilot|`.github/skills/`|SKILL.md|
 |Claude Code|`.claude/skills/`|SKILL.md|
 
-Skills live at `.github/skills/` — the VS Code native default. VS Code discovers them via the `chat.agentSkillsLocations` setting.
+## Install Strategy
 
-### Install Strategy
-
-Files are copied (snapshot) during `bin/install.sh`. No symlinks are used.
+Files copied (snapshot) during `bin/install.sh`. No symlinks.
 
 |Installed Path|Source|Purpose|
 |-|-|-|
 |`.github/agents/*.agent.md`|`agents/compiled/`|Agent definitions|
 |`.github/agents/kernel/`|`agents/kernel/`|Behavioral rules|
-|`.github/skills/`|`.github/skills/` (source repo)|Reusable skills (VS Code native)|
-
-**Git Handling:**
-- Copied files are checked in
-- `.gitignore` already ignores `.ai/` contents as needed
-- Enables tools that read `.github/` to access shared knowledge
-
-**Verification:**
-```bash
-# Check installed files exist
-test -d .github/agents && test -d .ai/library
-```
+|`.github/skills/`|`.github/skills/` (source repo)|Reusable skills|

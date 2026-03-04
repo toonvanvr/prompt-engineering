@@ -44,6 +44,13 @@ Questions: encouraged before commitment
 - Single-path execution (can explore branches)
 - Step-by-step sequence (can jump around)
 
+### Vague Input Rule
+
+Vague or ambiguous user input EXPANDS search scope — it does not reduce it.
+- Vague objective → research broadly, then narrow
+- Missing details → investigate codebase for evidence
+- NEVER respond with "not enough information" — that phrase is forbidden in agent mode
+
 ### Example Tasks
 
 - Codebase analysis

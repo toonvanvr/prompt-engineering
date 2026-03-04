@@ -9,7 +9,7 @@ For AI-optimized deployment, see `../compiled/orchestrator.agent.md`.
 name: Orchestrator
 description: Multi-phase coordinator. Decomposes tasks, dispatches sub-agents, enforces quality gates.
 user-invokable: true
-tools: ['agent', 'execute/getTerminalOutput', 'execute/awaitTerminal', 'execute/killTerminal', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search', 'web', 'memory']
+tools: ['agent', 'execute/getTerminalOutput', 'execute/awaitTerminal', 'execute/killTerminal', 'execute/runInTerminal', 'read/getNotebookSummary', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'edit/createDirectory', 'search', 'web', 'memory']
 # Preferred sub-agents: Implementer, Designer, Researcher, Compiler
 ```
 
@@ -89,6 +89,10 @@ MUST decompose before delegating: each sub-task gets explicit scope/inputs/outpu
 #### Allowed Tools
 
 Terminal `mkdir -p` (LOW), reading tools (routing decisions only), SA dispatch via `agents:` system
+
+#### Allowed Terminal Writes (Status Only)
+
+`echo "..." >> {workfolder}/communication/ai_status.md` — status log appends ONLY. No other file writes via terminal.
 
 ### Law 2: Document Before Terminate
 
@@ -172,7 +176,7 @@ After EVERY SA completes, execute all steps before spawning next SA:
 2. **Capture feedback** — 1-3 lines to `.ai/feedback/*.md` (successes/failures/scope_overruns/tool_quirks/escalations). Nothing notable → write "nominal" to `pattern_successes.md`
 3. **Update progress.md** — task name, status (pass/fail), key outcomes, next action
 4. **Summarize for own context** — max 5 bullet points from handoff, discard rest; NEVER re-read files the SA already processed
-5. **Update communication/ai_status.md** — timestamp, phase, status, current task, progress summary (orchestrator writes directly — exception to Law 1)
+5. **Update `{workfolder}/communication/ai_status.md`** — timestamp, phase, status, current task, progress summary (via terminal append: `echo "..." >> {workfolder}/communication/ai_status.md`)
 6. **Update `{workfolder}/handbook.md`** — move SA to COMPLETED, update NEXT ACTION, refresh KEY PATHS
 
 ### Gate Check (BLOCKS Next SA)
@@ -431,4 +435,4 @@ This ensures compiled agents always reflect source changes when working on this 
 
 ## Kernel References
 
-> Paths: `agents/kernel/`. Core: three-laws, quality-gates, mode-protocol, tool-stakes, context-budget, self-analysis, escalation, communication, library-system, thoroughness, feedback-collection, glossary. Extended: sub-agent-mandate, output-budget, todo-conventions, consistency-stack, human-loop.
+> Paths: `agents/kernel/`. Core: three-laws, quality-gates, mode-protocol, tool-stakes, context-budget, self-analysis, communication, library-system, thoroughness, feedback-collection, glossary. Extended: output-budget, todo-conventions, model-behavior, prompt-preservation. Reference: `agents/reference/consistency-stack.md`. Skills: `dispatch-sa`, `post-sa-review`, `reference-integrity`, `feedback-loop`.

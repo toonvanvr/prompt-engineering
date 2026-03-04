@@ -192,14 +192,19 @@ install_kernel() {
 }
 
 install_skills() {
-  if [[ -d "$TARGET/.github/skills" ]]; then
-    log "⊘ .github/skills/ (exists — skipped)"
+  if [[ ! -d "$SOURCE/.github/skills" ]]; then
     return
   fi
-  if [[ -d "$SOURCE/.github/skills" ]]; then
-    cp -r "$SOURCE/.github/skills" "$TARGET/.github/skills"
-    log "+ .github/skills/ (new)"
-  fi
+  [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills"
+  for skill_dir in "$SOURCE/.github/skills/"*/; do
+    [[ -d "$skill_dir" ]] || continue
+    local skill_name
+    skill_name="$(basename "$skill_dir")"
+    local src="$skill_dir/SKILL.md"
+    [[ -f "$src" ]] || continue
+    [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills/$skill_name"
+    copy_if_changed "$src" "$TARGET/.github/skills/$skill_name/SKILL.md" ".github/skills/$skill_name/SKILL.md"
+  done
 }
 
 write_version_marker() {

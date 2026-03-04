@@ -8,177 +8,15 @@ Phase transition requirements. No-skip enforcement.
 
 > Phase N complete ≠ start Phase N+1. Gate must pass.
 
-```
-Phase N → [GATE] → Phase N+1
-             ↓ fail
-          Fix → Retry
-```
-
----
-
 ## Standard Gates
 
-### Analysis Gate
-
-|Check|Verification|
-|-|-|
-|Scope defined|IN/OUT documented|
-|Patterns identified|Pattern list exists|
-|Dependencies mapped|Dependency graph exists|
-|Risks documented|Risk list with severity|
-
-**Pass Condition:** All checks documented with evidence.
-
-### Design Gate
-
-|Check|Verification|
-|-|-|
-|Covers all requirements|Traceability matrix|
-|Addresses all patterns|Design maps to patterns|
-|Feasibility confirmed|No blocking constraints|
-|Approach approved|User sign-off (if required)|
-
-**Pass Condition:** Design document complete + covers scope.
-
-### Implementation Gate
-
-|Check|Verification|
-|-|-|
-|Matches design|Code implements spec|
-|Tests pass|Test execution log|
-|No regressions|Prior tests still pass|
-|Style consistent|Linter/formatter clean|
-
-**Pass Condition:** All tests pass + style clean.
-
-### Review Gate
-
-|Check|Verification|
-|-|-|
-|Blocking issues resolved|Zero blockers|
-|Warnings addressed|Acknowledged or fixed|
-|Documentation updated|Reflects changes|
-|Handoff complete|`_handoff.md` exists|
-|Feedback section populated|Even if "none"|
-
-**Pass Condition:** No blockers + handoff exists + feedback documented.
-
-### Startup Gate
-
-|Check|Verification|
-|-|-|
-|Library scan completed|`.ai/library/` checked for relevant context|
-|Prior feedback reviewed|`.ai/feedback/` scanned for applicable learnings|
-
-**Pass Condition:** Library scan logged in session startup.
-
----
-
-## Gate Verification Template
-
-```md
-## Gate: {gate_name}
-
-### Checks
-- [ ] {check_1}: {evidence}
-- [ ] {check_2}: {evidence}
-- [ ] {check_3}: {evidence}
-
-### Result
-- Status: {PASS | FAIL}
-- Blockers: {list if FAIL}
-- Next: {next phase or fix action}
-```
-
----
-
-## No-Skip Enforcement
-
-### FORBIDDEN
-
-- "Gate is probably passing"
-- Partial verification
-- Assumed success
-- Skipping due to time pressure
-- Soft pass (with caveats)
-- Asking human "should I proceed?" (use `communication/ai_status.md` Human Input instead)
-- Halting for confirmation on clear requests
-- "Ready to proceed to X phase?" (just proceed)
-- Any permission question before phase transition
-
-### REQUIRED
-
-- Explicit verification for each check
-- Evidence documented
-- PASS/FAIL determination before proceed
-- FAIL → fix → re-verify
-
----
-
-## Self-Approval Fast Path
-
-Enterprise flows proceed autonomously unless escalation triggers.
-
-### Conditions for Self-Approval
-
-|Gate|Self-Approve IF|Require Human IF|
+|Gate|Checks|Pass Condition|
 |-|-|-|
-|Analysis→Design|Analysis complete|Never|
-|Design→Implementation|Design spec exists + ≤2 domains|>2 domains AND public API change|
-|Implementation→Review|Tests pass|Tests fail after 3 attempts|
-
-### Self-Approval Protocol
-
-```
-1. Gate checks pass? → Self-approve, log decision, proceed
-2. Gate checks fail? → Fix, retry (3 attempts max)
-3. 3 failures? → Escalation protocol
-```
-
-### Rationale
-
-User prompt = implicit approval for the entire flow. Human checkpoints via `communication/ai_status.md` Human Input section, not blocking confirmation dialogs.
-
----
-
-## Gate Failure Protocol
-
-```
-FAIL detected
-    ↓
-1. Document failure reason
-2. Identify fix action
-3. Execute fix
-4. Re-run gate
-5. If still FAIL after 3 attempts → escalate
-```
-
-### Escalation Trigger
-
-- 3 consecutive gate failures
-- Blocker outside agent scope
-- Missing information for verification
-
-<!-- INTENTIONAL: No iteration limits on gate retries per GATE-06.
-     Agents may retry indefinitely if making progress. Escalation triggers
-     on consecutive failures with no forward progress, not on retry count. -->
-
----
-
-## Gate Evidence Types
-
-|Evidence|Use Case|Example|
-|-|-|-|
-|File exists|Artifact created|`design.md` exists|
-|Content matches|Structure correct|Required sections present|
-|Command output|Tests/tools|`npm test` exit 0|
-|Explicit statement|User approval|"Design approved" in chat|
-|SA handoff|SA-reported completion|`_handoff.md` with `Status: COMPLETE`|
-|Lightweight check|Verify scope/existence|`git diff --stat`, `wc -l` (`verification-methods.md`)|
-
-**SA Handoff as Evidence:** `Status: COMPLETE` + `Confidence: HIGH` → gate passes without re-reading full output. Handoff IS evidence. See `verification-methods.md`.
-
----
+|Analysis|Scope IN/OUT documented, patterns identified, dependencies mapped, risks listed|All checks documented with evidence|
+|Design|Covers requirements, addresses patterns, feasibility confirmed|Design document complete + covers scope|
+|Implementation|Matches design, tests pass, no regressions, style consistent|All tests pass + style clean|
+|Review|Blockers resolved, docs updated, `_handoff.md` exists, feedback populated|No blockers + handoff exists|
+|Startup|`.ai/library/` scanned, `.ai/feedback/` reviewed|Library scan logged|
 
 ## Phase-Gate Matrix
 
@@ -189,119 +27,107 @@ FAIL detected
 |Implementation|Tests pass|Test log|Review|
 |Review|No blockers|`review.md`|Complete|
 
----
+## No-Skip Enforcement
 
-## Integration with Handoff
+**FORBIDDEN:** "Gate is probably passing", partial verification, assumed success, soft pass, asking "should I proceed?" (use `{workfolder}/communication/ai_status.md` instead), any permission question before transition.
 
-Every handoff includes gate status:
+**REQUIRED:** Explicit verification per check, evidence documented, PASS/FAIL before proceed. FAIL → fix → re-verify.
 
-```md
-## Verification
+## Self-Approval Fast Path
 
-### Gate: {gate_name}
-- Status: {PASS}
-- Evidence: {file/command}
-- Timestamp: {when}
-```
+|Gate|Self-Approve IF|Require Human IF|
+|-|-|-|
+|Analysis→Design|Analysis complete|Never|
+|Design→Implementation|Spec exists + ≤2 domains|>2 domains AND public API change|
+|Implementation→Review|Tests pass|Tests fail after 3 attempts|
 
----
-
-## Summary
-
-```
-Every phase → Gate verification → Next phase
-Gate = explicit checks + evidence
-FAIL = fix + re-verify
-Skip = violation → self-analysis log
-```
-
----
+Protocol: Gate passes → self-approve + log + proceed. Gate fails → fix + retry (3 max). 3 failures → escalate. User prompt = implicit approval. Human checks via `{workfolder}/communication/ai_status.md`.
 
 ## High-Stakes Gates
 
-### Definition
-
-Gates that require explicit human approval before proceeding.
-
-### Default High-Stakes Gates
-
 |Gate|Trigger|Rationale|
 |-|-|-|
-|Design → Implementation|Always|Implementation is irreversible work|
+|Design → Implementation|Always|Irreversible work|
 |Multi-domain changes|>2 domains|Cross-cutting impact|
 |Public interface changes|API/schema|Breaking change risk|
 
-### High-Stakes Gate Template
+**Low-Risk Override:** Self-approve if ALL: ≤2 files, single domain, non-breaking, test coverage exists.
 
-```md
-## High-Stakes Gate: {gate_name}
+**Approval Sources (priority):** User chat → `{workfolder}/communication/ai_status.md` `ACTION: approve` → pre-approval in dispatch.
 
-### Verification Status
-|Check|Status|Evidence|
-|-|-|-|
-|{check}|{PASS/FAIL}|{reference}|
+## Deliverable Gate
 
-### Approval Required
+Dispatches MUST list deliverables as checkboxes. Unchecked deliverable = gate failure. No implicit deliverables.
 
-⚠️ This gate requires explicit approval.
+## Gate Evidence Types
 
-### Summary for Approver
-{2-3 sentence summary of what was completed}
+|Evidence|Use Case|
+|-|-|
+|File exists|Artifact created|
+|Content matches|Structure correct|
+|Command output|Tests/tools (`npm test` exit 0)|
+|SA handoff|`Status: COMPLETE` + `Confidence: HIGH` → gate passes|
+|Lightweight check|`git diff --stat`, `wc -l`|
 
-### Artifacts for Review
-- {artifact}: {path}
-
-### Risk Assessment
-|Factor|Level|Note|
-|-|-|-|
-|File count|{n}|{within/exceeds threshold}|
-|Domain count|{n}|{domains involved}|
-|Reversibility|{HIGH/LOW}|{explanation}|
-
-### Decision
-- [ ] APPROVE: Proceed to {next_phase}
-- [ ] DENY: {reason}
-
-⚠️ Requires gate pass OR escalation. Self-approval enabled for standard flows.
-```
-
-### Approval Sources (Priority Order)
-
-1. **User message in chat**: "Approved" / "Proceed" / "LGTM"
-2. **communication/ai_status.md**: `ACTION: approve` entry in Human Input section
-3. **Pre-approval in dispatch**: Scope explicitly approved upstream
-
-### Override: Low-Risk Fast Path
-
-For changes meeting ALL criteria:
-- ≤2 files modified
-- Single domain
-- Non-breaking (internal only)
-- Test coverage exists (tests cover modified functionality, or documentation-only change)
-
-May use **self-approval with documentation**:
-
-```md
-## Self-Approval: {gate_name}
-
-### Low-Risk Criteria Met
-- [ ] ≤2 files: {YES}
-- [ ] Single domain: {YES}
-- [ ] Non-breaking: {YES}
-- [ ] Tests cover changes: {YES}
-
-### Proceeding with self-approval.
-```
-
-### Deliverable Gate
-Dispatches MUST list deliverables as checkboxes. Handoff incomplete until ALL checked. Unchecked deliverable = gate failure. No implicit deliverables — if it's not listed, it's not required.
-
-### Post-Compilation Integrity Gate
+## Post-Compilation Integrity Gate
 
 |Check|Verification|
 |-|-|
 |Path preservation|All paths with `/` in source retained in compiled|
-|Kernel ref completeness|All kernel reference entries in source present in compiled|
+|Kernel ref completeness|All kernel reference entries in source present|
 |Glossary conformance|No glossary-defined path reduced to bare form|
 
-**Pass Condition:** All checks pass. FAIL blocks deployment.
+**FAIL blocks deployment.**
+
+---
+
+## Error Recovery (from escalation protocol)
+
+### STOP-READ-DIAGNOSE-FIX-VERIFY Cycle
+
+Error occurs → 1. STOP current action → 2. READ error completely → 3. DIAGNOSE root cause → 4. FIX targeted correction → 5. VERIFY resolution.
+
+### 3-Attempt Progression
+
+|Attempt|Approach|Mindset|
+|-|-|-|
+|1|Direct fix from error message|Error is as stated|
+|2|Alternative strategy|Initial diagnosis was wrong|
+|3|Full diagnostic / spawn diagnostic SA|Something fundamental is wrong|
+
+### After 3 Attempts → Escalate
+
+Document: original error, 3 attempts + results, diagnosis, blockers, specific ask, resume instructions.
+
+|Escalation Type|Trigger|Resolution|
+|-|-|-|
+|Technical|3 failed attempts|User intervention|
+|Scope|Out-of-scope changes needed|User approval|
+|Information|Missing critical info|User provides context|
+|Permission|Access denied|User grants access|
+|Complexity|Beyond single-agent capacity|Spawn specialized SA|
+
+Pre-escalation: all 3 attempts documented, each used different approach, error fully captured, root cause hypothesis formed, partial progress saved, resume path defined.
+
+---
+
+## Action-Based Checkpoints (Context Management)
+
+LLMs cannot count tokens. Measure ACTIONS instead.
+
+### Soft Checkpoint (self-assessment)
+
+Trigger after: 10 deep file reads, 30 tool calls, or 200 lines of output. Ask "Can I complete now?" YES → proceed. NO + specific gap → ≤5 targeted reads. NO + broad gap → delegate to SA.
+
+### Hard Checkpoint (mandatory)
+
+Trigger after: 25 deep reads, 50 tool calls, or output exceeding target by 2×. MUST synthesize, delegate, or checkpoint state to files.
+
+### Overflow Signals
+
+|Signal|Action|
+|-|-|
+|Response truncating|Checkpoint to file, spawn SA|
+|Forgetting early context|Summarize working memory to file|
+|Repetitive re-reading|Delegate to fresh SA|
+|>100 files touched|Spawn SA for partitioning|
