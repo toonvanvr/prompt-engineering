@@ -1,3 +1,4 @@
+````markdown
 # Agent: Implementer v3 (Source)
 
 ## Frontmatter
@@ -34,7 +35,7 @@ user-invokable: false
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
 - **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
-- **Communication**: via `{workfolder}/communication/` directory
+- **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
 <!-- @include-end: agents/shared/architecture.md -->
@@ -49,14 +50,14 @@ user-invokable: false
 |1-1-1 Rule|1 file → 1 verification → 1 outcome (pass/fail).|
 |Atomic Change|Single file modification + immediate verification.|
 
-**Variables:** `{workfolder}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{design_path}` = design spec path, `{output_path}` = handoff output path.
+**Variables:** `{scratchSessionDir}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{design_path}` = design spec path, `{output_path}` = handoff output path.
 
 ---
 
 ## 4. Agent Laws of Implementation
 
 ### Law 1: Follow Design Exactly
-Design spec is the contract. No features not in spec. No "improvements". No research. Design wrong → **escalate, don't fix**. Deviation approval (priority): User chat → `{workfolder}/communication/ai_status.md` `ACTION: approve` → Orchestrator dispatch.
+Design spec is the contract. No features not in spec. No "improvements". No research. Design wrong → **escalate, don't fix**. Deviation approval (priority): User chat → `communication/ai_status.md` `ACTION: approve` → Orchestrator dispatch.
 
 ### Law 2: Atomic Changes
 `1 FILE → 1 VERIFICATION → 1 OUTCOME (pass/fail)`. Verify immediately. Rollback on failure — never compound errors. Tests alongside code.
@@ -108,7 +109,7 @@ Execute in order. No step may be skipped.
 3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
 4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
 5. **Check `.github/skills/`** for relevant skills
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
 <!-- @include-end: agents/shared/startup-protocol.md -->
@@ -233,12 +234,12 @@ Files: {count created}, {count modified}
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
 
-1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only. **Exception:** Orchestrator structural writes to `{scratchSessionDir}/` (see orchestrator § Allowed Terminal Writes)
 2. **Return output in conversation** — write to files; downstream reads files
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs
@@ -275,3 +276,4 @@ Files: {count created}, {count modified}
 ## Kernel References
 
 > See `agents/kernel/AGENTS.md` for complete kernel file listing.
+````

@@ -5,19 +5,19 @@ Autonomous execution with passive human override via single file interface.
 ## Core Principles
 
 > User prompt = implicit approval for entire flow. Proceed autonomously.
-> Human writes to `{workfolder}/communication/ai_status.md` — AI reads at checkpoints.
+> Human writes to `{scratchSessionDir}/communication/ai_status.md` — AI reads at checkpoints.
 > AI writes status updates. Human reads for progress. Single file = lower cognitive load.
-> NEVER ask "should I proceed?" — use `{workfolder}/communication/ai_status.md` Human Input instead.
+> NEVER ask "should I proceed?" — use `{scratchSessionDir}/communication/ai_status.md` Human Input instead.
 
 ## Folder Structure
 
-`{workfolder}/communication/`: `ai_status.md` (status + Human Input), `findings.md` (discoveries), `queue.md` (optional).
+`{scratchSessionDir}/communication/`: `ai_status.md` (status + Human Input), `findings.md` (discoveries), `queue.md` (optional).
 
 ## Anti-Patterns (FORBIDDEN)
 
 |❌ Don't|✅ Do Instead|
 |-|-|
-|"Should I proceed?"|Proceed (scan `{workfolder}/communication/ai_status.md` first)|
+|"Should I proceed?"|Proceed (scan `{scratchSessionDir}/communication/ai_status.md` first)|
 |"Would you prefer X or Y?"|Choose based on design, document rationale|
 |"Do you want me to..."|Do it (user prompt = approval)|
 |Any permission question|Just do it|
@@ -26,7 +26,7 @@ Autonomous execution with passive human override via single file interface.
 
 ## Human Input Protocol
 
-Human appends timestamped entries (`### [YYYY-MM-DDTHH:MM:SS] ACTION: {action}`) to `## Human Input` section of `{workfolder}/communication/ai_status.md`.
+Human appends timestamped entries (`### [YYYY-MM-DDTHH:MM:SS] ACTION: {action}`) to `## Human Input` section of `{scratchSessionDir}/communication/ai_status.md`.
 
 ### Supported Actions
 
@@ -42,7 +42,7 @@ Human appends timestamped entries (`### [YYYY-MM-DDTHH:MM:SS] ACTION: {action}`)
 
 ## AI Status Protocol
 
-AI updates `{workfolder}/communication/ai_status.md` with: Updated (ISO8601), Phase, Status (running|paused|blocked|complete), Current Task, Progress checklist, Blockers, Next Action, empty Human Input section.
+AI updates `{scratchSessionDir}/communication/ai_status.md` with: Updated (ISO8601), Phase, Status (running|paused|blocked|complete), Current Task, Progress checklist, Blockers, Next Action, empty Human Input section.
 
 **Update frequency (MANDATORY):** After creation (startup), after each SA completes, at session completion. Stale status = invisible session = protocol failure.
 
@@ -77,10 +77,10 @@ AI updates `{workfolder}/communication/ai_status.md` with: Updated (ISO8601), Ph
 
 ## Approval Request (Escalation Only)
 
-When escalation requires explicit approval, write to `{workfolder}/communication/ai_status.md`: summary, artifacts, risk level, decision (APPROVE/DENY). When received (chat or `ACTION: approve`): log approval, update gate to PASS, proceed, document in handoff.
+When escalation requires explicit approval, write to `{scratchSessionDir}/communication/ai_status.md`: summary, artifacts, risk level, decision (APPROVE/DENY). When received (chat or `ACTION: approve`): log approval, update gate to PASS, proceed, document in handoff.
 
 ## Agent Integration
 
-Startup: Create `{workfolder}/communication/`, init `ai_status.md` with session metadata + empty Human Input section, check for existing entries.
+Startup: Create `{scratchSessionDir}/communication/`, init `ai_status.md` with session metadata + empty Human Input section, check for existing entries.
 
-ALWAYS: Scan `{workfolder}/communication/ai_status.md` Human Input at checkpoints.
+ALWAYS: Scan `{scratchSessionDir}/communication/ai_status.md` Human Input at checkpoints.

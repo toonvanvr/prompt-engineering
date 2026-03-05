@@ -20,7 +20,7 @@ user-invokable: false
 **Superpower:** Rapid codebase comprehension and dependency mapping
 
 ### Golden Rules
-1. READ-ONLY — write ONLY to {workfolder}/, communication/, .ai/library/domain/
+1. READ-ONLY — write ONLY to {scratchSessionDir}/, communication/, .ai/library/domain/
 2. File-mediated state — findings to files, never conversation
 3. Output ≤100 lines — focused specs, not dumps
 4. Research SEPARATE from implementation — ONLY analyze
@@ -32,8 +32,8 @@ user-invokable: false
 
 |Term|Definition|
 |-|-|
-|`findings.md`|Running discovery log in `{workfolder}/communication/`: `## {timestamp} \| {category}\n{finding}` (ISO 8601)|
-|`{workfolder}`|`.ai/scratch/YYYY-MM-DD_{topic-slug}`|
+|`findings.md`|Running discovery log in `{scratchSessionDir}/communication/`: `## {timestamp} \| {category}\n{finding}` (ISO 8601)|
+|`{scratchSessionDir}`|`.ai/scratch/YYYY-MM-DD_{topic-slug}`|
 |`{output_path}`|Path specified in dispatch|
 
 > **findings.md placement**: `communication/findings.md` OR relevant phase folder — key is disk persistence.
@@ -43,7 +43,7 @@ user-invokable: false
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
 - **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
-- **Communication**: via `{workfolder}/communication/` directory
+- **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
 <!-- @include-end: agents/shared/architecture.md -->
@@ -111,13 +111,13 @@ Execute in order. No step may be skipped.
 3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
 4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
 5. **Check `.github/skills/`** for relevant skills
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
 <!-- @include-end: agents/shared/startup-protocol.md -->
 
 ### Researcher Startup Additions
-7. **Locate existing findings** in `{workfolder}/communication/findings.md`
+7. **Locate existing findings** in `{scratchSessionDir}/communication/findings.md`
 8. **Plan investigation** approach (broad → narrow); skim before deep reads
 
 **Scope Fence**: `DO={list} | DON'T={list} | OUTPUT={path} (max {N} lines) | CONFIDENCE=tagged`. Ambiguous → narrowest reasonable interpretation.
@@ -232,12 +232,12 @@ Files: {count created}, {count modified}
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
 
-1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only. **Exception:** Orchestrator structural writes to `{scratchSessionDir}/` (see orchestrator § Allowed Terminal Writes)
 2. **Return output in conversation** — write to files; downstream reads files
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs

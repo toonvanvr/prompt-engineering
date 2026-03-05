@@ -55,8 +55,8 @@ Output limit: {500|300|150} lines/response
 Cumulative budget: {remaining from parent}
 
 ## Async Scan Points
-- Start of execution: read `{workfolder}/communication/ai_status.md` Human Input
-- Before handoff creation: read `{workfolder}/communication/ai_status.md` Human Input
+- Start of execution: read `{scratchSessionDir}/communication/ai_status.md` Human Input
+- Before handoff creation: read `{scratchSessionDir}/communication/ai_status.md` Human Input
 
 ## Scope
 |IN|OUT|

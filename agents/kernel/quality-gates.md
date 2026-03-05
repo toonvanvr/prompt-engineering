@@ -29,7 +29,7 @@ Phase transition requirements. No-skip enforcement.
 
 ## No-Skip Enforcement
 
-**FORBIDDEN:** "Gate is probably passing", partial verification, assumed success, soft pass, asking "should I proceed?" (use `{workfolder}/communication/ai_status.md` instead), any permission question before transition.
+**FORBIDDEN:** "Gate is probably passing", partial verification, assumed success, soft pass, asking "should I proceed?" (use `{scratchSessionDir}/communication/ai_status.md` instead), any permission question before transition.
 
 **REQUIRED:** Explicit verification per check, evidence documented, PASS/FAIL before proceed. FAIL → fix → re-verify.
 
@@ -41,7 +41,7 @@ Phase transition requirements. No-skip enforcement.
 |Design→Implementation|Spec exists + ≤2 domains|>2 domains AND public API change|
 |Implementation→Review|Tests pass|Tests fail after 3 attempts|
 
-Protocol: Gate passes → self-approve + log + proceed. Gate fails → fix + retry (3 max). 3 failures → escalate. User prompt = implicit approval. Human checks via `{workfolder}/communication/ai_status.md`.
+Protocol: Gate passes → self-approve + log + proceed. Gate fails → fix + retry (3 max). 3 failures → escalate. User prompt = implicit approval. Human checks via `{scratchSessionDir}/communication/ai_status.md`.
 
 ## High-Stakes Gates
 
@@ -53,7 +53,7 @@ Protocol: Gate passes → self-approve + log + proceed. Gate fails → fix + ret
 
 **Low-Risk Override:** Self-approve if ALL: ≤2 files, single domain, non-breaking, test coverage exists.
 
-**Approval Sources (priority):** User chat → `{workfolder}/communication/ai_status.md` `ACTION: approve` → pre-approval in dispatch.
+**Approval Sources (priority):** User chat → `{scratchSessionDir}/communication/ai_status.md` `ACTION: approve` → pre-approval in dispatch.
 
 ## Deliverable Gate
 

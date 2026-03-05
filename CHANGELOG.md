@@ -1,5 +1,70 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- **Orchestrator source overhaul** — tool rationalization, verbatim prompt resolution, variable rename, parallelization guidance, changelog convention, mode derivation
+
+## [2.3.0-alpha.1] - 2026-03-04
+
+### Added
+- **8 new VS Code skills** — feedback-loop, output-format, prompt-audit, reference-integrity, self-diagnosis, tool-risk, vagueness-handling, verification
+- **`agents/reference/consistency-stack.md`** — moved from kernel to reference (detail table)
+- **`.github/.gitignore`** — gitignore for skills directory
+
+### Changed
+- **Kernel consolidation** — merged `human-loop.md` into `communication.md`, `escalation.md` into `quality-gates.md`, `pattern-system.md` into `library-system.md`, `sub-agent-mandate.md` inlined into orchestrator, `consistency-stack.md` moved to `agents/reference/`
+- **`agents/kernel/context-budget.md`** — simplified, checkpoints moved to quality-gates
+- **`agents/kernel/quality-gates.md`** — restructured with merged escalation content
+- **`agents/kernel/communication.md`** — consolidated with human-loop protocol
+- **`agents/kernel/library-system.md`** — merged with pattern-system
+- **`agents/kernel/mode-protocol.md`** — added skill reference
+- **`agents/kernel/three-laws.md`** — added skill cross-references
+- **All 5 agent source files** — updated kernel references for consolidation
+- **`agents/templates/dispatch-base.md`** — updated references
+- **`agents/templates/dispatch-implement.md`** — updated references
+- **`bin/install.sh`** — skill installation support
+- **`agents/kernel/AGENTS.md`** — updated file reference with redirects for merged files
+- **`post-sa-review` skill** — updated for consolidated kernel
+
+## [2.2.1] - 2026-03-04
+
+### Fixed
+- **`communication/ai_status.md`** — path qualification and reference corrections
+- **`agents/kernel/quality-gates.md`** — expanded checkpoint protocol
+- **`agents/kernel/tool-stakes.md`** — path corrections
+- **`agents/kernel/prompt-preservation.md`** — path fix
+- **`agents/shared/constraints.md`** — constraint clarification
+- **`agents/source/orchestrator.src.md`** — reference fixes
+- **`agents/templates/dispatch-base.md`** — template path fixes
+- **`agents/templates/dispatch-implement.md`** — template path fixes
+
+### Changed
+- **`agents/kernel/AGENTS.md`** — updated file reference
+- **`agents/source/compiler.src.md`** — minor updates
+- **`agents/source/implementer.src.md`** — reference correction
+
+## [2.2.0] - 2026-02-24
+
+### Added
+- **`agents/kernel/verification-methods.md`** — lightweight SA verification methods
+- **`agents/kernel/model-behavior.md`** — cross-model consistency rules
+
+### Changed
+- **`agents/kernel/communication.md`** — expanded communication protocol
+- **`agents/kernel/context-budget.md`** — simplified budget rules
+- **`agents/kernel/feedback-collection.md`** — immediate feedback capture
+- **`agents/kernel/thoroughness.md`** — updated context reading rules
+- **`agents/kernel/output-budget.md`** — adjusted output limits
+- **`agents/kernel/quality-gates.md`** — added checkpoint rules
+- **`agents/source/orchestrator.src.md`** — ai_status integration, tools update
+- **`agents/source/designer.src.md`** — minor update
+- **`agents/source/researcher.src.md`** — minor update
+- **`agents/templates/dispatch-base.md`** — simplified dispatch template
+- **`agents/shared/constraints.md`** — constraint update
+- **`agents/shared/startup-protocol.md`** — startup update
+- **`bin/install.sh`** — improvements
+
 ## [2.1.0] - 2026-02-23
 
 ### Added

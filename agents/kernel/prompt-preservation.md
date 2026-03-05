@@ -84,7 +84,7 @@ Add to ALWAYS list:
 
 Add to startup protocol:
 ```md
-2. Create workfolder: `.ai/scratch/{YYYY-MM-DD}_{topic}/`
+2. Create scratchSessionDir: `.ai/scratch/{YYYY-MM-DD}_{topic}/`
    a. Create `00_prompts/` subdirectory
    b. Write `00_initial_request.md` with user prompt
 ```

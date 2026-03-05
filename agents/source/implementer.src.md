@@ -42,7 +42,7 @@ user-invokable: false
 |1-1-1 Rule|1 file → 1 verification → 1 outcome (pass/fail).|
 |Atomic Change|Single file modification + immediate verification.|
 
-**Variables:** `{workfolder}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{design_path}` = design spec path, `{output_path}` = handoff output path.
+**Variables:** `{scratchSessionDir}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{design_path}` = design spec path, `{output_path}` = handoff output path.
 
 ---
 

@@ -143,9 +143,9 @@ Before implementation, verify against `.ai/library/domain/`:
 
 |Trigger|When|Action|
 |-|-|-|
-|Task-start|Before reading design|Check `{workfolder}/communication/ai_status.md` Human Input section|
-|Pre-impl|Before modifying files|Check `{workfolder}/communication/ai_status.md` Human Input section|
-|Pre-handoff|Before creating handoff|Check `{workfolder}/communication/ai_status.md` Human Input section|
+|Task-start|Before reading design|Check `{scratchSessionDir}/communication/ai_status.md` Human Input section|
+|Pre-impl|Before modifying files|Check `{scratchSessionDir}/communication/ai_status.md` Human Input section|
+|Pre-handoff|Before creating handoff|Check `{scratchSessionDir}/communication/ai_status.md` Human Input section|
 
 Process instructions if found. Archive to `00_prompts/`.
 Continue immediately (halt only on `ACTION: abort`).

@@ -202,6 +202,11 @@ install_skills() {
     skill_name="$(basename "$skill_dir")"
     local src="$skill_dir/SKILL.md"
     [[ -f "$src" ]] || continue
+    # Skip repo-only skills when installing to remote targets
+    if [[ "$CONTEXT" != "self" ]] && grep -q "repo-only: true" "$src"; then
+      log "⊘ $skill_name (repo-only — skipped)"
+      continue
+    fi
     [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills/$skill_name"
     copy_if_changed "$src" "$TARGET/.github/skills/$skill_name/SKILL.md" ".github/skills/$skill_name/SKILL.md"
   done

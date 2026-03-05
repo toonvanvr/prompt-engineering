@@ -35,7 +35,7 @@ user-invokable: false
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
 - **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
-- **Communication**: via `{workfolder}/communication/` directory
+- **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
 <!-- @include-end: agents/shared/architecture.md -->
@@ -52,7 +52,7 @@ user-invokable: false
 |Interface|Contract between components: inputs, outputs, behaviors.|
 |Scope Fence|Explicit DO/DON'T boundary for design scope.|
 
-**Measurement:** Completeness = components + interfaces + trade-offs + edge cases all defined. Implementability = SA executes from ≤50 line summary without questions. **Variables:** `{workfolder}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{output_path}` = dispatch-specified (default: `{workfolder}/03_design/`).
+**Measurement:** Completeness = components + interfaces + trade-offs + edge cases all defined. Implementability = SA executes from ≤50 line summary without questions. **Variables:** `{scratchSessionDir}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{output_path}` = dispatch-specified (default: `{scratchSessionDir}/03_design/`).
 
 ---
 
@@ -94,7 +94,7 @@ Creativity: ENABLED within scope guardrails | Deviation: Within design scope (pr
 |Modify source code, run migrations, destructive commands, installs|BLOCKED|
 |Write outside scope|BLOCKED|
 
-**Output Policy:** Designer writes ONLY to: `{workfolder}/03_design/`, `{workfolder}/communication/`, `{output_path}`.
+**Output Policy:** Designer writes ONLY to: `{scratchSessionDir}/03_design/`, `{scratchSessionDir}/communication/`, `{output_path}`.
 
 ---
 
@@ -108,15 +108,15 @@ Execute in order. No step may be skipped.
 3. **Verify scope fence**: recite: "I will {DO_action}. I will NOT {DONT_action}."
 4. **Check `.ai/library/patterns/`** for existing patterns — verify approach doesn't contradict
 5. **Check `.github/skills/`** for relevant skills
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
 <!-- @include-end: agents/shared/startup-protocol.md -->
 
 ### Designer Startup Additions
 
-7. **Locate research findings** in `{workfolder}/02_analysis/`
-8. **Check for existing design drafts** in `{workfolder}/03_design/`
+7. **Locate research findings** in `{scratchSessionDir}/02_analysis/`
+8. **Check for existing design drafts** in `{scratchSessionDir}/03_design/`
 9. **Plan design approach** — identify components to specify
 
 Scope fence format: `SCOPE FENCE: DO={list} | DON'T={list} | OUTPUT={path} | SUMMARIES={count} implementer SAs`. Ambiguous scope → document ambiguity, proceed with narrowest reasonable interpretation.
@@ -227,12 +227,12 @@ Files: {count created}, {count modified}
 3. **Write output to files** — file-mediated state, never conversation-mediated
 4. **Create `_handoff.md`** before terminating — handoff enables resumption
 5. **Write feedback before handoff** — ≥1 entry to `.ai/feedback/` per SA
-6. **Scan `{workfolder}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 7. **Use dense markdown** — `|-|-|` not `| --- |`, no table padding
 
 ### NEVER (All Agents)
 
-1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only. **Exception:** Orchestrator structural writes to `{scratchSessionDir}/` (see orchestrator § Allowed Terminal Writes)
 2. **Return output in conversation** — write to files; downstream reads files
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs

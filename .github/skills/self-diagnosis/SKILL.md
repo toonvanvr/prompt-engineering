@@ -15,7 +15,7 @@ How agents document their own execution flaws for continuous improvement.
 |`LAW_VIOLATION`|Three Laws breached|
 
 ## Log Location
-`{workfolder}/_self_analysis.md`
+`{scratchSessionDir}/_self_analysis.md`
 
 ## When to Log
 - Any Three Law violation (always)

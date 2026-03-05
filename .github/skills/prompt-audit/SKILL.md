@@ -5,7 +5,7 @@
 Preserve every user prompt for audit trail and context recovery.
 
 ## Startup Sequence
-1. Create `{workfolder}/00_prompts/` subdirectory
+1. Create `{scratchSessionDir}/00_prompts/` subdirectory
 2. Copy initial prompt verbatim to `00_prompts/00_initial_request.md`
 3. Never modify the original prompt text
 

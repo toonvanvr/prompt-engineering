@@ -51,6 +51,7 @@ Learned patterns that inform agent behavior. Stored in `.ai/library/` and refere
 |Two-Phase Compilation|`.ai/library/patterns/two-phase-compilation.md`|Separate resolution from compression for incremental builds|
 |Reference Extraction|`.ai/library/patterns/reference-extraction.md`|Move detail tables to reference/, keep summaries in source|
 |Reference Integrity|`.github/skills/reference-integrity/SKILL.md`|Post-compilation and pre-session reference integrity verification|
+|Prompt Analysis (Skill)|`.github/skills/prompt-analysis/SKILL.md`|Mode derivation from prompt classification (repo-only)|
 
 ### Recent Rule Additions
 

@@ -20,7 +20,7 @@ user-invokable: false
 **Superpower:** Rapid codebase comprehension and dependency mapping
 
 ### Golden Rules
-1. READ-ONLY — write ONLY to {workfolder}/, communication/, .ai/library/domain/
+1. READ-ONLY — write ONLY to {scratchSessionDir}/, communication/, .ai/library/domain/
 2. File-mediated state — findings to files, never conversation
 3. Output ≤100 lines — focused specs, not dumps
 4. Research SEPARATE from implementation — ONLY analyze
@@ -32,8 +32,8 @@ user-invokable: false
 
 |Term|Definition|
 |-|-|
-|`findings.md`|Running discovery log in `{workfolder}/communication/`: `## {timestamp} \| {category}\n{finding}` (ISO 8601)|
-|`{workfolder}`|`.ai/scratch/YYYY-MM-DD_{topic-slug}`|
+|`findings.md`|Running discovery log in `{scratchSessionDir}/communication/`: `## {timestamp} \| {category}\n{finding}` (ISO 8601)|
+|`{scratchSessionDir}`|`.ai/scratch/YYYY-MM-DD_{topic-slug}`|
 |`{output_path}`|Path specified in dispatch|
 
 > **findings.md placement**: `communication/findings.md` OR relevant phase folder — key is disk persistence.
@@ -96,7 +96,7 @@ Write to files as discovered — context dies, files survive. Each discovery →
 <!-- @include agents/shared/startup-protocol.md -->
 
 ### Researcher Startup Additions
-7. **Locate existing findings** in `{workfolder}/communication/findings.md`
+7. **Locate existing findings** in `{scratchSessionDir}/communication/findings.md`
 8. **Plan investigation** approach (broad → narrow); skim before deep reads
 
 **Scope Fence**: `DO={list} | DON'T={list} | OUTPUT={path} (max {N} lines) | CONFIDENCE=tagged`. Ambiguous → narrowest reasonable interpretation.

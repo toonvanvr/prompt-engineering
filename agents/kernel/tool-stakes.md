@@ -73,6 +73,10 @@ These operations are NEVER permitted, regardless of stakes level:
 
 **Violation = immediate self-analysis log + task failure.**
 
+#### Orchestrator Exemption
+
+The FORBIDDEN shell writes above apply to agents with VS Code edit tools. The orchestrator has NO edit tools (structurally removed). Its terminal writes target ONLY `{scratchSessionDir}/` paths (ephemeral, gitignored) for: verbatim prompt (`00_prompts/`), status (`communication/`), scaffolding (`progress.md`, `handbook.md`). These are NOT source code and do NOT need undo history.
+
 ---
 
 ## Approval Protocol

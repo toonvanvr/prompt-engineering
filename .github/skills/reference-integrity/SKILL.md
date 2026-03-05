@@ -14,7 +14,7 @@ Verify that all file references in agent system files resolve to existing target
 ### 1. File Existence
 Scan backtick-wrapped paths in `agents/`, `.ai/`, `.github/` → verify each target exists on disk.
 - Report broken references as `file:line → missing_path`
-- Skip runtime paths containing `{workfolder}`, `{session}`, or template variables
+- Skip runtime paths containing `{scratchSessionDir}`, `{session}`, or template variables
 
 ### 2. Pipeline Path Survival
 For each path containing `/` in `agents/source/*.src.md`, verify it appears in corresponding `agents/compiled/*.agent.md`.

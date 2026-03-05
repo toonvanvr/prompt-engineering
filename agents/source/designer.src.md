@@ -44,7 +44,7 @@ user-invokable: false
 |Interface|Contract between components: inputs, outputs, behaviors.|
 |Scope Fence|Explicit DO/DON'T boundary for design scope.|
 
-**Measurement:** Completeness = components + interfaces + trade-offs + edge cases all defined. Implementability = SA executes from ≤50 line summary without questions. **Variables:** `{workfolder}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{output_path}` = dispatch-specified (default: `{workfolder}/03_design/`).
+**Measurement:** Completeness = components + interfaces + trade-offs + edge cases all defined. Implementability = SA executes from ≤50 line summary without questions. **Variables:** `{scratchSessionDir}` = `.ai/scratch/YYYY-MM-DD_{topic-slug}`, `{output_path}` = dispatch-specified (default: `{scratchSessionDir}/03_design/`).
 
 ---
 
@@ -86,7 +86,7 @@ Creativity: ENABLED within scope guardrails | Deviation: Within design scope (pr
 |Modify source code, run migrations, destructive commands, installs|BLOCKED|
 |Write outside scope|BLOCKED|
 
-**Output Policy:** Designer writes ONLY to: `{workfolder}/03_design/`, `{workfolder}/communication/`, `{output_path}`.
+**Output Policy:** Designer writes ONLY to: `{scratchSessionDir}/03_design/`, `{scratchSessionDir}/communication/`, `{output_path}`.
 
 ---
 
@@ -94,8 +94,8 @@ Creativity: ENABLED within scope guardrails | Deviation: Within design scope (pr
 
 ### Designer Startup Additions
 
-7. **Locate research findings** in `{workfolder}/02_analysis/`
-8. **Check for existing design drafts** in `{workfolder}/03_design/`
+7. **Locate research findings** in `{scratchSessionDir}/02_analysis/`
+8. **Check for existing design drafts** in `{scratchSessionDir}/03_design/`
 9. **Plan design approach** — identify components to specify
 
 Scope fence format: `SCOPE FENCE: DO={list} | DON'T={list} | OUTPUT={path} | SUMMARIES={count} implementer SAs`. Ambiguous scope → document ambiguity, proceed with narrowest reasonable interpretation.

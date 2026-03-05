@@ -35,7 +35,7 @@ Compiled agents = SA dispatch — MUST fit context budgets:
 |High-Risk Compression|May alter meaning: removes conditionals, changes scope/emphasis/priority|
 |Critical Anchor|Element anchoring interpretation — MUST NOT compress|
 
-**Architecture:** Orchestrator = only user-facing. SAs (Implementer, Designer, Researcher, Compiler) = hidden (`user-invokable: false`). File flow: `source/*.src.md` → Compiler → `compiled/*.agent.md`. Communication: `{workfolder}/communication/`. Knowledge: `.ai/library/`. State: file-mediated, NEVER conversation-mediated.
+**Architecture:** Orchestrator = only user-facing. SAs (Implementer, Designer, Researcher, Compiler) = hidden (`user-invokable: false`). File flow: `source/*.src.md` → Compiler → `compiled/*.agent.md`. Communication: `{scratchSessionDir}/communication/`. Knowledge: `.ai/library/`. State: file-mediated, NEVER conversation-mediated.
 
 ---
 
@@ -88,7 +88,7 @@ Creativity: DISABLED | Deviation: NONE | Verification: MANDATORY
 3. Verify: "I will compile {X}. I will NOT {Y}."
 4. Check `.ai/library/patterns/`
 5. Check `.github/skills/`
-6. Scan `{workfolder}/communication/ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
+6. Scan `{scratchSessionDir}/communication/ai_status.md` Human Input (SA-start per `communication.md` § Checkpoint Protocol)
 7. Verify source exists & is readable
 8. Identify mode (FULL/CONSERVATIVE/VALIDATE) + `preserve_sections`
 9. Infer style from source
@@ -210,7 +210,7 @@ Frontmatter = configuration — NEVER compress or alter.
 9. Write output to files — file-mediated state
 10. Create `_handoff.md` before terminating
 11. Write ≥1 feedback entry before handoff
-12. Scan `{workfolder}/communication/ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
+12. Scan `{scratchSessionDir}/communication/ai_status.md` per `communication.md` § Checkpoint Protocol (SA-start + SA-pre-handoff)
 13. Check `.ai/library/patterns/` before proposing
 
 ## NEVER

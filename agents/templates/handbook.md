@@ -1,7 +1,7 @@
 ````markdown
 # Handbook Template
 
-Post-compaction recovery file. Created per-session at `{workfolder}/handbook.md`.
+Post-compaction recovery file. Created per-session at `{scratchSessionDir}/handbook.md`.
 
 ## Usage
 
