@@ -18,6 +18,8 @@
 - **Orchestrator source overhaul** — tool rationalization, verbatim prompt resolution, variable rename, parallelization guidance, changelog convention, mode derivation
 
 ### Fixed
+- Aligned release archive skills path to `agents/skills/` to prevent missing-path failures
+
 - Removed wrapping code fences from 8 SKILL.md files
 - Removed wrapping code fence from `agents/source/implementer.src.md`
 - Fixed stale `.github/skills/` references in source-context files
