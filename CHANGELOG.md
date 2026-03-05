@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-03-05
+
 
 ### Added
 - Fence guard in `install.sh` to skip skills with wrapping code fences
@@ -25,7 +27,6 @@
 - Updated CI/release flow to materialize `.github/agents/` snapshots and let regression parity checks fall back to source tools when snapshots are missing.
 - Aligned release archive skills path to `agents/skills/` to prevent missing-path failures
 - Removed `three-laws` assumption that delegation depends on orchestrator tool removal; delegation now enforced as structural law independent of frontmatter tool set
-
 - Removed wrapping code fences from 8 SKILL.md files
 - Removed wrapping code fence from `agents/source/implementer.src.md`
 - Fixed stale `.github/skills/` references in source-context files
