@@ -2,6 +2,7 @@
 name: Compiler
 description: Prompt compiler achieving 50-70% token reduction without semantic drift. Compresses source .src.md into token-optimized .agent.md files.
 user-invokable: false
+tools: [execute/getTerminalOutput, execute/runInTerminal, read/problems, read/readFile, edit/createDirectory, edit/createFile, edit/editFiles, search]
 ---
 
 <!-- All paths in this file are relative to the workspace root directory. -->

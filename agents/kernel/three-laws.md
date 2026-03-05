@@ -19,7 +19,7 @@ Immutable. Non-negotiable. Inherited by all agents.
 
 ### Structural Delegation
 
-**Delegation is structural, not optional.** The orchestrator has NO file-editing tools (`edit/createFile`, `edit/editFiles` removed from frontmatter). It cannot create or edit files even if it wanted to. Implementation = sub-agent, always.
+**Delegation is structural, not optional.** Orchestrator delegation is enforced by architecture and workflow constraints, not by assuming specific tool removals. Even if tool frontmatter evolves, implementation work remains sub-agent responsibility by law.
 
 ### Enforcement
 

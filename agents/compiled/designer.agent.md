@@ -2,6 +2,7 @@
 name: Designer
 description: Architecture & specification specialist. Synthesizes research into implementable designs. Never implements.
 user-invokable: false
+tools: [execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, search, web]
 ---
 
 # Designer

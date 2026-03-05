@@ -9,6 +9,7 @@
 - Self-verification skill (`agents/skills/self-verify/SKILL.md`, repo-only)
 - Small-Task Protocol in orchestrator for graduated pipeline skip
 - Compiler tool availability documentation
+- Agent regression gate script (`bin/verify-agent-regressions.sh`) for source/compiled/snapshot tools parity and orchestrator anchor checks
 
 ### Changed
 - Relocated skills from `.github/skills/` to `agents/skills/` (source of truth)
@@ -16,9 +17,14 @@
 - Extended Compiler Code Block Guard to cover all framework file types
 - Expanded orchestrator with Small-Task Protocol (score 30-50)
 - **Orchestrator source overhaul** — tool rationalization, verbatim prompt resolution, variable rename, parallelization guidance, changelog convention, mode derivation
+- Canonicalized `tools:` frontmatter in all `agents/source/*.src.md` to match `.github/agents/` snapshot
+- Updated release workflow to run regression verification and package `.github/agents/` in release archives
+- Hardened orchestrator CHANGELOG instruction to require version check and release metadata backfill from prior section patterns
 
 ### Fixed
+- Updated CI/release flow to materialize `.github/agents/` snapshots and let regression parity checks fall back to source tools when snapshots are missing.
 - Aligned release archive skills path to `agents/skills/` to prevent missing-path failures
+- Removed `three-laws` assumption that delegation depends on orchestrator tool removal; delegation now enforced as structural law independent of frontmatter tool set
 
 - Removed wrapping code fences from 8 SKILL.md files
 - Removed wrapping code fence from `agents/source/implementer.src.md`

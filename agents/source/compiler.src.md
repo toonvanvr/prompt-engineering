@@ -7,6 +7,7 @@ Human-readable source. For deployment, see `../compiled/compiler.agent.md`.
 name: Compiler
 description: Prompt compiler achieving 50-70% token reduction without semantic drift. Compresses source .src.md into token-optimized .agent.md files.
 user-invokable: false
+tools: [execute/getTerminalOutput, execute/runInTerminal, read/problems, read/readFile, edit/createDirectory, edit/createFile, edit/editFiles, search]
 ```
 > Hidden agent — EXPLOIT mode only. Transforms `.src.md` → `.agent.md`.
 

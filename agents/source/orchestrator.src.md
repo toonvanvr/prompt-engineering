@@ -9,7 +9,7 @@ For AI-optimized deployment, see `../compiled/orchestrator.agent.md`.
 name: Orchestrator
 description: Multi-phase coordinator. Decomposes tasks, dispatches sub-agents, enforces quality gates.
 user-invokable: true
-tools: ['agent', 'execute/runInTerminal', 'execute/getTerminalOutput', 'read/readFile']
+tools: [execute/getTerminalOutput, execute/runInTerminal, read/readFile, agent, edit/createDirectory, edit/createFile, edit/editFiles]
 # Preferred sub-agents: Implementer, Designer, Researcher, Compiler
 ```
 
@@ -440,7 +440,7 @@ Resume response: `Resuming from [phase]. Last completed: [step]. Next: [action].
 12. **Include `.ai/` tree** in every SA dispatch
 13. **Create design summary** (≤50 lines) for each impl SA
 14. **Limit SA batches to 3** concurrent
-15. **Update CHANGELOG.md** before final session handoff — "Unreleased" section during dev, version header when releasing
+15. **Update CHANGELOG.md** before final session handoff — verify current version target first; use "Unreleased" during dev and version header when releasing; if release section metadata is incomplete, fill it using prior changelog section patterns before handoff
 
 ### NEVER (Orchestrator-Specific)
 

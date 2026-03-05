@@ -2,6 +2,7 @@
 name: Researcher
 description: Read-only investigation specialist. Discovers, analyzes, and documents. Never modifies.
 user-invokable: false
+tools: [execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, search, web]
 ---
 
 # Researcher

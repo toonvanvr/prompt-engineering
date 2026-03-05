@@ -21,6 +21,18 @@ jobs:
           echo "$TAG" > VERSION
           echo "VERSION=$TAG" >> "$GITHUB_ENV"
 
+      - name: Materialize release snapshot
+        run: |
+          mkdir -p .github/agents
+          cp agents/compiled/*.agent.md .github/agents/
+          if [ -f .github/agents/update.sh ]; then
+            chmod +x .github/agents/update.sh
+            echo "Including existing .github/agents/update.sh"
+          fi
+
+      - name: Verify agent regressions
+        run: bash bin/verify-agent-regressions.sh
+
       - name: Create release archive
         run: |
           ARCHIVE="prompt-engineering-v${VERSION}.tar.gz"
@@ -30,6 +42,7 @@ jobs:
             README.md \
             LICENSE \
             bin/install.sh \
+            .github/agents/ \
             agents/compiled/ \
             agents/kernel/ \
             agents/modes/ \
