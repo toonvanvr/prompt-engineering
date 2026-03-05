@@ -13,6 +13,7 @@ Agent framework for orchestrated AI task execution.
 |`templates/`|Sub-agent dispatch templates|YES|
 |`shared/`|Composable text fragments for source files|YES|
 |`reference/`|Detailed tables/schemas for compilation|YES|
+|`skills/`|VS Code Agent Skills (SKILL.md format)|YES|
 |`precompiled/`|Resolved intermediary files (.pre.md)|NO (generated)|
 
 ## Agent Types

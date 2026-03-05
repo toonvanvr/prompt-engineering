@@ -1,4 +1,3 @@
-```skill
 # Tool Risk Classification
 
 ## Description
@@ -25,4 +24,3 @@ Risk-based tool call handling. Higher stakes require higher oversight.
 - HIGH-stakes operations must state justification before execution
 - FORBIDDEN violation → immediate self-analysis log + task failure
 - Log HIGH-stakes operations in `implementation_changes.md`
-```

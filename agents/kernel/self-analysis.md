@@ -15,7 +15,7 @@ How agents document execution flaws. Continuous improvement loop.
 ```
 .ai/self-analysis/
 ├── {date}-{task}-{category}.md
-└── index.md (summary of all entries)
+└── index.md (auto-generated, optional)
 ```
 
 ### Filename Pattern

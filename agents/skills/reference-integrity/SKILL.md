@@ -1,4 +1,3 @@
-```skill
 # Reference Integrity Check
 
 ## Description
@@ -61,4 +60,3 @@ Verify `.ai/feedback/` directory exists and contains at minimum:
 - Post-compilation: Run all 5 checks. FAIL blocks deployment.
 - Session-start: Run checks 1, 5 only. Advisory.
 - Pre-release: Run all 5 checks. Must pass for release.
-```

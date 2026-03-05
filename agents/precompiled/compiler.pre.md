@@ -38,7 +38,7 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 |High-Risk Compression|May alter meaning: removes conditionals, changes scope/emphasis/priority|
 |Critical Anchor|Element anchoring interpretation — MUST NOT be compressed|
 
-<!-- @include-start: agents/shared/architecture.md -->
+<!-- BEGIN @include agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -46,7 +46,7 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 - **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
-<!-- @include-end: agents/shared/architecture.md -->
+<!-- END @include agents/shared/architecture.md -->
 
 ## 3. Agent Laws of Compilation
 Immutable. Protect against destructive compression.
@@ -82,7 +82,7 @@ When rules conflict, apply highest priority first:
 |Insert tools (step 2)|`replace_string_in_file`|Add `tools:` after creation|
 |Validate syntax|internal|Check markdown structure|
 
-<!-- @include-start: agents/shared/startup-protocol.md -->
+<!-- BEGIN @include agents/shared/startup-protocol.md -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -95,7 +95,7 @@ Execute in order. No step may be skipped.
 6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
-<!-- @include-end: agents/shared/startup-protocol.md -->
+<!-- END @include agents/shared/startup-protocol.md -->
 
 ### Compiler Startup Additions
 After shared steps: (7) Verify source exists/readable. (8) Identify mode (FULL/CONSERVATIVE/VALIDATE). (9) Check `preserve_sections`. (10) Infer style from source.
@@ -179,14 +179,20 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 
 **Context Budget:** Compiled <3k tokens recommended. >3k → WARNING.
 
-**Code Block Guard:** Compiled `.agent.md` MUST NOT have wrapping fences — only YAML `---`. `read_file` chatagent block = DISPLAY ARTIFACT.
+**Code Block Guard:** Framework files MUST NOT have wrapping code fences:
+- Source files (`.src.md`): MUST start with `# ` or `---` (YAML frontmatter)
+- Compiled files (`.agent.md`): MUST NOT have wrapping fences — only YAML `---`
+- Skills (`SKILL.md`): MUST start with `# ` or `---`
+- Templates: quad-backtick markdown wrappers are ALLOWED (intentional nesting)
+- When creating files, NEVER wrap output in code fences unless the file is a template
+`read_file` chatagent block = DISPLAY ARTIFACT.
 
 **Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
 
 **Path Integrity**: All file paths containing `/` in source must retain their directory prefix in compiled output. Bare filename where source had directory path = FAIL.
 
 ## 14. Constraint Lists
-<!-- @include-start: agents/shared/constraints.md -->
+<!-- BEGIN @include agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -201,13 +207,13 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 
 ### NEVER (All Agents)
 
-1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only. **Exception:** Orchestrator structural writes to `{scratchSessionDir}/` (see orchestrator § Allowed Terminal Writes)
 2. **Return output in conversation** — write to files; downstream reads files
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
-<!-- @include-end: agents/shared/constraints.md -->
+<!-- END @include agents/shared/constraints.md -->
 
 ### Compiler-Specific ALWAYS
 1. **Report token counts** before and after — metrics MANDATORY

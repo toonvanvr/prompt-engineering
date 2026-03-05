@@ -23,6 +23,7 @@ Classify the user's prompt along 4 dimensions to determine execution strategy.
 |-|-|-|-|-|
 |Micro|fix|Scoped|EXPLOIT|Skip interpretation + design. 1 impl SA.|
 |Small|fix/feature|Scoped|EXPLOIT|Lightweight interpret → design → impl|
+|Small|fix|Scoped|EXPLOIT|Skip R/D if ≤3 files. 1-2 impl SAs. See §6 Small-Task Protocol.|
 |Small|investigate|Any|EXPLORE|Research only, no implementation|
 |Medium|feature/refactor|Any|EXPLORE→EXPLOIT|Standard pipeline (all phases)|
 |Mega|Any|Any|EXPLORE→EXPLOIT|Full pipeline, multi-wave batching|

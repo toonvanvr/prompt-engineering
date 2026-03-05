@@ -32,7 +32,7 @@ Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.
 |`agents/shared/`|Composable source fragments (@include targets)|YES|
 |`agents/reference/`|Detail tables/schemas for compilation|YES|
 |`agents/kernel/`|Inherited behavioral rules|YES (carefully)|
-|`.github/skills/`|Agent Skills (committed, VS Code native)|YES|
+|`agents/skills/`|Agent Skills (committed, VS Code native)|YES|
 |`.ai/scratch/`|Ephemeral working space|YES (temporary)|
 |`.ai/feedback/`|Auto-collected learnings (gitignored)|NO (machine-specific)|
 |`.ai/library/`|Persistent knowledge (patterns, domain, quirks)|YES|
@@ -46,7 +46,7 @@ Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.
 4. Deploy: re-run `install.sh` (copies snapshot to `.github/agents/`)
 
 ### Add Knowledge
-- **Skills** → `.github/skills/` (committed, [Agent Skills](https://agentskills.io/) format)
+- **Skills** → `agents/skills/` (committed, [Agent Skills](https://agentskills.io/) format)
 - **Patterns/domain/quirks** → `.ai/library/{topic}.md` (gitignored in target repos, committed in source repo)
 
 ## Conventions
@@ -64,6 +64,3 @@ Open VS Code → Copilot Chat → Agent mode → **@orchestrator**. See `README.
 - Skip quality gates
 - Implement without design approval (high stakes)
 
-## Related
-
-See also `.github/copilot-instructions.md` for detailed conventions.

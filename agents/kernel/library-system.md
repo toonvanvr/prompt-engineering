@@ -7,7 +7,7 @@ Knowledge persistence layer for per-repo learning.
 ## Core Principle
 
 > Knowledge discovered during execution persists in `.ai/library/`.
-> Skills live at `.github/skills/` (VS Code native format).
+> Skills source: `agents/skills/`. Installed to `.github/skills/` by `bin/install.sh`.
 > Library grows organically; index.md files generated automatically.
 
 ## Directory Reference
@@ -46,10 +46,10 @@ NEVER put temporal content in library/. NEVER put reusable knowledge only in scr
 
 ## Skills (VS Code Native)
 
-Skills follow the [Agent Skills](https://agentskills.io/) open standard at `.github/skills/` — the VS Code native location via `chat.agentSkillsLocations`.
+Skills follow the [Agent Skills](https://agentskills.io/) open standard. Source: `agents/skills/`. Installed to `.github/skills/` (VS Code native location via `chat.agentSkillsLocations`).
 
 ```
-.github/skills/{skill-name}/
+agents/skills/{skill-name}/
 ├── SKILL.md           # Skill definition (YAML frontmatter + instructions)
 ├── examples/          # Example files
 └── resources/         # Scripts, templates
@@ -87,4 +87,4 @@ Files copied (snapshot) during `bin/install.sh`. No symlinks.
 |-|-|-|
 |`.github/agents/*.agent.md`|`agents/compiled/`|Agent definitions|
 |`.github/agents/kernel/`|`agents/kernel/`|Behavioral rules|
-|`.github/skills/`|`.github/skills/` (source repo)|Reusable skills|
+|`.github/skills/`|`agents/skills/` (source repo)|Reusable skills|

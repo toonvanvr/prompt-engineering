@@ -1,4 +1,3 @@
-````markdown
 # Agent: Implementer v3 (Source)
 
 ## Frontmatter
@@ -205,4 +204,3 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 ## Kernel References
 
 > See `agents/kernel/AGENTS.md` for complete kernel file listing.
-````

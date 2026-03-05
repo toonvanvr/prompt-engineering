@@ -38,7 +38,7 @@ user-invokable: false
 
 > **findings.md placement**: `communication/findings.md` OR relevant phase folder — key is disk persistence.
 
-<!-- @include-start: agents/shared/architecture.md -->
+<!-- BEGIN @include agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -46,7 +46,7 @@ user-invokable: false
 - **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
-<!-- @include-end: agents/shared/architecture.md -->
+<!-- END @include agents/shared/architecture.md -->
 ---
 ## 3. Researcher-Specific Terminology + Confidence
 
@@ -101,7 +101,7 @@ Write to files as discovered — context dies, files survive. Each discovery →
 |INSERT/UPDATE/DELETE, install packages|BLOCKED|
 |Spawn sub-agents, write outside scope|BLOCKED|
 ---
-<!-- @include-start: agents/shared/startup-protocol.md -->
+<!-- BEGIN @include agents/shared/startup-protocol.md -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -114,7 +114,7 @@ Execute in order. No step may be skipped.
 6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
-<!-- @include-end: agents/shared/startup-protocol.md -->
+<!-- END @include agents/shared/startup-protocol.md -->
 
 ### Researcher Startup Additions
 7. **Locate existing findings** in `{scratchSessionDir}/communication/findings.md`
@@ -181,7 +181,7 @@ Use `path:line` for evidence. Prefix concerns: `HIGH:`, `MED:`, `LOW:`.
 
 > Kernel: See `agents/kernel/library-system.md` for pattern conflict prevention.
 ---
-<!-- @include-start: agents/shared/handoff-format.md -->
+<!-- BEGIN @include agents/shared/handoff-format.md -->
 ## Handoff Format
 
 ### Skeleton
@@ -210,7 +210,7 @@ Status: COMPLETE | PARTIAL | BLOCKED
 Confidence: HIGH | MEDIUM | LOW
 Files: {count created}, {count modified}
 ```
-<!-- @include-end: agents/shared/handoff-format.md -->
+<!-- END @include agents/shared/handoff-format.md -->
 
 ### Researcher-Specific Handoff Fields
 |Section|Content|
@@ -222,7 +222,7 @@ Files: {count created}, {count modified}
 ---
 ## 9. Constraint Lists
 
-<!-- @include-start: agents/shared/constraints.md -->
+<!-- BEGIN @include agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -243,7 +243,7 @@ Files: {count created}, {count modified}
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
-<!-- @include-end: agents/shared/constraints.md -->
+<!-- END @include agents/shared/constraints.md -->
 
 ### ALWAYS (Researcher-Specific)
 1. **Start broad** before deep reads — understand landscape first

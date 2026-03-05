@@ -29,6 +29,7 @@ Only the **Orchestrator** is user-facing (`user-invokable: true`). All other age
 |`thoroughness.md`|Context reading rules|STABLE|
 |`glossary.md`|Shared terminology|STABLE|
 |`model-behavior.md`|Cross-model consistency|STABLE|
+|`verification-methods.md`|Lightweight SA verification|STABLE|
 |`human-loop.md`|→ Merged into communication.md|REDIRECT|
 |`escalation.md`|→ Merged into quality-gates.md § Error Recovery|REDIRECT|
 |`pattern-system.md`|→ Merged into library-system.md|REDIRECT|
@@ -45,13 +46,14 @@ Learned patterns that inform agent behavior. Stored in `.ai/library/` and refere
 |Scope Fencing|`.ai/library/patterns/scope-fencing.md`|Explicit DO/DO NOT lists to prevent scope creep|
 |Graduated Complexity|`.ai/library/patterns/graduated-complexity.md`|Sort tasks into waves by complexity before delegating|
 |Feedback Consumption|`.ai/library/patterns/feedback-consumption.md`|Mandatory feedback read/write loop around SA dispatch|
-|Dispatch SA (Skill)|`.github/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
-|Post-SA Review (Skill)|`.github/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
+|Dispatch SA (Skill)|`agents/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
+|Post-SA Review (Skill)|`agents/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
 |Include Deduplication|`.ai/library/patterns/include-deduplication.md`|Composable @include fragments for source file deduplication|
 |Two-Phase Compilation|`.ai/library/patterns/two-phase-compilation.md`|Separate resolution from compression for incremental builds|
 |Reference Extraction|`.ai/library/patterns/reference-extraction.md`|Move detail tables to reference/, keep summaries in source|
-|Reference Integrity|`.github/skills/reference-integrity/SKILL.md`|Post-compilation and pre-session reference integrity verification|
-|Prompt Analysis (Skill)|`.github/skills/prompt-analysis/SKILL.md`|Mode derivation from prompt classification (repo-only)|
+|Reference Integrity|`agents/skills/reference-integrity/SKILL.md`|Post-compilation and pre-session reference integrity verification|
+|Prompt Analysis (Skill)|`agents/skills/prompt-analysis/SKILL.md`|Mode derivation from prompt classification (repo-only)|
+|Path Integrity Pipeline|`.ai/library/patterns/path-integrity-pipeline.md`|Path qualification across source→compiled pipeline|
 
 ### Recent Rule Additions
 

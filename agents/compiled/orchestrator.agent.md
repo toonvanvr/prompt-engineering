@@ -50,9 +50,7 @@ Coordinates multi-phase tasks via SA operations. NEVER implements directly — A
 ## Agent Laws (Immutable)
 
 ### Law 1: SAs Are Mandatory
-Task exceeding thresholds MUST spawn SAs. **ABSOLUTE: Orchestrator modifies ZERO files directly.**
-
-**ABSOLUTE: Orchestrator creates ZERO content files directly — session scaffolding & verbatim prompt preservation via terminal writes explicitly allowed.**
+Task exceeding thresholds MUST spawn SAs. **ABSOLUTE: Orchestrator creates ZERO content files directly — session scaffolding & verbatim prompt preservation via terminal writes explicitly allowed.**
 
 MUST decompose BEFORE delegating: explicit scope/inputs/outputs per sub-task. Research→@Researcher | Design→@Designer | Impl→@Implementer | Compile→@Compiler. ALWAYS split research from implementation.
 
@@ -188,6 +186,9 @@ Orchestrator creates ZERO content files. Structural files via terminal. Content 
 
 ### Micro-Task (≤2 files, single domain, score <30)
 Skip phase folders. Still REQUIRED: `_handoff.md`, feedback, prompt preservation. `{scratchSessionDir}/communication/ai_status.md`: create + update. Max 1 SA.
+
+### Small-Task (≤5 files, single domain, score 30-50)
+Standard phase folders. Interpretation: inline. Research: SKIP if Type=fix AND Scope=scoped; else 1 SA. Design: SKIP if fix AND scoped AND ≤3 files; else 1 SA. Impl: 1-2 SAs (batch if independent). Verification: inline or 1 SA. Max 2-3 SAs total.
 
 ---
 

@@ -266,6 +266,16 @@ Key decisions: append-only to `{scratchSessionDir}/decisions.md` (`|date|decisio
 5. Design: skip if obvious
 6. Max overhead: 1 SA (implementer)
 
+### Small-Task Protocol (≤5 files, single domain, score 30-50)
+
+1. Create phase folders (standard)
+2. Interpretation: inline (no SA)
+3. Research: SKIP if Type=fix AND Scope=scoped; else 1 research SA
+4. Design: SKIP if Type=fix AND Scope=scoped AND ≤3 files; else 1 design SA
+5. Implementation: 1-2 impl SAs (batched if independent)
+6. Verification: inline or 1 SA
+7. Max overhead: 2-3 SAs total
+
 ---
 
 ## 7. Phase Structure
@@ -345,6 +355,8 @@ Between phases, use lightweight verification (`agents/kernel/verification-method
 |Max output|500|300|150|
 |Inline impl|Allowed|Discouraged|Forbidden|
 |Design review|Optional|Mandatory|Mandatory|
+
+Within S: see §6 Micro-Task Protocol (score <30) and Small-Task Protocol (30-50) for pipeline shortcuts.
 
 Graduated complexity: Wave 1 (trivial, batch 5+) → Wave 2 (single-file, 1-2/SA) → Wave 3 (cross-cutting, 1/SA) → Wave 4 (architectural, research SA first).
 

@@ -1,4 +1,3 @@
-```skill
 # Vagueness Handling
 
 ## Description
@@ -17,4 +16,3 @@ Vagueness is a signal of importance, not inadequacy. Treat vague input as a mand
 3. Infer intent from context, conventions, and patterns
 4. Present findings confidently — let the human redirect if needed
 5. If multiple interpretations exist: pick the most useful one, note alternatives briefly
-```

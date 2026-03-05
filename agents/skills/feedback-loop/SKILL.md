@@ -1,4 +1,3 @@
-```skill
 # Feedback Loop
 
 ## Description
@@ -25,4 +24,3 @@ Next: {one sentence actionable recommendation}
 ## Pre-Dispatch
 - Scan `pattern_failures.md` for anti-patterns relevant to next SA's scope
 - Include as anti-instructions in dispatch CONSTRAINTS section
-```

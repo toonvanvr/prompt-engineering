@@ -1,4 +1,3 @@
-```skill
 # Output Format
 
 ## Description
@@ -32,4 +31,3 @@ Frontend, Backend, Infra, Kernel, Docs — each counts as 1 domain.
 |`TODO(3)`|Low|Backlog|
 |`TODO(4)`|Question|Research needed|
 |`PERF`|Special|Profile before optimizing|
-```

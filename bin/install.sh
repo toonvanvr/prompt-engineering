@@ -192,11 +192,11 @@ install_kernel() {
 }
 
 install_skills() {
-  if [[ ! -d "$SOURCE/.github/skills" ]]; then
+  if [[ ! -d "$SOURCE/agents/skills" ]]; then
     return
   fi
   [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills"
-  for skill_dir in "$SOURCE/.github/skills/"*/; do
+  for skill_dir in "$SOURCE/agents/skills/"*/; do
     [[ -d "$skill_dir" ]] || continue
     local skill_name
     skill_name="$(basename "$skill_dir")"
@@ -205,6 +205,11 @@ install_skills() {
     # Skip repo-only skills when installing to remote targets
     if [[ "$CONTEXT" != "self" ]] && grep -q "repo-only: true" "$src"; then
       log "⊘ $skill_name (repo-only — skipped)"
+      continue
+    fi
+    # Skip skills with wrapping code fences
+    if head -1 "$src" | grep -q '^```'; then
+      log "⚠ $skill_name: SKILL.md has wrapping code fence — skipping"
       continue
     fi
     [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills/$skill_name"
@@ -281,10 +286,7 @@ ensure_gitignore() {
     ensure_gitignore_line "$file" "/agents/.tvv-pe"
     ensure_gitignore_line "$file" "/agents/update.sh"
     ensure_gitignore_line "$file" "/.gitignore"
-    # Only gitignore skills in external projects (they're source files in this repo)
-    if [[ "$install_context" != "self" ]]; then
-      ensure_gitignore_line "$file" "/skills/"
-    fi
+    ensure_gitignore_line "$file" "/skills/"
   elif [[ "$scope" == "ai" ]]; then
     ensure_gitignore_line "$file" "# Installed by prompt-engineering — https://github.com/toonvanvr/prompt-engineering"
     ensure_gitignore_line "$file" "/.gitignore"

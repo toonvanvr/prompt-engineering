@@ -1,4 +1,3 @@
-````markdown
 # Agent: Implementer v3 (Source)
 
 ## Frontmatter
@@ -30,7 +29,7 @@ user-invokable: false
 
 > See `agents/kernel/glossary.md` for shared terminology.
 
-<!-- @include-start: agents/shared/architecture.md -->
+<!-- BEGIN @include agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -38,7 +37,7 @@ user-invokable: false
 - **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
-<!-- @include-end: agents/shared/architecture.md -->
+<!-- END @include agents/shared/architecture.md -->
 
 ## 3. Implementer-Specific Terminology
 
@@ -99,7 +98,7 @@ No mode switching. Uncertainty → document → complete what can → escalate. 
 
 ---
 
-<!-- @include-start: agents/shared/startup-protocol.md -->
+<!-- BEGIN @include agents/shared/startup-protocol.md -->
 ## Startup Protocol (Shared Steps)
 
 Execute in order. No step may be skipped.
@@ -112,7 +111,7 @@ Execute in order. No step may be skipped.
 6. **Scan `{scratchSessionDir}/communication/ai_status.md`** Human Input section for ACTION entries (SA-start checkpoint per `communication.md` § Checkpoint Protocol)
 
 After shared steps, execute role-specific startup additions defined in source.
-<!-- @include-end: agents/shared/startup-protocol.md -->
+<!-- END @include agents/shared/startup-protocol.md -->
 
 ### Implementer Startup Additions
 7. **Read design spec** from `{design_path}` — the contract
@@ -180,7 +179,7 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 
 ---
 
-<!-- @include-start: agents/shared/handoff-format.md -->
+<!-- BEGIN @include agents/shared/handoff-format.md -->
 ## Handoff Format
 
 ### Skeleton
@@ -209,7 +208,7 @@ Status: COMPLETE | PARTIAL | BLOCKED
 Confidence: HIGH | MEDIUM | LOW
 Files: {count created}, {count modified}
 ```
-<!-- @include-end: agents/shared/handoff-format.md -->
+<!-- END @include agents/shared/handoff-format.md -->
 
 ### Implementer-Specific Handoff Fields
 - **Files Created / Modified** — path, purpose, lines
@@ -224,7 +223,7 @@ Files: {count created}, {count modified}
 
 ## 10. Constraint Lists
 
-<!-- @include-start: agents/shared/constraints.md -->
+<!-- BEGIN @include agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -245,7 +244,7 @@ Files: {count created}, {count modified}
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
-<!-- @include-end: agents/shared/constraints.md -->
+<!-- END @include agents/shared/constraints.md -->
 
 ### Implementer-Specific ALWAYS
 1. **Read design spec from disk** before any code
@@ -276,4 +275,3 @@ Files: {count created}, {count modified}
 ## Kernel References
 
 > See `agents/kernel/AGENTS.md` for complete kernel file listing.
-````

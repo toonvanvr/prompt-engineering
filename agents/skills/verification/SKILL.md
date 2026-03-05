@@ -1,4 +1,3 @@
-```skill
 # Verification Methods
 
 ## Description
@@ -26,4 +25,11 @@ Lightweight verification for post-SA review and phase transitions. Verify outcom
 - NEVER re-read full output artifacts for verification
 - NEVER re-run SA analysis on completed work
 - Between phases: `git diff --stat` + `git status --short` + test execution
-```
+
+### Fence Guard Check
+Scan framework files for wrapping code fences:
+- `grep -n '^```' agents/source/*.src.md agents/compiled/*.agent.md agents/skills/*/SKILL.md`
+- Expected: 0 matches for source and compiled files
+- SKILL.md: first line must NOT start with ```
+- Templates (`agents/templates/`): quad-backtick markdown allowed
+

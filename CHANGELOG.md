@@ -2,8 +2,25 @@
 
 ## [Unreleased]
 
+
+### Added
+- Fence guard in `install.sh` to skip skills with wrapping code fences
+- Fence Guard Check in verification skill
+- Self-verification skill (`agents/skills/self-verify/SKILL.md`, repo-only)
+- Small-Task Protocol in orchestrator for graduated pipeline skip
+- Compiler tool availability documentation
+
 ### Changed
+- Relocated skills from `.github/skills/` to `agents/skills/` (source of truth)
+- Updated `bin/install.sh` to source skills from `agents/skills/`
+- Extended Compiler Code Block Guard to cover all framework file types
+- Expanded orchestrator with Small-Task Protocol (score 30-50)
 - **Orchestrator source overhaul** — tool rationalization, verbatim prompt resolution, variable rename, parallelization guidance, changelog convention, mode derivation
+
+### Fixed
+- Removed wrapping code fences from 8 SKILL.md files
+- Removed wrapping code fence from `agents/source/implementer.src.md`
+- Fixed stale `.github/skills/` references in source-context files
 
 ## [2.3.0-alpha.1] - 2026-03-04
 

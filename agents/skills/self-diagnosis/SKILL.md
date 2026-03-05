@@ -1,4 +1,3 @@
-```skill
 # Self-Diagnosis
 
 ## Description
@@ -30,5 +29,4 @@ How agents document their own execution flaws for continuous improvement.
 Trigger: {what prompted this}
 Impact: {what was affected}
 Correction: {how it was fixed}
-```
 ```

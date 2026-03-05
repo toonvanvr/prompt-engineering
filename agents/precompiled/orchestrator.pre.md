@@ -55,7 +55,7 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 
 > Pipeline is conceptual. Phase table (§7) expands RESEARCH into Interpretation+Analysis. INTEGRATE is within Verification phase.
 
-<!-- @include-start: agents/shared/architecture.md -->
+<!-- BEGIN @include agents/shared/architecture.md -->
 ## Architecture
 - **Orchestrator** is the only user-facing agent — coordinates all work
 - **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invokable: false`)
@@ -63,7 +63,7 @@ The orchestrator coordinates complex multi-phase tasks by decomposing them into 
 - **Communication**: via `{scratchSessionDir}/communication/` directory
 - **Knowledge persistence**: via `.ai/library/` directory
 - **State transfer**: file-mediated, NEVER conversation-mediated
-<!-- @include-end: agents/shared/architecture.md -->
+<!-- END @include agents/shared/architecture.md -->
 
 ---
 
@@ -274,6 +274,16 @@ Key decisions: append-only to `{scratchSessionDir}/decisions.md` (`|date|decisio
 5. Design: skip if obvious
 6. Max overhead: 1 SA (implementer)
 
+### Small-Task Protocol (≤5 files, single domain, score 30-50)
+
+1. Create phase folders (standard)
+2. Interpretation: inline (no SA)
+3. Research: SKIP if Type=fix AND Scope=scoped; else 1 research SA
+4. Design: SKIP if Type=fix AND Scope=scoped AND ≤3 files; else 1 design SA
+5. Implementation: 1-2 impl SAs (batched if independent)
+6. Verification: inline or 1 SA
+7. Max overhead: 2-3 SAs total
+
 ---
 
 ## 7. Phase Structure
@@ -354,6 +364,8 @@ Between phases, use lightweight verification (`agents/kernel/verification-method
 |Inline impl|Allowed|Discouraged|Forbidden|
 |Design review|Optional|Mandatory|Mandatory|
 
+Within S: see §6 Micro-Task Protocol (score <30) and Small-Task Protocol (30-50) for pipeline shortcuts.
+
 Graduated complexity: Wave 1 (trivial, batch 5+) → Wave 2 (single-file, 1-2/SA) → Wave 3 (cross-cutting, 1/SA) → Wave 4 (architectural, research SA first).
 
 File targets: source/test 150 (max 300), docs 150 (max 200), handoff 30-60 (max 80), design 100 (max 150/file).
@@ -418,7 +430,7 @@ Resume response: `Resuming from [phase]. Last completed: [step]. Next: [action].
 
 ## 13. Constraint Lists
 
-<!-- @include-start: agents/shared/constraints.md -->
+<!-- BEGIN @include agents/shared/constraints.md -->
 ## Shared Constraints
 
 ### ALWAYS (All Agents)
@@ -439,7 +451,7 @@ Resume response: `Resuming from [phase]. Last completed: [step]. Next: [action].
 4. **Combine research with implementation** — always separate SAs
 5. **Skip quality gates** — gates are checkpoints, not suggestions
 6. **Copy file contents verbatim into outputs** — use references (`path:line`) or summaries
-<!-- @include-end: agents/shared/constraints.md -->
+<!-- END @include agents/shared/constraints.md -->
 
 ### ALWAYS (Orchestrator-Specific)
 

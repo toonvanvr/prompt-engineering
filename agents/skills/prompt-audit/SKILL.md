@@ -1,4 +1,3 @@
-```skill
 # Prompt Audit
 
 ## Description
@@ -22,4 +21,3 @@ Preserve every user prompt for audit trail and context recovery.
 - Sequence numbers are zero-padded: `01`, `02`, ..., `99`
 - Track prompt lineage through SAs via dispatch context
 - Nothing is lost; everything is traceable
-```

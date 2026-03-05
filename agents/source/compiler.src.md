@@ -158,7 +158,13 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 
 **Context Budget:** Compiled <3k tokens recommended. >3k → WARNING.
 
-**Code Block Guard:** Compiled `.agent.md` MUST NOT have wrapping fences — only YAML `---`. `read_file` chatagent block = DISPLAY ARTIFACT.
+**Code Block Guard:** Framework files MUST NOT have wrapping code fences:
+- Source files (`.src.md`): MUST start with `# ` or `---` (YAML frontmatter)
+- Compiled files (`.agent.md`): MUST NOT have wrapping fences — only YAML `---`
+- Skills (`SKILL.md`): MUST start with `# ` or `---`
+- Templates: quad-backtick markdown wrappers are ALLOWED (intentional nesting)
+- When creating files, NEVER wrap output in code fences unless the file is a template
+`read_file` chatagent block = DISPLAY ARTIFACT.
 
 **Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
 

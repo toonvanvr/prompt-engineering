@@ -53,7 +53,7 @@ agents/
 ├── modes/            # EXPLORE/EXPLOIT specifications
 └── templates/        # Sub-agent dispatch templates
 
-.github/skills/       # Agent Skills (committed, VS Code native)
+agents/skills/       # Agent Skills (committed, VS Code native)
 
 .ai/                  # Created by installer (gitignored)
 ├── scratch/          # Timestamped working folders (ephemeral)
