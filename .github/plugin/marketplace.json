@@ -1,0 +1,33 @@
+{
+  "name": "prompt-engineering",
+  "metadata": {
+    "description": "AI agent system with orchestrated sub-agents, quality gates, and feedback loops",
+    "version": "3.0.0-alpha.2",
+    "pluginRoot": "./plugins"
+  },
+  "owner": {
+    "name": "toonvanvr",
+    "url": "https://github.com/toonvanvr"
+  },
+  "plugins": [
+    {
+      "name": "orchestrator",
+      "description": "Multi-phase task coordinator with research, design, and implementation sub-agents",
+      "version": "3.0.0-alpha.2",
+      "source": "orchestrator",
+      "author": {
+        "name": "toonvanvr",
+        "url": "https://github.com/toonvanvr"
+      },
+      "repository": "https://github.com/toonvanvr/prompt-engineering",
+      "keywords": [
+        "agents",
+        "orchestration",
+        "sub-agents",
+        "quality-gates",
+        "prompt-engineering",
+        "copilot"
+      ]
+    }
+  ]
+}

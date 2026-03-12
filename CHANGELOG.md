@@ -1,6 +1,41 @@
 # Changelog
 
-## [Unreleased]
+## [3.0.0-alpha.2] - 2026-03-12
+
+### Breaking Changes
+- Restructured to VS Code Agent Plugin format with marketplace.json
+- Moved all files from `agents/` and `skills/` into `plugins/orchestrator/`
+- Removed `bin/install.sh` — replaced by documentation and Copilot Setup agent
+- Removed `.github/agents/` snapshot deployment — compiled agents served directly from `plugins/orchestrator/agents/`
+- Removed all backward compatibility with pre-plugin layout
+
+### Added
+- Marketplace index at `.github/plugin/marketplace.json` (compatible with awesome-copilot)
+- Per-plugin manifest at `plugins/orchestrator/.github/plugin/plugin.json`
+- Claude Code support via `plugins/orchestrator/.claude-plugin/plugin.json`
+- Copilot Setup (toonvanvr) agent — interactive VS Code settings configuration
+- Web tool awareness — orchestrator delegates web research to sub-agents
+- Example prompts: bug-fix, feature-addition, documentation-site, cli-tool, ticket-board, refactoring
+- Detailed setup guide at `docs/setup.md`
+
+### Changed
+- All agents renamed with `(toonvanvr)` suffix for namespace safety
+- Numeric SA thresholds replaced with principle-based delegation guidance
+- Hard SA batch limit (5) removed — parallelism encouraged by design
+- Task sizing scoring formula replaced with qualitative scaling
+- Context budget fixed checkpoints replaced with awareness-based assessment
+- Compilation pipeline paths: `plugins/orchestrator/src/` → `plugins/orchestrator/agents/`
+- README fully rewritten for plugin-native setup (marketplace, local, remote)
+- Release workflow updated for plugin archive format
+
+### Removed
+- `bin/install.sh` (485-line bash installer)
+- `bin/verify-agent-regressions.sh`
+- `tests/install/` (installer tests)
+- `.github/agents/` snapshot directory
+- `.github/skills/` directory
+- `examples/` top-level directory (moved to `plugins/orchestrator/docs/examples/`)
+- Dummy agent (`.github/agents/dummy.agent.md`)
 
 ## [3.0.0-alpha.1] - 2026-03-12
 

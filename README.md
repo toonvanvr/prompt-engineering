@@ -1,179 +1,92 @@
 # Prompt Engineering
 
-AI agent system for VS Code GitHub Copilot. Specialized subagents handle research, design, and implementation phases with quality-gated handoffs and isolated contexts. Installed files are gitignored — each developer runs the installer after checkout, like `npm install`.
+AI agent system for VS Code GitHub Copilot (primary) and Claude Code. Specialized sub-agents handle research, design, and implementation with quality-gated handoffs.
 
-## Quick Start
+## Setup
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- .
+### Marketplace (Recommended)
+1. Enable plugins in VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`):
+   ```json
+   { "chat.plugins.enabled": true }
+   ```
+2. Add marketplace in workspace or user settings:
+   ```json
+   { "chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"] }
+   ```
+3. Browse `@agentPlugins` in the Extensions sidebar
+4. Pick **Orchestrator (toonvanvr)** from the agent dropdown in Copilot Chat
+
+### Local Clone
+1. Clone: `git clone https://github.com/toonvanvr/prompt-engineering.git /path/to/prompt-engineering`
+2. Add to VS Code settings:
+   ```json
+   {
+     "chat.plugins.enabled": true,
+     "chat.plugins.paths": {
+       "/path/to/prompt-engineering/plugins/orchestrator": true
+     }
+   }
+   ```
+3. Pick **Orchestrator (toonvanvr)** from the agent dropdown
+
+### Remote Plugin
+```json
+{
+  "chat.plugins.enabled": true,
+  "chat.plugins.marketplaces": ["https://github.com/toonvanvr/prompt-engineering.git"]
+}
 ```
 
-Open VS Code → Copilot Chat → Agent mode → pick **Orchestrator** from the agent picker.
+> Pick **Copilot Setup (toonvanvr)** from the agent dropdown for interactive setup guidance.
+> See [docs/setup.md](docs/setup.md) for full settings reference.
 
 ## Agents
 
 | Agent | Visibility | Role |
 |-------|-----------|------|
-| **Orchestrator** | User-facing | Task decomposition, delegation, never implements |
-| Researcher | Hidden subagent | Codebase analysis, dependency mapping |
-| Designer | Hidden subagent | Architecture specs, trade-off analysis |
-| Implementer | Hidden subagent | Code execution per design contract |
-| Compiler | Hidden subagent | Prompt compression (50-70% token reduction) |
+| **Orchestrator (toonvanvr)** | User-facing | Task decomposition, delegation, never implements |
+| Researcher (toonvanvr) | Subagent | Codebase analysis, web research, dependency mapping |
+| Designer (toonvanvr) | Subagent | Architecture specs, trade-off analysis |
+| Implementer (toonvanvr) | Subagent | Code execution per design contract |
+| Compiler (toonvanvr) | Subagent | Prompt compression (50-70% token reduction) |
+| **Copilot Setup (toonvanvr)** | User-facing | VS Code settings configuration |
 
-Subagents communicate via files, run in isolated contexts, and pass through quality gates. You never interact with them directly.
+Sub-agents communicate via files, run in isolated contexts, and pass through quality gates. You never interact with them directly.
 
 ## Usage
 
 Talk to the Orchestrator naturally:
 
-- *"Add authentication to the API"* — Full research → design → implement cycle
-- *"Investigate why tests are failing"* — Spawns researcher
-- *"Review the payment module architecture"* — Spawns researcher + designer
+- *"Add authentication to the API"*
+- *"Investigate why tests are failing"*
+- *"Review the payment module architecture"*
+- *"Refactor the config module to use builder pattern"*
 
-To intervene mid-task, write to `.ai/scratch/{session}/communication/ai_status.md`:
+See [example prompts](plugins/orchestrator/docs/examples/) for detailed scenarios.
 
-```markdown
-ACTION: pause | resume | abort | redirect | feedback | context
-REASON: Your message here
+## Development
+
+### Plugin Structure
+```
+plugins/orchestrator/
+├── agents/         # Compiled .agent.md files (generated, DO NOT EDIT)
+├── skills/         # Agent Skills (committed)
+├── src/            # Source files (EDIT THESE)
+│   ├── *.src.md    # Agent source definitions
+│   ├── shared/     # Composable fragments (@include targets)
+│   ├── reference/  # Detail tables for compilation
+│   └── kernel/     # Compile-time reference
+└── docs/examples/  # Example prompts
 ```
 
-## Project Structure
-
+### Compilation
 ```
-bin/
-└── install.sh        # Installer with modes (install/update/check/uninstall)
-
-agents/
-├── source/           # Human-editable .src.md definitions (EDIT THESE)
-├── shared/           # Composable fragments (@include targets)
-├── reference/        # Detail tables/schemas for compilation
-├── precompiled/      # Resolved intermediary .pre.md (generated)
-├── compiled/         # Deployed .agent.md files (generated, DO NOT EDIT)
-├── kernel/           # Compile-time reference only (not deployed at runtime)
-├── modes/            # EXPLORE/EXPLOIT specifications
-└── templates/        # Sub-agent dispatch templates
-
-skills/              # Agent Skills (committed, VS Code native)
-
-.ai/                  # Created by installer (gitignored)
-├── scratch/          # Timestamped working folders (ephemeral)
-├── feedback/         # Auto-collected learnings (machine-specific)
-└── library/          # Persistent knowledge
-    ├── patterns/     # Reusable solutions
-    ├── domain/       # Business concepts
-    └── quirks/       # Tool oddities
+src/*.src.md → src/precompiled/*.pre.md → agents/*.agent.md
 ```
 
-## Editing Agents
+Edit sources in `src/`, invoke **Compiler (toonvanvr)** to recompile.
 
-```
-1. Edit:       agents/source/{agent}.src.md
-2. Precompile: Resolve @includes → agents/precompiled/{agent}.pre.md
-3. Compile:    Token compression → agents/compiled/{agent}.agent.md
-4. Deploy:     bin/install.sh (copies snapshot to .github/agents/)
-```
+## License
 
-Invoke the **Compiler** agent to run steps 2-3.
-
-## Compilation Pipeline
-
-Agent sources are compiled in two phases:
-
-```
-source (.src.md) → precompiled (.pre.md) → compiled (.agent.md)
-```
-
-| Phase | Input | Output | What happens |
-|-------|-------|--------|-------------|
-| **Precompile** | `agents/source/*.src.md` | `agents/precompiled/*.pre.md` | Resolves `<!-- @include path -->` directives |
-| **Compile** | `agents/precompiled/*.pre.md` | `agents/compiled/*.agent.md` | Token compression (50-70% reduction) |
-
-The `@include` directive (e.g., `<!-- @include agents/shared/architecture.md -->`) inlines shared fragments at build time. Source fragments live in `agents/shared/` (composable blocks) and `agents/reference/` (detail tables).
-
-## Installation
-
-### Option A: VS Code Agent Plugin (Recommended)
-
-> Requires VS Code 1.111+ with `chat.plugins.enabled: true` (Preview)
-
-Browse `@agentPlugins` in the Extensions sidebar, or add manually to your VS Code settings:
-
-```json
-{
-  "chat.plugins.paths": {
-    "/path/to/prompt-engineering": true
-  },
-  "chat.plugins.enabled": true
-}
-```
-
-Then: Copilot Chat → Agent mode → select **Orchestrator**.
-
-### Option B: Shell Installer
-
-```bash
-# Install (first time — full setup)
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- .
-
-# Update (re-deploys agents, skips setup)
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- . --mode=update
-
-# Check (CI — exits 1 if outdated)
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- . --mode=check
-
-# Uninstall (removes installed files, not settings)
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- . --mode=uninstall
-
-# Verbose output
-curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- . --verbose
-```
-
-| Mode | Creates dirs | Writes settings | Deploys agents | Use case |
-|------|-------------|----------------|---------------|----------|
-| `install` | Yes | Yes | Yes | First setup |
-| `update` | No | No | Yes | Re-deploy after source changes |
-| `check` | No | No | Compare only | CI pipeline validation |
-| `uninstall` | No | No | Removes | Clean removal of installed files |
-
-Uses `cmp -s` for change detection — only overwrites files that actually changed.
-
-Creates the following structure in your project:
-
-```
-.github/
-├── agents/        # Agent files (snapshot, gitignored)
-└── skills/        # Agent Skills (committed, skipped if exists)
-.ai/               # Workspace for scratch/feedback/library (gitignored)
-.vscode/
-└── settings.json  # Recommended Copilot settings
-```
-
-## VS Code Settings
-
-The installer configures `.vscode/settings.json` with recommended Copilot settings.
-
-| Setting | Purpose | Reference |
-|---------|---------|-----------|
-| [`chat.customAgentInSubagent.enabled`](vscode://settings/chat.customAgentInSubagent.enabled) | Allow agents to spawn custom subagents | [v1.106 Release Notes](https://code.visualstudio.com/updates/v1_106) |
-| [`chat.agent.thinking.collapsedTools`](vscode://settings/chat.agent.thinking.collapsedTools) | Collapse tool calls in thinking display | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
-| [`chat.tools.autoExpandFailures`](vscode://settings/chat.tools.autoExpandFailures) | Auto-expand details on tool failures | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
-| [`github.copilot.chat.searchSubagent.enabled`](vscode://settings/github.copilot.chat.searchSubagent.enabled) | Use isolated search subagent | [v1.107 Release Notes](https://code.visualstudio.com/updates/v1_107) |
-| [`github.copilot.chat.copilotMemory.enabled`](vscode://settings/github.copilot.chat.copilotMemory.enabled) | Cross-session memory persistence | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
-| [`github.copilot.chat.anthropic.thinking.budgetTokens`](vscode://settings/github.copilot.chat.anthropic.thinking.budgetTokens) | Extended thinking budget (32000 tokens) | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
-| [`github.copilot.chat.anthropic.toolSearchTool.enabled`](vscode://settings/github.copilot.chat.anthropic.toolSearchTool.enabled) | Tool search for Anthropic models | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
-| [`chat.useAgentSkills`](vscode://settings/chat.useAgentSkills) | Enable Agent Skills for domain knowledge | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
-| [`github.copilot.chat.anthropic.contextEditing.enabled`](vscode://settings/github.copilot.chat.anthropic.contextEditing.enabled) | Efficient context management for long sessions | [v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) |
-| [`github.copilot.chat.githubMcpServer.enabled`](vscode://settings/github.copilot.chat.githubMcpServer.enabled) | Built-in GitHub MCP server | [v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) |
-| [`chat.tools.terminal.sandbox.enabled`](vscode://settings/chat.tools.terminal.sandbox.enabled) | Terminal sandboxing for agent commands | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
-| [`chat.tools.terminal.autoApproveWorkspaceNpmScripts`](vscode://settings/chat.tools.terminal.autoApproveWorkspaceNpmScripts) | Auto-approve npm scripts from workspace | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
-| [`chat.tools.terminal.preventShellHistory`](vscode://settings/chat.tools.terminal.preventShellHistory) | Exclude agent commands from shell history | [Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) |
-
-## References
-
-- [Agent Skills](https://agentskills.io/) — Open standard for skill definitions
-- [VS Code Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization) — Agent and chat settings
-- [VS Code v1.106 Release Notes](https://code.visualstudio.com/updates/v1_106) — Subagent support
-- [VS Code v1.107 Release Notes](https://code.visualstudio.com/updates/v1_107) — Search subagent
-- [VS Code v1.108 Release Notes](https://code.visualstudio.com/updates/v1_108) — Memory, GitHub MCP, Agent Skills
-- [VS Code v1.109 Release Notes](https://code.visualstudio.com/updates/v1_109) — Extended thinking, tool search
+MIT
 

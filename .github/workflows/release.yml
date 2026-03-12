@@ -21,18 +21,6 @@ jobs:
           echo "$TAG" > VERSION
           echo "VERSION=$TAG" >> "$GITHUB_ENV"
 
-      - name: Materialize release snapshot
-        run: |
-          mkdir -p .github/agents
-          cp agents/compiled/*.agent.md .github/agents/
-          if [ -f .github/agents/update.sh ]; then
-            chmod +x .github/agents/update.sh
-            echo "Including existing .github/agents/update.sh"
-          fi
-
-      - name: Verify agent regressions
-        run: bash bin/verify-agent-regressions.sh
-
       - name: Create release archive
         run: |
           ARCHIVE="prompt-engineering-v${VERSION}.tar.gz"
@@ -41,12 +29,8 @@ jobs:
             VERSION \
             README.md \
             LICENSE \
-            bin/install.sh \
-            .github/agents/ \
-            agents/compiled/ \
-            agents/modes/ \
-            agents/templates/ \
-            agents/skills/
+            .github/plugin/marketplace.json \
+            plugins/orchestrator/
           echo "ARCHIVE=$ARCHIVE" >> "$GITHUB_ENV"
 
       - name: Create GitHub Release
@@ -55,13 +39,23 @@ jobs:
           files: ${{ env.ARCHIVE }}
           generate_release_notes: true
           body: |
-            ## Install
+            ## Setup
 
-            ```bash
-            curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/v${{ env.VERSION }}/bin/install.sh | bash -s -- /path/to/project
+            Add to VS Code User Settings:
+            ```json
+            {
+              "chat.plugins.enabled": true,
+              "chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"]
+            }
             ```
 
-            Or with a specific version:
-            ```bash
-            curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/v${{ env.VERSION }}/bin/install.sh | bash -s -- /path/to/project --version=${{ env.VERSION }}
+            Or for local install, clone and add:
+            ```json
+            {
+              "chat.plugins.paths": {
+                "/path/to/prompt-engineering/plugins/orchestrator": true
+              }
+            }
             ```
+
+            See [docs/setup.md](https://github.com/toonvanvr/prompt-engineering/blob/v${{ env.VERSION }}/docs/setup.md) for full configuration reference.
