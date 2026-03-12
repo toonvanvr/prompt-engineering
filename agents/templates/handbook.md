@@ -14,7 +14,7 @@ Orchestrator creates this at session startup, updates after each SA, reads after
 Updated: {ISO8601}
 
 ## PHASE
-Current: {phase} | Step: {N of M}
+Current: {phase} | Wave: {current_wave} / {total_waves}
 
 ## COMPLETED
 - [x] {SA-1}: {one-line result}

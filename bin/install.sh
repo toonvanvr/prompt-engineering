@@ -61,7 +61,7 @@ parse_args() {
     echo "" >&2
     echo "Modes:" >&2
     echo "  install    Full install with change detection (default)" >&2
-    echo "  update     Only update agent and kernel files" >&2
+    echo "  update     Only update agent files" >&2
     echo "  check      Dry-run — report what would change (exit 1 if outdated)" >&2
     echo "  uninstall  Remove all installed files" >&2
     exit 1
@@ -181,22 +181,12 @@ install_agents() {
   fi
 }
 
-install_kernel() {
-  [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/agents/kernel"
-  for f in "$SOURCE/agents/kernel/"*.md; do
-    [[ -f "$f" ]] || continue
-    local name
-    name="$(basename "$f")"
-    copy_if_changed "$f" "$TARGET/.github/agents/kernel/$name" ".github/agents/kernel/$name"
-  done
-}
-
 install_skills() {
-  if [[ ! -d "$SOURCE/agents/skills" ]]; then
+  if [[ ! -d "$SOURCE/skills" ]]; then
     return
   fi
   [[ "$DRY_RUN" != "true" ]] && mkdir -p "$TARGET/.github/skills"
-  for skill_dir in "$SOURCE/agents/skills/"*/; do
+  for skill_dir in "$SOURCE/skills/"*/; do
     [[ -d "$skill_dir" ]] || continue
     local skill_name
     skill_name="$(basename "$skill_dir")"
@@ -282,7 +272,6 @@ ensure_gitignore() {
     ensure_gitignore_line "$file" "/agents/implementer.agent.md"
     ensure_gitignore_line "$file" "/agents/orchestrator.agent.md"
     ensure_gitignore_line "$file" "/agents/researcher.agent.md"
-    ensure_gitignore_line "$file" "/agents/kernel/"
     ensure_gitignore_line "$file" "/agents/.tvv-pe"
     ensure_gitignore_line "$file" "/agents/update.sh"
     ensure_gitignore_line "$file" "/.gitignore"
@@ -399,17 +388,6 @@ run_uninstall() {
     fi
   done
 
-  # Kernel files — remove each .md individually
-  if [[ -d "$TARGET/.github/agents/kernel" ]]; then
-    for f in "$TARGET/.github/agents/kernel/"*.md; do
-      [[ -f "$f" ]] || continue
-      local name=".github/agents/kernel/$(basename "$f")"
-      rm "$f"
-      log "- $name (removed)"
-      ((removed++)) || true
-    done
-  fi
-
   # Gitignore files — only if they contain our marker
   for gitignore_path in ".github/.gitignore" ".ai/.gitignore"; do
     local full_path="$TARGET/$gitignore_path"
@@ -423,7 +401,6 @@ run_uninstall() {
   done
 
   # Remove empty directories (non-recursive, fail-silent)
-  rmdir "$TARGET/.github/agents/kernel" 2>/dev/null && log "- .github/agents/kernel/ (removed)" || true
   rmdir "$TARGET/.github/agents" 2>/dev/null && log "- .github/agents/ (removed)" || true
 
   echo ""
@@ -483,9 +460,8 @@ main() {
 
   check_staleness
 
-  # Always install agents and kernel
+  # Always install agents
   install_agents
-  install_kernel
 
   # Full install only: setup, skills, gitignore, vscode
   if [[ "$MODE" == "install" ]]; then

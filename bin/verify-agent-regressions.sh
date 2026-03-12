@@ -123,6 +123,37 @@ else
   fail "orchestrator ai_status checkpoint anchors missing"
 fi
 
+# e) user-invocable spelling (no 'k')
+INVOKABLE_COUNT=$({ grep -rn "user-invokable" "$ROOT/agents/" --include="*.md" 2>/dev/null || true; } | wc -l)
+if [[ "$INVOKABLE_COUNT" -eq 0 ]]; then
+  pass "no user-invokable (old spelling) found"
+else
+  fail "found $INVOKABLE_COUNT occurrences of user-invokable (should be user-invocable)"
+fi
+
+# f) plugin.json validity
+PLUGIN_JSON="$ROOT/.github/plugin/plugin.json"
+if [[ -f "$PLUGIN_JSON" ]]; then
+  if python3 -c "import json; json.load(open('$PLUGIN_JSON'))" 2>/dev/null; then
+    pass "plugin.json is valid JSON"
+  else
+    fail "plugin.json is invalid JSON"
+  fi
+  
+  # Check version sync with VERSION file
+  if [[ -f "$ROOT/VERSION" ]]; then
+    PLUGIN_VER=$(python3 -c "import json; print(json.load(open('$PLUGIN_JSON'))['version'])" 2>/dev/null || echo "unknown")
+    FILE_VER=$(cat "$ROOT/VERSION" | tr -d '[:space:]')
+    if [[ "$PLUGIN_VER" == "$FILE_VER" ]]; then
+      pass "plugin.json version matches VERSION file ($FILE_VER)"
+    else
+      fail "plugin.json version ($PLUGIN_VER) != VERSION ($FILE_VER)"
+    fi
+  fi
+else
+  pass "no plugin.json (optional)"
+fi
+
 if [[ "$FAILED" -ne 0 ]]; then
   echo "Regression checks: FAILED"
   exit 1

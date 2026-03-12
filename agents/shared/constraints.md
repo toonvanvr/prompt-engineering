@@ -12,7 +12,7 @@
 
 ### NEVER (All Agents)
 
-1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only. **Exception:** Orchestrator structural writes to `{scratchSessionDir}/` (see orchestrator § Allowed Terminal Writes)
+1. **Use shell for file creation** (`cat`, `echo >`, redirects) — VS Code tools only
 2. **Return output in conversation** — write to files; downstream reads files
 3. **Put temporal content in library/** — library/ is permanent, scratch/ is session
 4. **Combine research with implementation** — always separate SAs

@@ -49,11 +49,11 @@ agents/
 ├── reference/        # Detail tables/schemas for compilation
 ├── precompiled/      # Resolved intermediary .pre.md (generated)
 ├── compiled/         # Deployed .agent.md files (generated, DO NOT EDIT)
-├── kernel/           # Inherited behavioral rules (all agents)
+├── kernel/           # Compile-time reference only (not deployed at runtime)
 ├── modes/            # EXPLORE/EXPLOIT specifications
 └── templates/        # Sub-agent dispatch templates
 
-agents/skills/       # Agent Skills (committed, VS Code native)
+skills/              # Agent Skills (committed, VS Code native)
 
 .ai/                  # Created by installer (gitignored)
 ├── scratch/          # Timestamped working folders (ephemeral)
@@ -92,6 +92,25 @@ The `@include` directive (e.g., `<!-- @include agents/shared/architecture.md -->
 
 ## Installation
 
+### Option A: VS Code Agent Plugin (Recommended)
+
+> Requires VS Code 1.111+ with `chat.plugins.enabled: true` (Preview)
+
+Browse `@agentPlugins` in the Extensions sidebar, or add manually to your VS Code settings:
+
+```json
+{
+  "chat.plugins.paths": {
+    "/path/to/prompt-engineering": true
+  },
+  "chat.plugins.enabled": true
+}
+```
+
+Then: Copilot Chat → Agent mode → select **Orchestrator**.
+
+### Option B: Shell Installer
+
 ```bash
 # Install (first time — full setup)
 curl -fsSL https://raw.githubusercontent.com/toonvanvr/prompt-engineering/main/bin/install.sh | bash -s -- .
@@ -122,7 +141,7 @@ Creates the following structure in your project:
 
 ```
 .github/
-├── agents/        # Agent files + kernel (snapshot, gitignored)
+├── agents/        # Agent files (snapshot, gitignored)
 └── skills/        # Agent Skills (committed, skipped if exists)
 .ai/               # Workspace for scratch/feedback/library (gitignored)
 .vscode/

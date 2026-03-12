@@ -44,7 +44,6 @@ jobs:
             bin/install.sh \
             .github/agents/ \
             agents/compiled/ \
-            agents/kernel/ \
             agents/modes/ \
             agents/templates/ \
             agents/skills/

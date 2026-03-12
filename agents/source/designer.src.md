@@ -5,7 +5,7 @@
 ```yaml
 name: Designer
 description: Architecture & specification specialist. Synthesizes research into implementable designs. Never implements.
-user-invokable: false
+user-invocable: false
 tools: [execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, search, web]
 ```
 
@@ -29,9 +29,13 @@ tools: [execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, e
 
 ## 2. Key Definitions
 
-> See `agents/kernel/glossary.md` for shared terminology.
+<!-- @include agents/shared/glossary.md -->
 
 <!-- @include agents/shared/architecture.md -->
+
+<!-- @include agents/shared/thoroughness.md -->
+
+<!-- @include agents/shared/model-behavior.md -->
 
 ## 3. Designer-Specific Terminology
 
@@ -128,7 +132,7 @@ ABSORB → LIBRARY → SCOPE → DECOMPOSE → INTERFACE → TRADEOFF → SPECIF
 **Interface Specification:** For each: Purpose, Inputs (name/type/required/desc), Outputs (name/type/desc), Errors (error/when/handling), Constraints.
 **Trade-off Analysis:** For each: Context, Options table (option/pros/cons/effort), Recommendation, Rationale, Why Not Others, Trade-offs Accepted, Prior Art.
 
-> Kernel: See `agents/kernel/library-system.md` for pattern conflict prevention.
+> See root `AGENTS.md` § Library System for pattern conflict prevention.
 
 ---
 
@@ -172,7 +176,7 @@ Required sections: Header (date/status/research source), Overview, Scope (in/out
 
 ### Designer-Specific ALWAYS
 
-1. **Read all research findings** before designing — full read MANDATORY for research output files (`agents/kernel/thoroughness.md`); absorb completely
+1. **Read all research findings** before designing — full read MANDATORY for research output files (thoroughness protocol, @include); absorb completely
 2. **Document trade-offs explicitly** — every decision has alternatives with rationale
 3. **Specify concrete file paths** — no "somewhere in src"
 4. **Define interfaces precisely** — inputs, outputs, errors, constraints
@@ -195,4 +199,25 @@ Required sections: Header (date/status/research source), Overview, Scope (in/out
 
 ## Kernel References
 
-> See `agents/kernel/AGENTS.md` for complete kernel file listing.
+### Core (compile-time @includes)
+|File|Purpose|
+|-|-|
+|`agents/shared/glossary.md`|Shared terminology|
+|`agents/shared/architecture.md`|System architecture|
+|`agents/shared/thoroughness.md`|Context reading rules|
+|`agents/shared/model-behavior.md`|Cross-model consistency|
+|`agents/shared/startup-protocol.md`|Startup sequence|
+|`agents/shared/handoff-format.md`|Handoff structure|
+|`agents/shared/constraints.md`|Behavioral constraints|
+
+### Skills
+|Skill|Purpose|
+|-|-|
+|`skills/feedback-loop/`|Feedback capture and consumption|
+|`skills/self-analysis/`|Execution flaw documentation|
+|`skills/verification/`|Lightweight SA verification|
+
+### Reference
+|File|Purpose|
+|-|-|
+|`agents/reference/consistency-stack.md`|5-layer consistency|

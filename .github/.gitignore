@@ -5,7 +5,6 @@
 /agents/implementer.agent.md
 /agents/orchestrator.agent.md
 /agents/researcher.agent.md
-/agents/kernel/
 /agents/.tvv-pe
 /.gitignore
 /agents/update.sh

@@ -8,17 +8,16 @@ Agent framework for orchestrated AI task execution.
 |-|-|-|
 |`source/`|Human-readable definitions (.src.md)|YES|
 |`compiled/`|Token-optimized deployment (.agent.md)|NO|
-|`kernel/`|Inherited behavioral rules|YES (carefully)|
+|`kernel/`|Compile-time reference only (not deployed at runtime)|NO (migrated)|
 |`modes/`|EXPLORE/EXPLOIT specifications|RARELY|
 |`templates/`|Sub-agent dispatch templates|YES|
 |`shared/`|Composable text fragments for source files|YES|
 |`reference/`|Detailed tables/schemas for compilation|YES|
-|`skills/`|VS Code Agent Skills (SKILL.md format)|YES|
 |`precompiled/`|Resolved intermediary files (.pre.md)|NO (generated)|
 
 ## Agent Types
 
-Only the **Orchestrator** is user-facing. All others are hidden subagents (`user-invokable: false`).
+Only the **Orchestrator** is user-facing. All others are hidden subagents (`user-invocable: false`).
 
 |Agent|Visibility|Purpose|Mode|
 |-|-|-|-|
@@ -37,17 +36,32 @@ Only the **Orchestrator** is user-facing. All others are hidden subagents (`user
 4. Deploy: bin/install.sh (copies snapshot to .github/agents/)
 ```
 
-## Kernel Inheritance
+## Kernel Status
 
-All agents inherit rules from `kernel/`:
-- `three-laws.md` — Immutable behavioral anchors
-- `quality-gates.md` — Phase transition verification
-- `mode-protocol.md` — EXPLORE↔EXPLOIT switching
-- `tool-stakes.md` — Risk classification
-- `human-loop.md` — Autonomous execution with human override via communication/ai_status.md
+Kernel files (`kernel/`) are compile-time reference only — not deployed at runtime. Rules are inlined into agents at compile time via `@include` directives and the two-phase compilation pipeline. Content has been migrated to:
+- `agents/shared/` — glossary, thoroughness, model-behavior (@include targets)
+- `skills/` — feedback-loop, self-analysis, verification
+- `AGENTS.md` files — TODO conventions, library system
+
+See `kernel/AGENTS.md` for the full migration table.
 
 ## Never
 
 - Edit files in `compiled/` or `precompiled/` — they are generated
-- Skip kernel inheritance in dispatches
+- Skip kernel references in dispatches
 - Bypass quality gates
+
+## TODO Conventions
+
+Standardized TODO annotations for consistent priority handling.
+
+|Tag|Priority|Description|Action|
+|-|-|-|-|
+|`TODO(0)`|Critical|Never merge with this|Block release|
+|`TODO(1)`|High|Architectural flaws, major bugs|Fix before PR|
+|`TODO(2)`|Medium|Minor bugs, missing features|Fix soon|
+|`TODO(3)`|Low|Polish, tests, documentation|Backlog|
+|`TODO(4)`|Question|Investigation needed|Research|
+|`PERF`|Special|Performance optimization|Profile first|
+
+**Rules:** `TODO(0)` blocks all merges. Always include priority number. On discovery: log to analysis artifacts, do not fix TODOs outside scope. On creation: match to severity.

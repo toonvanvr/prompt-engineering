@@ -6,10 +6,10 @@ Common preamble for all sub-agent dispatches.
 ---
 
 ## Sub-Agent Preamble
-Compiled agents already contain kernel rules — preamble provides ONLY task-specific context.
+Compiled agents already contain all behavioral rules — preamble provides ONLY task-specific context.
 ~~~md
 # SA Dispatch: {TYPE} — {DOMAIN}
-## Kernel Preamble
+## SA Preamble
 You are a SUB-AGENT (SA = Sub-Agent: you execute in an isolated context window; your input comes from files; your output goes to files; you cannot spawn other agents).
 ### Directives (NON-NEGOTIABLE)
 1. DOCUMENT EVERYTHING — Write to `.ai/scratch/{YYYY-MM-DD}_{topic}/`

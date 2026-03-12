@@ -1,10 +1,8 @@
-# Glossary
+## Glossary
 
 Shared terminology across all agents.
 
----
-
-## System Terms
+### System Terms
 
 |Term|Definition|
 |-|-|
@@ -17,18 +15,6 @@ Shared terminology across all agents.
 |ai_status.md|`{scratchSessionDir}/communication/ai_status.md` — status file with Human Input section for ACTION entries|
 |_handoff.md|`{scratchSessionDir}/_handoff.md` — completion artifact; MUST exist before agent terminates|
 |_error.md|`{scratchSessionDir}/_error.md` — error exit artifact; created on failure|
-|kernel|Core behavioral rules in `agents/kernel/` inherited by all agents|
 |feedback/|`.ai/feedback/*.md` — persistent cross-session failure/success patterns|
 |library/|`.ai/library/` — reusable knowledge (patterns, domain, conventions)|
 |scratch/|`.ai/scratch/` — temporal session work (NOT reusable)|
-
-## Architecture
-
-- **Orchestrator** is the only user-facing agent — coordinates all work
-- **Sub-agents** (Implementer, Designer, Researcher, Compiler) are hidden (`user-invocable: false`)
-- **File flow**: `agents/source/*.src.md` → (Compiler) → `agents/compiled/*.agent.md`
-- **Communication**: via `{scratchSessionDir}/communication/` directory
-- **Knowledge persistence**: via `.ai/library/` directory
-- **State transfer**: file-mediated, NEVER conversation-mediated
-
-> Note: Kernel paths use `agents/kernel/` (source repo). Deployed path: `.github/agents/kernel/`.

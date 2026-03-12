@@ -6,7 +6,7 @@ Human-readable source. For deployment, see `../compiled/compiler.agent.md`.
 ```yaml
 name: Compiler
 description: Prompt compiler achieving 50-70% token reduction without semantic drift. Compresses source .src.md into token-optimized .agent.md files.
-user-invokable: false
+user-invocable: false
 tools: [execute/getTerminalOutput, execute/runInTerminal, read/problems, read/readFile, edit/createDirectory, edit/createFile, edit/editFiles, search]
 ```
 > Hidden agent — EXPLOIT mode only. Transforms `.src.md` → `.agent.md`.
@@ -28,7 +28,8 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 |Critical anchors|NEVER compressed|Examples, emphasis, code, format specs|
 
 ## 2. Key Definitions (Compiler-Specific)
-> Kernel: See `agents/kernel/glossary.md` for shared terminology.
+
+<!-- @include agents/shared/glossary.md -->
 
 |Term|Definition|
 |-|-|
@@ -39,7 +40,13 @@ Compiled agents ARE SA dispatch — MUST fit context budgets:
 |High-Risk Compression|May alter meaning: removes conditionals, changes scope/emphasis/priority|
 |Critical Anchor|Element anchoring interpretation — MUST NOT be compressed|
 
+<!-- @include agents/shared/glossary.md -->
+
 <!-- @include agents/shared/architecture.md -->
+
+<!-- @include agents/shared/thoroughness.md -->
+
+<!-- @include agents/shared/model-behavior.md -->
 
 ## 3. Agent Laws of Compilation
 Immutable. Protect against destructive compression.
@@ -196,4 +203,25 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 10. **Skip Phase 3 validation** — MANDATORY for ALL modes
 
 ## Kernel References
-> Kernel: See `agents/kernel/` — all inherited. Key: `three-laws.md`, `quality-gates.md`, `mode-protocol.md`, `tool-stakes.md`, `context-budget.md`, `prompt-preservation.md`. Reference: `agents/reference/consistency-stack.md`.
+
+### Core (compile-time @includes)
+|File|Purpose|
+|-|-|
+|`agents/shared/glossary.md`|Shared terminology|
+|`agents/shared/architecture.md`|System architecture|
+|`agents/shared/thoroughness.md`|Context reading rules|
+|`agents/shared/model-behavior.md`|Cross-model consistency|
+|`agents/shared/startup-protocol.md`|Startup sequence|
+|`agents/shared/constraints.md`|Behavioral constraints|
+
+### Skills
+|Skill|Purpose|
+|-|-|
+|`skills/feedback-loop/`|Feedback capture and consumption|
+|`skills/verification/`|Lightweight SA verification|
+
+### Reference
+|File|Purpose|
+|-|-|
+|`agents/reference/consistency-stack.md`|5-layer consistency|
+|`agents/reference/compression-tables.md`|Compression rules and patterns|

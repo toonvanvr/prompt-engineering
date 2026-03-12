@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [3.0.0-alpha.1] - 2026-03-12
+
+### Breaking Changes
+- Removed runtime kernel dependency — kernel rules now inlined at compile time
+- Removed `handoffs:` from frontmatter (deprecated by VS Code)
+- Changed orchestrator from terminal writes (`cat`/`echo`) to native `create_file`/`create_directory` tools
+
+### Added
+- WBS-driven wave planning replaces hard task/SA caps
+- Mandatory prompt interpretation via @Researcher SA for all prompts
+- Parallel compilation support (5 @Compiler SAs simultaneously)
+- Enhanced self-repo awareness with path/cross-file validation
+- `.github/agents/dummy.agent.md` tool catalog
+
+### Changed
+- Kernel files migrated: 3 → shared/@include, 3 → skills, 2 → AGENTS.md, 7 deleted, 6 confirmed already-inlined
+- Install script simplified (no kernel installation)
+- Release workflow updated (no kernel in archive)
+- SA batch limit increased from 3 to 5 concurrent
+- Version bump from 2.3.0 to 3.0.0-alpha.1
+
 ## [2.3.0] - 2026-03-05
 
 

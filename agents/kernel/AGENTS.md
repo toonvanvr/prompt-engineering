@@ -1,53 +1,40 @@
 # agents/kernel/
 
-Core behavioral rules inherited by all agents.
+Compile-time behavioral rules. These files are **reference sources** — they are inlined into agent source files via `@include` directives or merged into skills/AGENTS.md during the v3 migration. Agents do NOT read from `agents/kernel/` at runtime.
 
-## Purpose
+## Status
 
-Kernel files define immutable or near-immutable rules that constrain agent behavior. Changes here affect ALL agents.
+Kernel files have been migrated to their compile-time destinations:
+- **@include targets** → `agents/shared/` (glossary, thoroughness, model-behavior)
+- **Skills** → `skills/` (feedback-collection → feedback-loop, self-analysis, verification-methods → verification)
+- **AGENTS.md** → root `AGENTS.md` (library-system) and `agents/AGENTS.md` (todo-conventions)
+- **Already inlined** → Content already exists in compiled agents (three-laws, communication, context-budget, output-budget, prompt-preservation, quality-gates)
+- **Already covered** → By `agents/modes/` and `agents/shared/` (mode-protocol, tool-stakes)
 
-## Agent Architecture
+## Remaining Files (Reference Only)
 
-Only the **Orchestrator** is user-facing (`user-invokable: true`). All other agents are hidden sub-agents (`user-invokable: false`) spawned by the orchestrator. Sub-agents never interact with the user directly — they read from files and write to files.
-
-## File Reference
-
-|File|Purpose|Mutability|
+|File|Purpose|Status|
 |-|-|-|
-|`three-laws.md`|Fundamental laws|IMMUTABLE|
-|`quality-gates.md`|Phase transition + error recovery + checkpoints|STABLE|
-|`mode-protocol.md`|EXPLORE/EXPLOIT definitions|STABLE|
-|`tool-stakes.md`|Risk classification|STABLE|
-|`todo-conventions.md`|TODO priority system|STABLE|
-|`communication.md`|Human-AI communication & override protocol (merged human-loop.md)|STABLE|
-|`context-budget.md`|Read strategy & quality constraints (simplified, checkpoints → quality-gates)|ADJUSTABLE|
-|`self-analysis.md`|Logging categories|STABLE|
-|`feedback-collection.md`|Automatic feedback capture|STABLE|
-|`library-system.md`|Knowledge persistence (merged pattern-system.md)|STABLE|
-|`prompt-preservation.md`|Prompt audit trail|STABLE|
-|`output-budget.md`|Output token limits|ADJUSTABLE|
-|`thoroughness.md`|Context reading rules|STABLE|
-|`glossary.md`|Shared terminology|STABLE|
-|`model-behavior.md`|Cross-model consistency|STABLE|
-|`verification-methods.md`|Lightweight SA verification|STABLE|
-|`human-loop.md`|→ Merged into communication.md|REDIRECT|
-|`escalation.md`|→ Merged into quality-gates.md § Error Recovery|REDIRECT|
-|`pattern-system.md`|→ Merged into library-system.md|REDIRECT|
-|`sub-agent-mandate.md`|→ Core triggers inlined in orchestrator source|REDIRECT|
-|`consistency-stack.md`|→ Moved to agents/reference/consistency-stack.md|REDIRECT|
+|`three-laws.md`|Fundamental laws|Inlined in compiled agents|
+|`quality-gates.md`|Phase transition + error recovery|Inlined in compiled agents|
+|`mode-protocol.md`|EXPLORE/EXPLOIT definitions|Covered by `agents/modes/`|
+|`tool-stakes.md`|Risk classification|Covered by `agents/shared/constraints.md`|
+|`communication.md`|Human-AI communication|Inlined in compiled agents|
+|`context-budget.md`|Read strategy|Inlined in compiled agents|
+|`output-budget.md`|Output token limits|Inlined in compiled agents|
+|`prompt-preservation.md`|Prompt audit trail|Inlined in compiled agents|
+|`self-analysis.md`|Logging categories|Migrated to `skills/self-analysis/`|
+|`feedback-collection.md`|Feedback capture|Migrated to `skills/feedback-loop/`|
+|`library-system.md`|Knowledge persistence|Migrated to root `AGENTS.md`|
+|`todo-conventions.md`|TODO priority system|Migrated to `agents/AGENTS.md`|
+|`thoroughness.md`|Context reading rules|Migrated to `agents/shared/thoroughness.md`|
+|`glossary.md`|Shared terminology|Migrated to `agents/shared/glossary.md`|
+|`model-behavior.md`|Cross-model consistency|Migrated to `agents/shared/model-behavior.md`|
+|`verification-methods.md`|SA verification|Migrated to `skills/verification/`|
 
-## Library Patterns
+## Modification Rules
 
-Learned patterns that inform agent behavior. Stored in `.ai/library/` and referenced by orchestrator during dispatch.
-
-|Pattern|Path|Purpose|
-|-|-|-|
-|File-Mediated State|`.ai/library/patterns/file-mediated-state.md`|SA communication via files, not conversation summaries|
-|Scope Fencing|`.ai/library/patterns/scope-fencing.md`|Explicit DO/DO NOT lists to prevent scope creep|
-|Graduated Complexity|`.ai/library/patterns/graduated-complexity.md`|Sort tasks into waves by complexity before delegating|
-|Feedback Consumption|`.ai/library/patterns/feedback-consumption.md`|Mandatory feedback read/write loop around SA dispatch|
-|Dispatch SA (Skill)|`agents/skills/dispatch-sa/SKILL.md`|v2 dispatch template and pre-dispatch checklist|
-|Post-SA Review (Skill)|`agents/skills/post-sa-review/SKILL.md`|Mandatory post-SA output processing and feedback capture|
+These files are kept as authoritative reference. Do not add new kernel files — use `agents/shared/`, `skills/`, or `AGENTS.md` instead.
 |Include Deduplication|`.ai/library/patterns/include-deduplication.md`|Composable @include fragments for source file deduplication|
 |Two-Phase Compilation|`.ai/library/patterns/two-phase-compilation.md`|Separate resolution from compression for incremental builds|
 |Reference Extraction|`.ai/library/patterns/reference-extraction.md`|Move detail tables to reference/, keep summaries in source|

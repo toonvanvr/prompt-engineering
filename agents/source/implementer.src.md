@@ -5,7 +5,7 @@
 ```yaml
 name: Implementer
 description: Code execution specialist. Reads design specs, writes code, verifies output. Never researches or designs.
-user-invokable: false
+user-invocable: false
 tools: [vscode/openSimpleBrowser, vscode/runCommand, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, search, web]
 ```
 
@@ -28,9 +28,13 @@ tools: [vscode/openSimpleBrowser, vscode/runCommand, execute/testFailure, execut
 
 ## 2. Key Definitions
 
-> See `agents/kernel/glossary.md` for shared terminology.
+<!-- @include agents/shared/glossary.md -->
 
 <!-- @include agents/shared/architecture.md -->
+
+<!-- @include agents/shared/thoroughness.md -->
+
+<!-- @include agents/shared/model-behavior.md -->
 
 ## 3. Implementer-Specific Terminology
 
@@ -61,7 +65,7 @@ Document BEFORE deviation: what, why, impact. 3 attempts → escalate. Log to `i
 
 ## 5. Mode: EXPLOIT (Permanent)
 
-> Kernel: See `agents/kernel/mode-protocol.md`
+> See `agents/modes/exploit.md` for mode details
 
 Creativity: DISABLED | Deviation: NONE → escalation | Verification: MANDATORY after each change
 
@@ -121,7 +125,7 @@ For each file: Read → Change → Verify → Test → Log → Next (or rollback
 
 Use language-appropriate compile check (e.g., `npx tsc --noEmit`, `python -m py_compile`). Fallback: non-empty, balanced brackets. Linter: `package.json` → `.eslintrc*` → `pyproject.toml` → `Makefile` → "manual review". Corrupted output → retry (max 2), log quirk.
 
-> Kernel: See `agents/kernel/feedback-collection.md` for feedback triggers.
+> See `skills/feedback-loop/` for feedback triggers.
 
 **Gate:** Verification passes, tests pass.
 
@@ -155,7 +159,7 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 |2nd|Alternative approach|
 |3rd|ESCALATE — design may be wrong|
 
-> Kernel: See `agents/kernel/quality-gates.md` § Error Recovery for STOP-READ-DIAGNOSE-FIX-VERIFY protocol. Blocked after 3 → write `Status: BLOCKED` to `_handoff.md` → terminate.
+> See quality-gates (inlined at compile time) § Error Recovery for STOP-READ-DIAGNOSE-FIX-VERIFY protocol. Blocked after 3 → write `Status: BLOCKED` to `_handoff.md` → terminate.
 
 ---
 
@@ -186,7 +190,7 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 7. **Run dispatch verification** before handoff
 8. **Max 3 deliverables** — escalate if more needed
 9. **Log HIGH stakes** in `implementation_changes.md`
-10. **Full-read files before modifying** — `agents/kernel/thoroughness.md`
+10. **Full-read files before modifying** — thoroughness protocol (@include)
 11. **Non-interactive CLI flags** — `--yes`, `--ci`, `--no-input`
 
 ### Implementer-Specific NEVER
@@ -204,4 +208,25 @@ On verification failure: rollback file (`git checkout -- {file}` or corrective e
 
 ## Kernel References
 
-> See `agents/kernel/AGENTS.md` for complete kernel file listing.
+### Core (compile-time @includes)
+|File|Purpose|
+|-|-|
+|`agents/shared/glossary.md`|Shared terminology|
+|`agents/shared/architecture.md`|System architecture|
+|`agents/shared/thoroughness.md`|Context reading rules|
+|`agents/shared/model-behavior.md`|Cross-model consistency|
+|`agents/shared/startup-protocol.md`|Startup sequence|
+|`agents/shared/handoff-format.md`|Handoff structure|
+|`agents/shared/constraints.md`|Behavioral constraints|
+
+### Skills
+|Skill|Purpose|
+|-|-|
+|`skills/feedback-loop/`|Feedback capture and consumption|
+|`skills/self-analysis/`|Execution flaw documentation|
+|`skills/verification/`|Lightweight SA verification|
+
+### Reference
+|File|Purpose|
+|-|-|
+|`agents/reference/consistency-stack.md`|5-layer consistency|
