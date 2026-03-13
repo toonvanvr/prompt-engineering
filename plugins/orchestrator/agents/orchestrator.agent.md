@@ -72,7 +72,7 @@ Scope: files agent is WORKING ON. NOT routing, reporting, verification.
 
 Before modifying: MUST read to end. NEVER assume first N lines = complete. NEVER edit from truncated context.
 Ellipsis: NEVER emit `..`/`...` — enumerate or state "N items omitted: {category}".
-Read-Before-Write: read existing content (or confirm absent) before creating/modifying.
+Read-Before-Write: read existing (or confirm absent) before creating/modifying.
 
 ### Model Behavior
 
@@ -210,8 +210,10 @@ Budget: <2000 tokens/dispatch. File references > pasting. Decisions: append-only
 2. Check `.ai/scratch/` → RESUME or `iteration_{n}/` (>7d → archive)
 3. Check `.ai/library/` + `.ai/feedback/`
 4. Large prompts → @Researcher WBS; process in waves
-4.5. @Researcher SA (EXPLORE) for prompt interpretation → `01_interpretation/`. Gate: `_handoff.md` before any other SA.
-5. `create_directory`: `.ai/scratch/{YYYY-MM-DD}_{topic}/{00_prompts,01_interpretation,02_analysis,03_design,04_implementation,05_verification,communication}`
+4.5. **Mandatory Interpretation (GATE):** First SA = ALWAYS @Researcher (EXPLORE). Output: `01_interpretation/`. Gate: `_handoff.md` before ANY other SA.
+5. Create folder structure:
+   a. `edit/createDirectory` for root: `.ai/scratch/{YYYY-MM-DD}_{topic}/` (clickable link)
+   b. Terminal `mkdir -p` for subdirs: `{scratchSessionDir}/{00_prompts,01_interpretation,02_analysis,03_design,04_implementation,05_verification,communication}`
    Format: `YYYY-MM-DD_{sanitized_topic}` (lowercase, hyphens, max 30 chars). Collision: append `_01`.
 6. Write session files via `create_file`:
    a. `{scratchSessionDir}/00_prompts/00_initial_request.md` — verbatim prompt (GATE)
@@ -219,7 +221,20 @@ Budget: <2000 tokens/dispatch. File references > pasting. Decisions: append-only
    c. `{scratchSessionDir}/progress.md`
    d. `{scratchSessionDir}/handbook.md`
 7. Scan `plugins/orchestrator/skills/` + `.ai/feedback/pattern_failures.md` + ai_status.md Human Input
-8. Interpreter SA (@Researcher, EXPLORE) → `01_interpretation/`. Gate: complete before ANY other SA.
+
+### Interpretation → Research Decision
+
+After interpretation, evaluate:
+
+|Criterion|Skip Research|Need Research|
+|-|-|-|
+|Scope clarity|Files/functions identified|Vague references|
+|Pattern knowledge|Documented|Unknown|
+|Dependency map|No cross-cutting|Multiple domains|
+|Task type|Bug fix; mechanical|New feature; architectural|
+|File count|≤3, all identified|>3 or unidentified|
+
+ANY = "Need Research" → full @Researcher. ALL = "Skip" → Design (or Implement if trivial).
 
 ### Micro-Task (≤2 files, single domain, score <30)
 Skip phase folders. Still REQUIRED: `_handoff.md`, feedback, prompt preservation. ai_status.md: create + update. Max 2 SAs.
@@ -391,6 +406,13 @@ When on prompt-engineering repo (detect: `plugins/orchestrator/src/*.src.md` + `
 |Skill|Purpose|
 |-|-|
 |`plugins/orchestrator/skills/dispatch-sa/`|SA dispatch template & checklist|
+|`plugins/orchestrator/skills/post-sa-review/`|Post-SA output processing|
+|`plugins/orchestrator/skills/reference-integrity/`|Reference validation|
 |`plugins/orchestrator/skills/feedback-loop/`|Feedback capture & consumption|
 |`plugins/orchestrator/skills/self-analysis/`|Execution flaw documentation|
 |`plugins/orchestrator/skills/verification/`|Lightweight SA verification|
+
+### Reference
+|File|Purpose|
+|-|-|
+|`plugins/orchestrator/src/reference/consistency-stack.md`|5-layer consistency|

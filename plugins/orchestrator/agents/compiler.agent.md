@@ -176,6 +176,8 @@ Default: CONSERVATIVE. Semantic preservation > targets.
 
 NEVER compress or alter frontmatter. Read source `## Frontmatter` → validate → emit as-is with `---` delimiters. NEVER modify values, reorder, or add unlisted properties. WARN on missing required.
 
+**Tools exception:** MAY add `tools:` where none exists. Existing `tools:` MUST be preserved — NEVER drop.
+
 **Two-Step Protocol (MANDATORY):** Create file WITHOUT `tools:` → insert via `replace_string_in_file`.
 
 > Schema: `plugins/orchestrator/src/reference/frontmatter-schema.md`
@@ -276,6 +278,7 @@ Trust handoff. Full-read primary targets only. Vague = investigate.
 |`plugins/orchestrator/src/shared/architecture.md`|System architecture|
 |`plugins/orchestrator/src/shared/thoroughness.md`|Context reading rules|
 |`plugins/orchestrator/src/shared/model-behavior.md`|Cross-model consistency|
+|`plugins/orchestrator/src/shared/startup-protocol.md`|Startup sequence|
 |`plugins/orchestrator/src/shared/constraints.md`|Behavioral constraints|
 
 ### Skills

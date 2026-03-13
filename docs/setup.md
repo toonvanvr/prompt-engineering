@@ -7,50 +7,61 @@
 
 ## Installation Methods
 
-### Marketplace (Recommended)
+### Direct GitHub Install (Recommended)
 
 1. Open VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`)
 2. Enable agent plugins:
-   ```json
+   ```jsonc
    {
-     "chat.plugins.enabled": true
+     "chat.plugins.enabled": true,
    }
    ```
-3. Add the marketplace source (workspace or user settings):
-   ```json
-   {
-     "chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"]
-   }
-   ```
-4. Browse `@agentPlugins` in the Extensions sidebar
-5. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
+3. Install the plugin:
+  ```bash
+  copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
+  ```
+4. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
+
+### Marketplace
+
+Use this if you want the plugin to appear in marketplace browse results and to manage it as `orchestrator@toonvanvr-prompt-engineering`.
+
+1. Open VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`)
+2. Enable agent plugins:
+  ```jsonc
+  {
+    "chat.plugins.enabled": true,
+  }
+  ```
+3. Add the marketplace:
+  ```bash
+  copilot plugin marketplace add toonvanvr/prompt-engineering
+  ```
+4. Install from the marketplace:
+  ```bash
+  copilot plugin install orchestrator@toonvanvr-prompt-engineering
+  ```
+5. Browse `@agentPlugins` in the Extensions sidebar
+6. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
 
 ### Local Clone
+
+Use this for local development or if you want the plugin to track your checked-out repo.
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/toonvanvr/prompt-engineering.git /path/to/prompt-engineering
    ```
 2. Add to VS Code settings:
-   ```json
+   ```jsonc
    {
      "chat.plugins.enabled": true,
      "chat.plugins.paths": {
-       "/path/to/prompt-engineering/plugins/orchestrator": true
-     }
+       "/path/to/prompt-engineering/plugins/orchestrator": true,
+     },
    }
    ```
 3. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
-
-### Remote Plugin
-
-Add to VS Code settings:
-```json
-{
-  "chat.plugins.enabled": true,
-  "chat.plugins.marketplaces": ["https://github.com/toonvanvr/prompt-engineering.git"]
-}
-```
 
 ## Interactive Setup
 
@@ -94,7 +105,7 @@ Pick **Copilot Setup (toonvanvr)** from the agent dropdown in Copilot Chat. It w
 
 ### Full JSON Example
 
-```json
+```jsonc
 {
   "chat.plugins.enabled": true,
   "chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"],
@@ -108,7 +119,7 @@ Pick **Copilot Setup (toonvanvr)** from the agent dropdown in Copilot Chat. It w
   "github.copilot.chat.githubMcpServer.enabled": true,
   "chat.tools.terminal.sandbox.enabled": true,
   "chat.tools.terminal.autoApproveWorkspaceNpmScripts": true,
-  "chat.tools.terminal.preventShellHistory": true
+  "chat.tools.terminal.preventShellHistory": true,
 }
 ```
 
@@ -144,3 +155,15 @@ Claude Code supports AGENTS.md files natively. The root `AGENTS.md` and `plugins
 ### Plugin not found after clone
 - Ensure the path in `chat.plugins.paths` points to `plugins/orchestrator/` (not the repo root)
 - Use absolute paths in the settings
+
+### Marketplace install says "Plugin source directory not found"
+- Refresh the cached marketplace checkout:
+  ```bash
+  copilot plugin marketplace remove toonvanvr-prompt-engineering
+  copilot plugin marketplace add toonvanvr/prompt-engineering
+  copilot plugin install orchestrator@toonvanvr-prompt-engineering
+  ```
+- If you want the shortest path instead, bypass the marketplace and install directly:
+  ```bash
+  copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
+  ```

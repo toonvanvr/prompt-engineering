@@ -1,6 +1,6 @@
 # plugins/orchestrator/src/kernel/
 
-Compile-time behavioral rules. These files are **reference sources** — they are inlined into agent source files via `@include` directives or merged into skills/AGENTS.md during the v3 migration. Agents do NOT read from `plugins/orchestrator/src/kernel/` at runtime.
+Compile-time behavioral rules. These files are **reference sources** — they are inlined into agent source files via `@include` directives or merged into `plugins/orchestrator/AGENTS.md` during the v3 migration. Agents do NOT read from `plugins/orchestrator/src/kernel/` at runtime.
 
 ## Status
 
@@ -26,7 +26,7 @@ Kernel files have been migrated to their compile-time destinations:
 |`self-analysis.md`|Logging categories|Migrated to `skills/self-analysis/`|
 |`feedback-collection.md`|Feedback capture|Migrated to `skills/feedback-loop/`|
 |`library-system.md`|Knowledge persistence|Migrated to root `AGENTS.md`|
-|`todo-conventions.md`|TODO priority system|Migrated to `agents/AGENTS.md`|
+|`todo-conventions.md`|TODO priority system|Migrated to `plugins/orchestrator/AGENTS.md`|
 |`thoroughness.md`|Context reading rules|Migrated to `plugins/orchestrator/src/shared/thoroughness.md`|
 |`glossary.md`|Shared terminology|Migrated to `plugins/orchestrator/src/shared/glossary.md`|
 |`model-behavior.md`|Cross-model consistency|Migrated to `plugins/orchestrator/src/shared/model-behavior.md`|

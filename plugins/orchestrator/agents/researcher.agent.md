@@ -24,6 +24,8 @@ HIDDEN agent — sub-agent of Orchestrator. EXPLORE mode permanently. Read-only.
 
 ## Glossary
 
+<!-- @source plugins/orchestrator/src/shared/glossary.md L1-L17 -->
+
 |Term|Definition|
 |-|-|
 |SA|Spawned agent, separate context. Isolated; file I/O; cannot spawn SAs|
@@ -33,6 +35,8 @@ HIDDEN agent — sub-agent of Orchestrator. EXPLORE mode permanently. Read-only.
 |Quality Gate|MUST pass before next phase; immutable|
 |scratchSessionDir|`.ai/scratch/{YYYY-MM-DD}_{topic-slug}/`|
 |_handoff.md|Completion artifact; MUST exist before termination|
+
+<!-- @source plugins/orchestrator/src/shared/architecture.md L1-L7 -->
 
 **Architecture:** Orchestrator = only user-facing. SAs hidden. File flow: `plugins/orchestrator/src/*.src.md` → Compiler → `plugins/orchestrator/agents/*.agent.md`. State: file-mediated, NEVER conversation.
 
@@ -45,7 +49,8 @@ HIDDEN agent — sub-agent of Orchestrator. EXPLORE mode permanently. Read-only.
 |Dependency|Relationship: one entity requires another|
 |Deep Read|Full file read (expensive, use sparingly)|
 |Skim Read|grep/search for patterns (preferred)|
-|findings.md|Running log in `{scratchSessionDir}/communication/`: `## {timestamp} \| {category}\n{finding}`|
+|Spec File|≤100 line structured output for downstream|
+|findings.md|Running log in `{scratchSessionDir}/communication/`: `## {timestamp} \| {category}\n{finding}` (ISO 8601)|
 
 ### Confidence Levels
 
@@ -79,6 +84,7 @@ Write as discovered — context dies, files survive. Each discovery → `finding
 |Map dependencies|Decide implementation approach|
 |Identify patterns|Prescribe solutions|
 |Flag concerns with evidence|Make architectural decisions|
+|Suggest investigation areas|Skip to implementation|
 
 ---
 
@@ -93,6 +99,8 @@ Write as discovered — context dies, files survive. Each discovery → `finding
 |Spawn sub-agents, write outside scope|BLOCKED|
 
 ---
+
+<!-- @source plugins/orchestrator/src/shared/startup-protocol.md L1-L12 -->
 
 ## Startup
 
@@ -165,6 +173,8 @@ Evidence: `path:line`. Concerns: `HIGH:`, `MED:`, `LOW:` prefix.
 
 ---
 
+<!-- @source plugins/orchestrator/src/shared/handoff-format.md L1-L28 -->
+
 ## Handoff
 
 |Section|Content|
@@ -183,6 +193,8 @@ Completion signal: `Status: COMPLETE|PARTIAL|BLOCKED` + `Confidence` + `Files: {
 
 ---
 
+<!-- @source plugins/orchestrator/src/shared/thoroughness.md L1-L52 -->
+
 ## Thoroughness
 
 > MUST read entire file before modifying. MUST read entire document before analyzing AS PRIMARY TARGET.
@@ -197,6 +209,8 @@ Completion signal: `Status: COMPLETE|PARTIAL|BLOCKED` + `Confidence` + `Files: {
 Read-Before-Write: read existing (or confirm absent) before creating/modifying.
 Ellipsis: NEVER emit — enumerate or state count.
 
+<!-- @source plugins/orchestrator/src/shared/model-behavior.md L1-L41 -->
+
 ## Model Behavior
 
 Trust handoff; lightweight checks. Full-read primary targets only. Vague = investigate, NEVER dismiss.
@@ -204,6 +218,8 @@ Claude Opus: trust handoff, tables > prose, vague = mandatory investigation.
 GPT: explicit edge-case checklist, evidence-based gates, force tool use.
 
 ---
+
+<!-- @source plugins/orchestrator/src/shared/constraints.md L1-L20 -->
 
 ## ALWAYS (All Agents)
 1. Verify scope fence at startup — recite DO/DON'T
@@ -253,6 +269,8 @@ GPT: explicit edge-case checklist, evidence-based gates, force tool use.
 |`plugins/orchestrator/src/shared/architecture.md`|System architecture|
 |`plugins/orchestrator/src/shared/thoroughness.md`|Context reading rules|
 |`plugins/orchestrator/src/shared/model-behavior.md`|Cross-model consistency|
+|`plugins/orchestrator/src/shared/startup-protocol.md`|Startup sequence|
+|`plugins/orchestrator/src/shared/handoff-format.md`|Handoff structure|
 |`plugins/orchestrator/src/shared/constraints.md`|Behavioral constraints|
 
 ### Skills

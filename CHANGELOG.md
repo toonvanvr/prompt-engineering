@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.0.0-beta.1] - 2026-03-13
+
+### Added
+- Parallel compilation instruction file (`.github/instructions/parallel-compilation.instructions.md`)
+- Plugin README for VS Code Extensions panel (`plugins/orchestrator/README.md`)
+- Prompting guide with real-world examples organized by prompt style
+- Safe file swap protocol with atomic `mv` rename for compiler self-compilation
+
+### Changed
+- Simplified root README setup to single JSONC code block with commented alternative
+- Replaced fabricated example prompts with authentic natural-language examples (one-liner, multi-concern, stream-of-consciousness)
+- All JSONC code blocks now have trailing commas for paste-safety
+- Orchestrator startup: `edit/createDirectory` for root + terminal bulk `mkdir -p` for subdirs (UX improvement)
+- Mandatory prompt interpretation enforced as first SA with explicit gate
+- Added interpretation → research decision criteria table to orchestrator source
+- Version bumped from 3.0.0-alpha.2 to 3.0.0-beta.1
+
+### Fixed
+- Stale `../compiled/` path reference in orchestrator source (→ `../agents/`)
+- Broken `agents/AGENTS.md` and `skills/AGENTS.md` references in kernel AGENTS.md
+
+### Removed
+- Fabricated example files (bug-fix.md, cli-tool.md, documentation-site.md, feature-addition.md, refactoring.md, ticket-board.md)
+- "Remote Plugin" section from README
+- Separate Marketplace/Local Clone setup subsections (consolidated into single block)
+
 ## [3.0.0-alpha.2] - 2026-03-12
 
 ### Breaking Changes
@@ -15,7 +41,7 @@
 - Claude Code support via `plugins/orchestrator/.claude-plugin/plugin.json`
 - Copilot Setup (toonvanvr) agent — interactive VS Code settings configuration
 - Web tool awareness — orchestrator delegates web research to sub-agents
-- Example prompts: bug-fix, feature-addition, documentation-site, cli-tool, ticket-board, refactoring
+- Example prompts (replaced in 3.0.0-beta.1)
 - Detailed setup guide at `docs/setup.md`
 
 ### Changed

@@ -4,41 +4,34 @@ AI agent system for VS Code GitHub Copilot (primary) and Claude Code. Specialize
 
 ## Setup
 
-### Marketplace (Recommended)
-1. Enable plugins in VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`):
-   ```json
-   { "chat.plugins.enabled": true }
-   ```
-2. Add marketplace in workspace or user settings:
-   ```json
-   { "chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"] }
-   ```
-3. Browse `@agentPlugins` in the Extensions sidebar
-4. Pick **Orchestrator (toonvanvr)** from the agent dropdown in Copilot Chat
+Install the `orchestrator` plugin directly from the repo.
 
-### Local Clone
-1. Clone: `git clone https://github.com/toonvanvr/prompt-engineering.git /path/to/prompt-engineering`
-2. Add to VS Code settings:
-   ```json
-   {
-     "chat.plugins.enabled": true,
-     "chat.plugins.paths": {
-       "/path/to/prompt-engineering/plugins/orchestrator": true
-     }
-   }
-   ```
-3. Pick **Orchestrator (toonvanvr)** from the agent dropdown
+```
+copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
+```
 
-### Remote Plugin
-```json
+Then enable agent plugins in VS Code User Settings:
+
+```jsonc
 {
-  "chat.plugins.enabled": true,
-  "chat.plugins.marketplaces": ["https://github.com/toonvanvr/prompt-engineering.git"]
+	"chat.plugins.enabled": true
 }
 ```
 
-> Pick **Copilot Setup (toonvanvr)** from the agent dropdown for interactive setup guidance.
-> See [docs/setup.md](docs/setup.md) for full settings reference.
+If you want marketplace browsing and marketplace-style updates, use:
+
+```
+copilot plugin marketplace add toonvanvr/prompt-engineering
+copilot plugin install orchestrator@toonvanvr-prompt-engineering
+```
+
+This becomes visible as an installed plugin.
+
+![Extensions Panel](plugins/orchestrator/docs/assets/extensions-panel.png)
+
+Pick **Orchestrator (toonvanvr)** from the agent dropdown in Copilot Chat
+
+> See [docs/setup.md](docs/setup.md) for full settings reference, fallback install methods, and troubleshooting.
 
 ## Agents
 
@@ -55,14 +48,13 @@ Sub-agents communicate via files, run in isolated contexts, and pass through qua
 
 ## Usage
 
-Talk to the Orchestrator naturally:
+Talk to the Orchestrator the way you'd describe a task to a colleague — natural language, as specific or vague as you want:
 
-- *"Add authentication to the API"*
-- *"Investigate why tests are failing"*
-- *"Review the payment module architecture"*
-- *"Refactor the config module to use builder pattern"*
+> the validate task should also use ignition-validate on all compiled files
 
-See [example prompts](plugins/orchestrator/docs/examples/) for detailed scenarios.
+> Convert all sh scripts like bootstrap into JS, unless they're meant to run client-side and would add a dependency. Have a validation to check asynchronously which hosts have which services working or not.
+
+The orchestrator will interpret your request, research the codebase, design a solution if needed, and implement it — all through specialized sub-agents. See the [prompting guide](plugins/orchestrator/docs/examples/) for more examples and tips.
 
 ## Development
 
@@ -88,5 +80,5 @@ Edit sources in `src/`, invoke **Compiler (toonvanvr)** to recompile.
 
 ## License
 
-MIT
+[MPL-2.0](LICENSE)
 

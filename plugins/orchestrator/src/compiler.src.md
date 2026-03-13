@@ -174,7 +174,15 @@ Frontmatter is agent configuration — NEVER compressed or altered.
 - When creating files, NEVER wrap output in code fences unless the file is a template
 `read_file` chatagent block = DISPLAY ARTIFACT.
 
-**Safe File Swap:** Write `.new` → validate (frontmatter, syntax, >10 lines, reduction) → swap on pass; on failure keep `.new`, report error.
+### Safe File Swap Protocol
+
+1. Write compiled output to `{output_path}.new` using `create_file`
+2. Validate `.new` file: frontmatter present (`---` delimiters), not empty, >10 lines, reduction metrics within expected range
+3. On validation PASS: rename via terminal `mv {output_path}.new {output_path}` (atomic rename on same filesystem)
+4. On validation FAIL: keep `.new` file for debugging, report error with validation details, do NOT touch original `.agent.md`
+5. After successful swap, no `.new` files should remain in `plugins/orchestrator/agents/`
+
+**Why `mv`:** On Linux/macOS, `mv` on the same filesystem is an atomic `rename(2)` syscall. This guarantees either the old file or new file exists — never a half-written file. This is critical when `compiler.agent.md` compiles itself.
 
 **Path Integrity**: All file paths containing `/` in source must retain their directory prefix in compiled output. Bare filename where source had directory path = FAIL.
 

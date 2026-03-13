@@ -1,7 +1,7 @@
 {
   "name": "orchestrator",
   "description": "Multi-phase task coordinator with research, design, and implementation sub-agents",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-beta.1",
   "author": {
     "name": "toonvanvr",
     "url": "https://github.com/toonvanvr"

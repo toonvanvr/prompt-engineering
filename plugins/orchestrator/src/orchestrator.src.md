@@ -1,7 +1,7 @@
 # Agent: Orchestrator v3 (Source)
 
 This is the verbose, human-readable source file for the v3 Orchestrator agent.
-For AI-optimized deployment, see `../compiled/orchestrator.agent.md`.
+For AI-optimized deployment, see `../agents/orchestrator.agent.md`.
 
 ## Frontmatter
 
@@ -232,15 +232,17 @@ Key decisions: append-only to `{scratchSessionDir}/decisions.md` (`|date|decisio
 2. **Check for existing work** — scan `.ai/scratch/` for `{date}_{topic}*` or incomplete `STATE.md`. Found → offer RESUME or create `iteration_{n}/`. Age >7d → offer archive.
 3. **Session consolidation** — check `.ai/library/` + `.ai/feedback/` for prior learnings. Document which are being applied.
 4. **Validate task size** — large prompts → dispatch @Researcher to produce WBS; orchestrator processes WBS in waves
-4.5 **Analyze prompt** — dispatch @Researcher SA (EXPLORE) for prompt interpretation and classification. Output: `01_interpretation/`. Gate: interpretation `_handoff.md` exists before any other SA.
-5. **Create folder structure** (via `create_directory`):
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/00_prompts`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/01_interpretation`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/02_analysis`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/03_design`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/04_implementation`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/05_verification`
-   - `.ai/scratch/{YYYY-MM-DD}_{topic}/communication`
+4. **Mandatory Interpretation (GATE — BLOCKS ALL OTHER SAs)**
+   First SA = ALWAYS @Researcher (EXPLORE mode).
+   Scope: prompt interpretation + classification ONLY.
+   Allowed: read ≤5 key files for context (project structure, key configs).
+   Output: `01_interpretation/interpretation.md` + `01_interpretation/_handoff.md`
+   Gate: interpretation `_handoff.md` MUST exist before ANY other SA.
+5. **Create folder structure:**
+   a. `edit/createDirectory` for root: `.ai/scratch/{YYYY-MM-DD}_{topic}/` — creates clickable link in VS Code chat
+   b. Terminal `mkdir -p` for ALL subdirs in single command:
+      `mkdir -p {scratchSessionDir}/{00_prompts,01_interpretation,02_analysis,03_design,04_implementation,05_verification,communication}`
+      — bulk creation, no link overload
 
    Format: `YYYY-MM-DD_{sanitized_topic}` (lowercase, hyphens, max 30 chars). Collision: append `_01`.
 6. **Write session files** (via `create_file`):
@@ -251,7 +253,21 @@ Key decisions: append-only to `{scratchSessionDir}/decisions.md` (`|date|decisio
 7. Scan `plugins/orchestrator/skills/` for available skills
 8. Scan `.ai/feedback/pattern_failures.md` for warnings
 9. Scan `communication/ai_status.md` Human Input section
-10. **Spawn Interpreter SA** (@Researcher, EXPLORE) — clarify scope, identify ambiguity. Output: `01_interpretation/`. Gate: interpretation complete before ANY other SA.
+
+### Interpretation → Research Decision
+
+After interpretation SA completes, evaluate:
+
+|Criterion|Skip Research|Need Research|
+|-|-|-|
+|Scope clarity|All files/functions identified|"Somewhere in src" — vague|
+|Pattern knowledge|Codebase patterns documented|Unknown patterns/conventions|
+|Dependency map|No cross-cutting concerns|Multiple domains, unknown interactions|
+|Task type|Bug fix with repro; mechanical change|New feature; architectural change|
+|File count|≤3 files, all identified|>3 files OR some unidentified|
+
+Rule: ANY criterion = "Need Research" → spawn full @Researcher.
+Rule: ALL criteria = "Skip Research" → proceed to Design (or Implement for trivial tasks).
 
 ### Micro-Task Protocol (≤2 files, single domain, score <30)
 
