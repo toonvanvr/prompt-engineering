@@ -17,7 +17,6 @@ See [docs/setup.md](../../docs/setup.md) for detailed configuration.
 | Designer (toonvanvr) | Subagent | Architecture specs, trade-off analysis |
 | Implementer (toonvanvr) | Subagent | Code execution per design contract |
 | Compiler (toonvanvr) | Subagent | Prompt compression (50-70% reduction) |
-| Copilot Setup (toonvanvr) | User-facing | VS Code settings configuration |
 
 ## Directory Overview
 

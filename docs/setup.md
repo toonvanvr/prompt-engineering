@@ -54,10 +54,6 @@ This CLI path currently appears unstable: the install command can succeed withou
 copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
 ```
 
-## Interactive Setup
-
-Pick **Copilot Setup (toonvanvr)** from the agent dropdown in Copilot Chat. It will walk you through configuring VS Code settings interactively.
-
 ## VS Code Settings Reference
 
 ### Required
@@ -108,7 +104,7 @@ Pick **Copilot Setup (toonvanvr)** from the agent dropdown in Copilot Chat. It w
   "github.copilot.chat.anthropic.toolSearchTool.enabled": true,
   "github.copilot.chat.anthropic.contextEditing.enabled": true,
   "github.copilot.chat.githubMcpServer.enabled": true,
-  "chat.tools.terminal.sandbox.enabled": true,
+  "chat.tools.terminal.sandbox.enabled": false,
   "chat.tools.terminal.autoApproveWorkspaceNpmScripts": true,
   "chat.tools.terminal.preventShellHistory": true,
 }

@@ -1,5 +1,5 @@
 ---
-applyTo: "plugins/orchestrator/agents/orchestrator.agent.md"
+applyTo: "plugins/orchestrator/agents/*.agent.md"
 ---
 
 # Parallel Compilation Rule

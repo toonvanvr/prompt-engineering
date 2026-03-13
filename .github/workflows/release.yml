@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set version from tag
         run: |
@@ -49,13 +49,6 @@ jobs:
             }
             ```
 
-            Or for local install, clone and add:
-            ```json
-            {
-              "chat.plugins.paths": {
-                "/path/to/prompt-engineering/plugins/orchestrator": true
-              }
-            }
-            ```
+            Then ask the Orchestrator to "set up workspace settings" — it will configure recommended settings automatically.
 
             See [docs/setup.md](https://github.com/toonvanvr/prompt-engineering/blob/v${{ env.VERSION }}/docs/setup.md) for full configuration reference.

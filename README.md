@@ -32,7 +32,6 @@ Pick **Orchestrator (toonvanvr)** from the agent dropdown in Copilot Chat
 | Designer (toonvanvr) | Subagent | Architecture specs, trade-off analysis |
 | Implementer (toonvanvr) | Subagent | Code execution per design contract |
 | Compiler (toonvanvr) | Subagent | Prompt compression (50-70% token reduction) |
-| **Copilot Setup (toonvanvr)** | User-facing | VS Code settings configuration |
 
 Sub-agents communicate via files, run in isolated contexts, and pass through quality gates. You never interact with them directly.
 

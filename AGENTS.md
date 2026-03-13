@@ -15,7 +15,6 @@ Enable `chat.plugins.enabled` in VS Code settings and add this repo as a marketp
 | Designer (toonvanvr) | Subagent | Architecture specs, trade-off analysis |
 | Implementer (toonvanvr) | Subagent | Code execution per design contract |
 | Compiler (toonvanvr) | Subagent | Prompt compression (50-70% reduction) |
-| Copilot Setup (toonvanvr) | User-facing | VS Code settings configuration |
 
 ## Directory Overview
 

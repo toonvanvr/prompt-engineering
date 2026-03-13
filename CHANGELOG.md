@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.0-beta.2] - 2026-03-13
+
+### Added
+- Workspace setup skill (`plugins/orchestrator/skills/workspace-setup/SKILL.md`) — configures `.vscode/settings.json` with classified settings (Core/Recommended/Extras)
+
+### Changed
+- Implementer tools: replaced `vscode/openSimpleBrowser` with `browser`, added `edit/rename`
+- GitHub Actions: `actions/checkout@v4` → `actions/checkout@v6`
+- Release workflow body text updated (references workspace setup skill)
+- `docs/setup.md`: fixed terminal sandbox default to `false`
+- Plugin manifests (plugin.json, claude-plugin.json): version bump, skill list updated
+- `parallel-compilation.instructions.md`: `applyTo` glob now matches all agent files
+
+### Removed
+- Copilot Setup (toonvanvr) agent — replaced by workspace-setup skill
+- Vagueness-handling skill — already inlined in orchestrator source
+
 ## [3.0.0-beta.1] - 2026-03-13
 
 ### Added

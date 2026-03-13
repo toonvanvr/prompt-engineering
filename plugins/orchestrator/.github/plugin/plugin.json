@@ -1,7 +1,7 @@
 {
   "name": "orchestrator",
   "description": "Multi-phase task coordinator with research, design, and implementation sub-agents",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "author": {
     "name": "toonvanvr",
     "url": "https://github.com/toonvanvr"
@@ -31,7 +31,7 @@
     "skills/self-diagnosis",
     "skills/self-verify",
     "skills/tool-risk",
-    "skills/vagueness-handling",
+    "skills/workspace-setup",
     "skills/verification"
   ]
 }

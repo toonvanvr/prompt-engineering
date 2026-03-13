@@ -2,7 +2,7 @@
 name: Implementer (toonvanvr)
 description: Code execution specialist. Reads design specs, writes code, verifies output. Never researches or designs.
 user-invocable: false
-tools: [vscode/openSimpleBrowser, vscode/runCommand, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, search, web]
+tools: [browser, vscode/runCommand, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search, web]
 ---
 
 <!-- All paths relative to workspace root. -->
