@@ -4,34 +4,24 @@ AI agent system for VS Code GitHub Copilot (primary) and Claude Code. Specialize
 
 ## Setup
 
-Install the `orchestrator` plugin directly from the repo.
+See [docs/setup.md](docs/setup.md) for installation details, troubleshooting, and local development setup.
 
-```
-copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
-```
-
-Then enable agent plugins in VS Code User Settings:
+Add these to VS Code User Settings:
 
 ```jsonc
 {
-	"chat.plugins.enabled": true
+	"chat.plugins.enabled": true,
+	"chat.plugins.marketplaces": ["toonvanvr/prompt-engineering"] // add this marketplace
 }
 ```
 
-If you want marketplace browsing and marketplace-style updates, use:
+`chat.plugins.enabled` turns plugin support on.
 
-```
-copilot plugin marketplace add toonvanvr/prompt-engineering
-copilot plugin install orchestrator@toonvanvr-prompt-engineering
-```
-
-This becomes visible as an installed plugin.
+`chat.plugins.marketplaces` registers this repository as a plugin marketplace.
 
 ![Extensions Panel](plugins/orchestrator/docs/assets/extensions-panel.png)
 
 Pick **Orchestrator (toonvanvr)** from the agent dropdown in Copilot Chat
-
-> See [docs/setup.md](docs/setup.md) for full settings reference, fallback install methods, and troubleshooting.
 
 ## Agents
 

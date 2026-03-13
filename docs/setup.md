@@ -7,7 +7,7 @@
 
 ## Installation Methods
 
-### Direct GitHub Install (Recommended)
+### Marketplace (Recommended)
 
 1. Open VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`)
 2. Enable agent plugins:
@@ -16,23 +16,6 @@
      "chat.plugins.enabled": true,
    }
    ```
-3. Install the plugin:
-  ```bash
-  copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
-  ```
-4. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
-
-### Marketplace
-
-Use this if you want the plugin to appear in marketplace browse results and to manage it as `orchestrator@toonvanvr-prompt-engineering`.
-
-1. Open VS Code User Settings (`Ctrl/Cmd+Shift+P` → `Preferences: Open User Settings (JSON)`)
-2. Enable agent plugins:
-  ```jsonc
-  {
-    "chat.plugins.enabled": true,
-  }
-  ```
 3. Add the marketplace:
   ```bash
   copilot plugin marketplace add toonvanvr/prompt-engineering
@@ -62,6 +45,14 @@ Use this for local development or if you want the plugin to track your checked-o
    }
    ```
 3. Open Copilot Chat → Agent mode → pick **Orchestrator (toonvanvr)** from the agent dropdown
+
+### Direct GitHub Install
+
+This CLI path currently appears unstable: the install command can succeed without the plugin showing up reliably in the installed plugin UI. Prefer the marketplace flow above, or use a local clone during development.
+
+```bash
+copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
+```
 
 ## Interactive Setup
 
@@ -163,7 +154,12 @@ Claude Code supports AGENTS.md files natively. The root `AGENTS.md` and `plugins
   copilot plugin marketplace add toonvanvr/prompt-engineering
   copilot plugin install orchestrator@toonvanvr-prompt-engineering
   ```
-- If you want the shortest path instead, bypass the marketplace and install directly:
+
+### Direct GitHub install succeeds but the plugin does not appear
+- Treat the direct install path as unstable for now.
+- Remove the directly installed plugin and use the marketplace flow instead:
   ```bash
-  copilot plugin install toonvanvr/prompt-engineering:plugins/orchestrator
+  copilot plugin uninstall orchestrator
+  copilot plugin marketplace add toonvanvr/prompt-engineering
+  copilot plugin install orchestrator@toonvanvr-prompt-engineering
   ```
